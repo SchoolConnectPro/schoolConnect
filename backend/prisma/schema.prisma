@@ -1,0 +1,200 @@
+// SchoolConnect — Prisma Schema
+// Database: PostgreSQL via Supabase
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// SCHOOL
+// ─────────────────────────────────────────────
+model School {
+  id              String    @id @default(cuid())
+  name            String
+  address         String?
+  city            String?
+  whatsappNumber  String?   @unique
+  logoUrl         String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  teachers        Teacher[]
+  classes         Class[]
+  notifications   Notification[]
+}
+
+// ─────────────────────────────────────────────
+// TEACHER
+// ─────────────────────────────────────────────
+model Teacher {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   @unique  // WhatsApp number e.g. +919876543210
+  subject   String?
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id])
+  createdAt DateTime @default(now())
+
+  classes         TeacherClass[]
+  notifications   Notification[]
+  attendanceLogs  AttendanceLog[]
+}
+
+// ─────────────────────────────────────────────
+// CLASS
+// ─────────────────────────────────────────────
+model Class {
+  id        String   @id @default(cuid())
+  grade     String   // e.g. "8"
+  section   String   // e.g. "B"
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id])
+  createdAt DateTime @default(now())
+
+  students      Student[]
+  teachers      TeacherClass[]
+  notifications Notification[]
+
+  @@unique([grade, section, schoolId])
+}
+
+// ─────────────────────────────────────────────
+// TEACHER ↔ CLASS (many-to-many)
+// ─────────────────────────────────────────────
+model TeacherClass {
+  teacherId String
+  classId   String
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  class     Class   @relation(fields: [classId], references: [id])
+
+  @@id([teacherId, classId])
+}
+
+// ─────────────────────────────────────────────
+// STUDENT
+// ─────────────────────────────────────────────
+model Student {
+  id          String   @id @default(cuid())
+  name        String
+  rollNumber  String?
+  classId     String
+  class       Class    @relation(fields: [classId], references: [id])
+  createdAt   DateTime @default(now())
+
+  parent          Parent?
+  attendanceLogs  AttendanceLog[]
+
+  @@unique([rollNumber, classId])
+}
+
+// ─────────────────────────────────────────────
+// PARENT
+// ─────────────────────────────────────────────
+model Parent {
+  id                 String           @id @default(cuid())
+  name               String
+  phone              String           @unique  // WhatsApp number e.g. +919876543210
+  studentId          String           @unique
+  student            Student          @relation(fields: [studentId], references: [id])
+  languagePreference LanguageCode     @default(EN)
+  optedIn            Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+
+  messageLogs MessageLog[]
+}
+
+// ─────────────────────────────────────────────
+// NOTIFICATION
+// ─────────────────────────────────────────────
+model Notification {
+  id               String             @id @default(cuid())
+  type             NotificationType
+  rawTeacherMessage String?           // original teacher message
+  message          String             // formatted message sent to parents
+  targetClassId    String?            // null = school-wide broadcast
+  targetClass      Class?             @relation(fields: [targetClassId], references: [id])
+  schoolId         String
+  school           School             @relation(fields: [schoolId], references: [id])
+  createdByTeacherId String?
+  createdByTeacher   Teacher?         @relation(fields: [createdByTeacherId], references: [id])
+  scheduledAt      DateTime           @default(now())
+  sentAt           DateTime?
+  status           NotificationStatus @default(PENDING)
+  recipientCount   Int                @default(0)
+  createdAt        DateTime           @default(now())
+
+  messageLogs MessageLog[]
+}
+
+// ─────────────────────────────────────────────
+// MESSAGE LOG (per-parent delivery tracking)
+// ─────────────────────────────────────────────
+model MessageLog {
+  id               String        @id @default(cuid())
+  notificationId   String
+  notification     Notification  @relation(fields: [notificationId], references: [id])
+  parentId         String
+  parent           Parent        @relation(fields: [parentId], references: [id])
+  twilioMessageSid String?
+  status           DeliveryStatus @default(QUEUED)
+  sentAt           DateTime?
+  createdAt        DateTime      @default(now())
+}
+
+// ─────────────────────────────────────────────
+// ATTENDANCE LOG
+// ─────────────────────────────────────────────
+model AttendanceLog {
+  id                  String          @id @default(cuid())
+  studentId           String
+  student             Student         @relation(fields: [studentId], references: [id])
+  date                DateTime        @default(now())
+  markedByTeacherId   String
+  markedByTeacher     Teacher         @relation(fields: [markedByTeacherId], references: [id])
+  parentNotifiedAt    DateTime?
+  parentReply         ParentReply?
+  createdAt           DateTime        @default(now())
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+enum NotificationType {
+  BROADCAST
+  ATTENDANCE
+  TEST_REMINDER
+  EVENT
+  HOMEWORK
+  EMERGENCY
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum DeliveryStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  FAILED
+}
+
+enum LanguageCode {
+  EN
+  HI
+  PA
+}
+
+enum ParentReply {
+  SICK
+  KNOWN
+  PRESENT
+}
