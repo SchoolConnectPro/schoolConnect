@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SchoolConnect — AI-Powered School Communication on WhatsApp</title>
+<meta name="description" content="Teachers WhatsApp naturally. Parents stay informed automatically."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="icon" type="image/png" href="images/favicon.png"/>
+<link rel="apple-touch-icon" href="images/favicon.png"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo">
+      <img src="images/favicon.png" alt="SchoolConnect" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="logo-icon" style="display:none"><i class="fab fa-whatsapp"></i></div>
+      <span>School<strong>Connect</strong></span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#contact" class="btn btn-ghost">Contact</a>
+      <a href="#demo" class="btn btn-primary nav-cta">Book a Demo</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge" data-aos="fade-down" data-aos-delay="100">
+        <span class="badge-dot"></span> AI-Powered &nbsp;·&nbsp; WhatsApp-Native &nbsp;·&nbsp; Zero Training Required
+      </div>
+      <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">
+        Teachers WhatsApp<br><span class="gradient-text">naturally.</span><br>
+        Parents stay informed<br><span class="gradient-text">automatically.</span>
+      </h1>
+      <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="300">
+        SchoolConnect is the AI communication platform that lives inside WhatsApp. Teachers send a quick message — AI formats it, translates it, and broadcasts it to every parent. No new app. No training. No extra work.
+      </p>
+      <div class="hero-actions" data-aos="fade-up" data-aos-delay="400">
+        <a href="#demo" class="btn btn-primary btn-lg"><i class="fas fa-calendar-check"></i> Book a Free Demo</a>
+        <a href="#how-it-works" class="btn btn-outline btn-lg"><i class="fas fa-play-circle"></i> See How It Works</a>
+      </div>
+      <div class="hero-stats" data-aos="fade-up" data-aos-delay="500">
+        <div class="hero-stat"><strong>95%</strong><span>WhatsApp open rate</span></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><strong>0</strong><span>New apps for parents</span></div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat"><strong>2 min</strong><span>To set up a class</span></div>
+      </div>
+    </div>
+    <div class="hero-mockup" data-aos="fade-left" data-aos-delay="300">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="chat-header">
+          <div class="chat-avatar"><i class="fab fa-whatsapp"></i></div>
+          <div class="chat-info"><strong>SchoolConnect AI</strong><span class="online-dot">&#9679; Online</span></div>
+        </div>
+        <div class="chat-body" id="chatBody">
+          <div class="chat-date-divider">Today</div>
+          <div class="chat-message teacher-msg" id="msg1">
+            <div class="msg-bubble">Math test on 12 April chapters 4-5 grade 8B</div>
+            <span class="msg-time">9:03 AM ✓✓</span>
+          </div>
+          <div class="chat-message ai-msg hidden" id="msg2">
+            <div class="msg-bubble">
+              <div class="preview-label">📋 Preview for 34 parents:</div>
+              <div class="preview-content">📚 <strong>Test Reminder — Grade 8B</strong><br>St. Mary's School<br><br>📅 Date: Saturday, 12 April<br>📖 Subject: Mathematics<br>📝 Chapters: 4 &amp; 5<br><br>Please ensure your child is well prepared.<br><br>Reply <strong>SEND</strong> to broadcast ✅</div>
+            </div>
+            <span class="msg-time">9:03 AM</span>
+          </div>
+          <div class="chat-message teacher-msg hidden" id="msg3">
+            <div class="msg-bubble">SEND</div>
+            <span class="msg-time">9:04 AM ✓✓</span>
+          </div>
+          <div class="chat-message ai-msg hidden" id="msg4">
+            <div class="msg-bubble success-bubble">✅ Sent to <strong>34 parents</strong> — 9:04 AM<br><small>📊 Delivered: 34 · Read: 28 · Pending: 6</small></div>
+            <span class="msg-time">9:04 AM</span>
+          </div>
+        </div>
+        <div class="chat-input-bar">
+          <div class="chat-input-fake"><span id="typingText"></span><span class="cursor blink">|</span></div>
+          <div class="chat-send-btn"><i class="fas fa-microphone"></i></div>
+        </div>
+      </div>
+      <div class="float-badge float-badge-1"><i class="fas fa-bolt"></i> AI-Powered</div>
+      <div class="float-badge float-badge-2"><i class="fas fa-language"></i> Auto-Translated</div>
+      <div class="float-badge float-badge-3"><i class="fas fa-shield-alt"></i> DPDP Compliant</div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+    <span>Scroll to explore</span>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="trust-strip">
+  <div class="container">
+    <p class="trust-label">Designed for schools across India</p>
+    <div class="trust-logos">
+      <div class="trust-item"><i class="fas fa-school"></i> CBSE Schools</div>
+      <div class="trust-item"><i class="fas fa-graduation-cap"></i> ICSE Schools</div>
+      <div class="trust-item"><i class="fas fa-map-marker-alt"></i> Jalandhar</div>
+      <div class="trust-item"><i class="fas fa-map-marker-alt"></i> Ludhiana</div>
+      <div class="trust-item"><i class="fas fa-map-marker-alt"></i> Amritsar</div>
+      <div class="trust-item"><i class="fas fa-map-marker-alt"></i> Chandigarh</div>
+      <div class="trust-item"><i class="fas fa-map-marker-alt"></i> Gurgaon</div>
+      <div class="trust-item"><i class="fas fa-map-marker-alt"></i> Delhi NCR</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem-section" id="problem">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">The Problem</span>
+      <h2 class="section-title">School communication is <span class="gradient-text">broken.</span></h2>
+      <p class="section-subtitle">Every school faces the same painful reality. Parents miss updates. Teachers waste hours. Principals have no visibility.</p>
+    </div>
+    <div class="comparison-grid">
+      <div class="comparison-card old-way" data-aos="fade-right" data-aos-delay="100">
+        <div class="comparison-header">
+          <div class="comparison-icon bad"><i class="fas fa-times-circle"></i></div>
+          <h3>The Old Way</h3>
+        </div>
+        <ul class="comparison-list">
+          <li><i class="fas fa-times"></i> Emails with only <strong>20% open rates</strong></li>
+          <li><i class="fas fa-times"></i> School apps parents <strong>never use</strong></li>
+          <li><i class="fas fa-times"></i> Teachers spend <strong>hours writing updates</strong></li>
+          <li><i class="fas fa-times"></i> Principals have <strong>zero visibility</strong></li>
+          <li><i class="fas fa-times"></i> Parents call school for <strong>every small thing</strong></li>
+          <li><i class="fas fa-times"></i> Fee reminders sent <strong>manually each month</strong></li>
+          <li><i class="fas fa-times"></i> PTM scheduling takes <strong>3 full working days</strong></li>
+          <li><i class="fas fa-times"></i> Absence alerts reach parents <strong>hours later</strong></li>
+        </ul>
+      </div>
+      <div class="vs-divider" data-aos="zoom-in" data-aos-delay="200">
+        <div class="vs-circle">VS</div>
+      </div>
+      <div class="comparison-card new-way" data-aos="fade-left" data-aos-delay="100">
+        <div class="comparison-header">
+          <div class="comparison-icon good"><i class="fas fa-check-circle"></i></div>
+          <h3>SchoolConnect</h3>
+        </div>
+        <ul class="comparison-list">
+          <li><i class="fas fa-check"></i> WhatsApp messages with <strong>95% open rates</strong></li>
+          <li><i class="fas fa-check"></i> Parents already <strong>have WhatsApp open</strong></li>
+          <li><i class="fas fa-check"></i> Teachers just <strong>send one WhatsApp</strong></li>
+          <li><i class="fas fa-check"></i> Real-time <strong>analytics dashboard</strong></li>
+          <li><i class="fas fa-check"></i> AI answers parent queries <strong>24/7 automatically</strong></li>
+          <li><i class="fas fa-check"></i> Fee reminders sent <strong>automatically every month</strong></li>
+          <li><i class="fas fa-check"></i> PTM scheduling done in <strong>under 2 hours</strong></li>
+          <li><i class="fas fa-check"></i> Absence alerts sent <strong>within minutes</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout-banner" data-aos="fade-up" data-aos-delay="200">
+      <div class="callout-stat"><span class="callout-number">20%</span><span class="callout-label">Email open rate</span></div>
+      <div class="callout-arrow"><i class="fas fa-arrow-right"></i><span>Switch to WhatsApp</span></div>
+      <div class="callout-stat highlight"><span class="callout-number">95%</span><span class="callout-label">WhatsApp open rate</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how-it-works">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">How It Works</span>
+      <h2 class="section-title">From teacher's phone to <span class="gradient-text">every parent</span> in seconds.</h2>
+      <p class="section-subtitle">Three simple steps. Zero new behaviour for teachers. Maximum impact for parents.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="step-number">01</div>
+        <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
+        <h3>Teacher Sends a WhatsApp</h3>
+        <p>The teacher types a natural message on their own phone — exactly like texting a colleague. No special format. No new app. Just WhatsApp.</p>
+        <div class="step-example"><div class="example-bubble teacher">"Math test on 12 April chapters 4-5 grade 8B"</div></div>
+      </div>
+      <div class="step-connector" data-aos="fade-up" data-aos-delay="150">
+        <div class="connector-line"></div>
+        <div class="connector-icon"><i class="fas fa-microchip"></i></div>
+        <div class="connector-line"></div>
+      </div>
+      <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="step-number">02</div>
+        <div class="step-icon ai-icon"><i class="fas fa-robot"></i></div>
+        <h3>AI Formats &amp; Previews</h3>
+        <p>The AI agent reads the message, classifies the intent, extracts the details, and composes a professional parent-friendly notification. Teacher sees a preview and confirms.</p>
+        <div class="step-example"><div class="example-bubble ai">📋 Preview ready for 34 parents. Reply <strong>SEND</strong> to broadcast.</div></div>
+      </div>
+      <div class="step-connector" data-aos="fade-up" data-aos-delay="250">
+        <div class="connector-line"></div>
+        <div class="connector-icon"><i class="fas fa-paper-plane"></i></div>
+        <div class="connector-line"></div>
+      </div>
+      <div class="step-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="step-number">03</div>
+        <div class="step-icon success-icon"><i class="fas fa-users"></i></div>
+        <h3>Parents Receive Instantly</h3>
+        <p>All opted-in parents of that class receive a beautifully formatted WhatsApp message in their preferred language — English, Hindi, or Punjabi.</p>
+        <div class="step-example"><div class="example-bubble success">✅ Sent to 34 parents — 9:04 AM<br><small>Delivered: 34 · Read: 28</small></div></div>
+      </div>
+    </div>
+    <div class="feature-highlight" data-aos="fade-up" data-aos-delay="100">
+      <div class="highlight-icon"><i class="fas fa-file-pdf"></i></div>
+      <div class="highlight-content">
+        <h3>Upload Syllabus Once. Automate the Entire Term.</h3>
+        <p>A teacher uploads a single PDF syllabus on Monday. The AI extracts every test, exam, and event — and automatically schedules parent reminders for the entire academic term. Zero teacher effort for 3 months.</p>
+      </div>
+      <div class="highlight-badge"><i class="fas fa-magic"></i> AI Magic</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Features</span>
+      <h2 class="section-title">Everything a school needs. <span class="gradient-text">Nothing extra.</span></h2>
+      <p class="section-subtitle">From daily attendance alerts to AI-powered academic risk monitoring — SchoolConnect handles the full lifecycle of school communication.</p>
+    </div>
+    <div class="feature-tabs" data-aos="fade-up" data-aos-delay="100">
+      <button class="feature-tab active" data-tab="core">🚀 Core</button>
+      <button class="feature-tab" data-tab="automation">⚡ Automation</button>
+      <button class="feature-tab" data-tab="engagement">💬 Engagement</button>
+      <button class="feature-tab" data-tab="premium">⭐ Premium</button>
+    </div>
+    <div class="features-grid active" id="tab-core">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon"><i class="fab fa-whatsapp"></i></div>
+        <h3>Teacher WhatsApp Agent</h3>
+        <p>Teachers send natural WhatsApp messages. AI classifies intent, formats professionally, and broadcasts to all class parents with one confirmation.</p>
+        <div class="feature-tags"><span>Natural Language</span><span>AI-Powered</span><span>Instant</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="feature-icon"><i class="fas fa-file-upload"></i></div>
+        <h3>Syllabus Ingestion Agent</h3>
+        <p>Upload one PDF. AI extracts all tests, exams, and events — then auto-schedules parent reminders for the entire term. Set it and forget it.</p>
+        <div class="feature-tags"><span>PDF Parsing</span><span>Auto-Schedule</span><span>Term-Wide</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon"><i class="fas fa-user-check"></i></div>
+        <h3>Attendance Alert System</h3>
+        <p>Student marked absent → parent notified within minutes. Parents reply SICK, KNOWN, or PRESENT. Absence reasons auto-logged. Reception calls eliminated.</p>
+        <div class="feature-tags"><span>Real-Time</span><span>Parent Reply</span><span>Auto-Log</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="feature-icon emergency-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <h3>Emergency Broadcast</h3>
+        <p>Principal sends one WhatsApp. Every parent across all classes is notified within minutes. Detects EMERGENCY keywords and bypasses all queues instantly.</p>
+        <div class="feature-tags"><span>School-Wide</span><span>Priority Queue</span><span>Instant</span></div>
+      </div>
+    </div>
+    <div class="features-grid" id="tab-automation">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon"><i class="fas fa-rupee-sign"></i></div>
+        <h3>Fee Reminder Automation</h3>
+        <p>Personalised fee reminders sent automatically on configured dates. Parents reply PAID with transaction ID. Accountant time saved: 20+ hours/month.</p>
+        <div class="feature-tags"><span>Razorpay</span><span>Auto-Escalation</span><span>Personalised</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+        <h3>Homework Tracker</h3>
+        <p>Teacher sends homework details via WhatsApp. Parents reply DONE when complete. Teacher sees live completion dashboard. Auto-reminder on due date morning.</p>
+        <div class="feature-tags"><span>Live Dashboard</span><span>Auto-Reminder</span><span>Completion Rate</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
+        <h3>PTM Scheduler</h3>
+        <p>Principal sets date and time range. System sends slot options to all parents. Parents choose via WhatsApp reply. Full schedule auto-generated. 3 days → 2 hours.</p>
+        <div class="feature-tags"><span>Auto-Slots</span><span>No Double-Booking</span><span>Reminders</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+        <h3>Result &amp; Report Card Delivery</h3>
+        <p>Upload marks CSV. Each parent receives personalised WhatsApp with their child's subject-wise results and a secure link to the full report card.</p>
+        <div class="feature-tags"><span>CSV Upload</span><span>Personalised</span><span>Secure Link</span></div>
+      </div>
+    </div>
+    <div class="features-grid" id="tab-engagement">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon"><i class="fas fa-robot"></i></div>
+        <h3>Parent Query Bot</h3>
+        <p>Parents ask questions 24/7 in natural language. AI answers from school data — syllabus, schedule, fees. Unresolvable queries escalated to teacher automatically.</p>
+        <div class="feature-tags"><span>24/7 AI</span><span>Multi-Language</span><span>Auto-Escalate</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="feature-icon"><i class="fas fa-language"></i></div>
+        <h3>Multi-Language Auto-Translation</h3>
+        <p>Teachers write in English. Parents receive in their preferred language — Hindi, Punjabi, or English. Translation happens automatically inside every AI call.</p>
+        <div class="feature-tags"><span>Hindi</span><span>Punjabi</span><span>English</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon"><i class="fas fa-poll"></i></div>
+        <h3>Poll &amp; Feedback Collection</h3>
+        <p>Principals run WhatsApp polls. Parents reply with a number. Live results dashboard. Auto-reminders to non-respondents. Makes school leadership look data-driven.</p>
+        <div class="feature-tags"><span>Live Results</span><span>Auto-Reminder</span><span>Dashboard</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="feature-icon"><i class="fas fa-birthday-cake"></i></div>
+        <h3>Birthday Wishes Automation</h3>
+        <p>Every morning, personalised birthday messages sent to parents from the school. ₹0.45 per message. Disproportionate emotional impact. Massive word-of-mouth.</p>
+        <div class="feature-tags"><span>Auto-Daily</span><span>Personalised</span><span>Word-of-Mouth</span></div>
+      </div>
+    </div>
+    <div class="features-grid" id="tab-premium">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon"><i class="fas fa-brain"></i></div>
+        <h3>Academic Risk Alert System</h3>
+        <p>AI monitors student performance over time. Alerts teacher when a student shows warning signs — low scores, frequent absences, low homework completion. Proactive support.</p>
+        <div class="feature-tags"><span>AI Monitoring</span><span>Early Warning</span><span>Proactive</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="feature-icon"><i class="fas fa-lock"></i></div>
+        <h3>Parent-Teacher Private Channel</h3>
+        <p>Privacy-preserving two-way communication. Neither party sees the other's real number. All conversations logged and auditable by Principal.</p>
+        <div class="feature-tags"><span>Privacy-First</span><span>Auditable</span><span>Auto-Close</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon"><i class="fas fa-microphone-alt"></i></div>
+        <h3>Voice Note Notifications</h3>
+        <p>Notifications delivered as WhatsApp voice notes in the parent's preferred language. Unlocks tier-2 and tier-3 markets where literacy levels vary.</p>
+        <div class="feature-tags"><span>Voice AI</span><span>Tier-2 Cities</span><span>Inclusive</span></div>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+        <h3>Advanced Analytics Dashboard</h3>
+        <p>Principals get a bird's-eye view of all school communication — delivery rates, parent engagement, class-wise performance, and compliance audit trails.</p>
+        <div class="feature-tags"><span>Real-Time</span><span>Audit Trail</span><span>Engagement</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-icon"><i class="fab fa-whatsapp"></i></div>
+        <div class="stat-row"><span class="stat-number" data-target="95">0</span><span class="stat-suffix">%</span></div>
+        <div class="stat-label">WhatsApp Open Rate</div>
+        <div class="stat-compare">vs 20% for email</div>
+      </div>
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <div class="stat-row"><span class="stat-number" data-target="10">0</span><span class="stat-suffix">sec</span></div>
+        <div class="stat-label">To Send a Parent Update</div>
+        <div class="stat-compare">vs 10 minutes manually</div>
+      </div>
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-icon"><i class="fas fa-school"></i></div>
+        <div class="stat-row"><span class="stat-number" data-target="15" data-suffix="L+">0</span><span class="stat-suffix">L+</span></div>
+        <div class="stat-label">Private Schools in India</div>
+        <div class="stat-compare">massively underserved</div>
+      </div>
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+        <div class="stat-row"><span class="stat-number" data-target="20">0</span><span class="stat-suffix">hrs</span></div>
+        <div class="stat-label">Accountant Time Saved/Month</div>
+        <div class="stat-compare">with fee automation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Pricing</span>
+      <h2 class="section-title">Simple, transparent pricing. <span class="gradient-text">No surprises.</span></h2>
+      <p class="section-subtitle">Flat monthly fee per school. Annual plans save 2 months. WhatsApp message costs included in estimates.</p>
+    </div>
+    <div class="pricing-toggle" data-aos="fade-up" data-aos-delay="100">
+      <span class="toggle-label active" id="monthlyLabel">Monthly</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="billingToggle">
+        <span class="toggle-slider"></span>
+      </label>
+      <span class="toggle-label" id="annualLabel">Annual <span class="save-badge">Save 2 months</span></span>
+    </div>
+    <div class="pricing-grid">
+      <!-- Starter -->
+      <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><span class="currency">₹</span><span class="amount monthly-price">1,999</span><span class="period">/month</span></div>
+        <div class="plan-price annual-price-wrap" style="display:none"><span class="currency">₹</span><span class="amount">19,990</span><span class="period">/year</span></div>
+        <div class="plan-target">100–300 students · Tier-2 cities</div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Teacher WhatsApp Agent</li>
+          <li><i class="fas fa-check"></i> Attendance Alerts</li>
+          <li><i class="fas fa-check"></i> Emergency Broadcast</li>
+          <li><i class="fas fa-check"></i> Syllabus Ingestion (2 classes)</li>
+          <li><i class="fas fa-check"></i> 3 Teacher Accounts</li>
+          <li class="disabled"><i class="fas fa-times"></i> Fee Reminders</li>
+          <li class="disabled"><i class="fas fa-times"></i> PTM Scheduler</li>
+          <li class="disabled"><i class="fas fa-times"></i> Parent Query Bot</li>
+        </ul>
+        <a href="#demo" class="btn btn-outline btn-full">Get Started</a>
+      </div>
+      <!-- Growth (Hero) -->
+      <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="150">
+        <div class="plan-popular">⭐ Most Popular</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-price"><span class="currency">₹</span><span class="amount monthly-price">3,999</span><span class="period">/month</span></div>
+        <div class="plan-price annual-price-wrap" style="display:none"><span class="currency">₹</span><span class="amount">39,990</span><span class="period">/year</span></div>
+        <div class="plan-target">300–800 students · All cities</div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Everything in Starter</li>
+          <li><i class="fas fa-check"></i> Fee Reminder Automation</li>
+          <li><i class="fas fa-check"></i> Homework Tracker</li>
+          <li><i class="fas fa-check"></i> PTM Scheduler</li>
+          <li><i class="fas fa-check"></i> Parent Query Bot (24/7 AI)</li>
+          <li><i class="fas fa-check"></i> Multi-Language Translation</li>
+          <li><i class="fas fa-check"></i> Result Delivery</li>
+          <li><i class="fas fa-check"></i> 10 Teacher Accounts</li>
+        </ul>
+        <a href="#demo" class="btn btn-primary btn-full">Book a Demo</a>
+      </div>
+      <!-- Premium -->
+      <div class="pricing-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="plan-name">Premium</div>
+        <div class="plan-price"><span class="currency">₹</span><span class="amount monthly-price">6,999</span><span class="period">/month</span></div>
+        <div class="plan-price annual-price-wrap" style="display:none"><span class="currency">₹</span><span class="amount">69,990</span><span class="period">/year</span></div>
+        <div class="plan-target">800+ students · Tier-1 cities</div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Everything in Growth</li>
+          <li><i class="fas fa-check"></i> Academic Risk Alerts</li>
+          <li><i class="fas fa-check"></i> Poll &amp; Feedback</li>
+          <li><i class="fas fa-check"></i> Birthday Wishes</li>
+          <li><i class="fas fa-check"></i> Private Parent-Teacher Channel</li>
+          <li><i class="fas fa-check"></i> Advanced Analytics</li>
+          <li><i class="fas fa-check"></i> Unlimited Teacher Accounts</li>
+          <li><i class="fas fa-check"></i> Priority Support</li>
+        </ul>
+        <a href="#demo" class="btn btn-outline btn-full">Get Started</a>
+      </div>
+      <!-- Elite -->
+      <div class="pricing-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="plan-name">Elite</div>
+        <div class="plan-price"><span class="currency">₹</span><span class="amount monthly-price">11,999</span><span class="period">/month</span></div>
+        <div class="plan-price annual-price-wrap" style="display:none"><span class="currency">₹</span><span class="amount">1,19,990</span><span class="period">/year</span></div>
+        <div class="plan-target">School chains · Multi-branch</div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Everything in Premium</li>
+          <li><i class="fas fa-check"></i> Multi-branch Management</li>
+          <li><i class="fas fa-check"></i> Voice Note Notifications</li>
+          <li><i class="fas fa-check"></i> White-label Option</li>
+          <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
+          <li><i class="fas fa-check"></i> ERP Integrations</li>
+          <li><i class="fas fa-check"></i> Custom Onboarding</li>
+          <li><i class="fas fa-check"></i> SLA Guarantee</li>
+        </ul>
+        <a href="#demo" class="btn btn-outline btn-full">Contact Sales</a>
+      </div>
+    </div>
+    <div class="pricing-note" data-aos="fade-up">
+      <i class="fas fa-info-circle"></i>
+      All prices exclude 18% GST. Annual billing: 10x monthly rate (2 months free). WhatsApp message costs (~₹0.12–0.15/conversation) billed separately at cost.
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">FAQ</span>
+      <h2 class="section-title">Questions? <span class="gradient-text">We have answers.</span></h2>
+      <p class="section-subtitle">Everything you need to know before getting started.</p>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+        <button class="faq-question">
+          Do parents need to download a new app?
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>No. Parents receive all notifications directly on WhatsApp — the app they already use every day. There is nothing to download, no account to create, and no portal to log into. This is the single biggest reason parents actually engage with SchoolConnect.</p>
+        </div>
+      </div>
+      <div class="faq-item" data-aos="fade-up" data-aos-delay="120">
+        <button class="faq-question">
+          Do teachers need training?
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Zero training required. Teachers just send WhatsApp messages exactly as they always do. The AI reads the message, understands the intent, and handles everything else. Most teachers are fully operational within 5 minutes of being registered.</p>
+        </div>
+      </div>
+      <div class="faq-item" data-aos="fade-up" data-aos-delay="140">
+        <button class="faq-question">
+          How does parent opt-in work?
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Each school gets a unique WhatsApp join link. Parents click it, it opens WhatsApp, and they send a message to join — at which point they are marked as opted-in. This is fully compliant with Meta's WhatsApp Business Policy and India's DPDP Act 2023.</p>
+        </div>
+      </div>
+      <div class="faq-item" data-aos="fade-up" data-aos-delay="160">
+        <button class="faq-question">
+          What languages are supported?
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Teachers write messages in English. Parents receive them in their preferred language — English, Hindi, or Punjabi. Each parent sets their language preference during opt-in. Translation happens automatically inside every AI call at no extra cost.</p>
+        </div>
+      </div>
+      <div class="faq-item" data-aos="fade-up" data-aos-delay="180">
+        <button class="faq-question">
+          Is student data safe and compliant?
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Yes. SchoolConnect is built with compliance as a foundation. All Indian user data is stored on Indian servers (Supabase Mumbai region). We are compliant with India's DPDP Act 2023, WhatsApp Business Policy, and Meta's opt-in requirements. A Data Processing Agreement is signed with every school.</p>
+        </div>
+      </div>
+      <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+        <button class="faq-question">
+          How long does setup take?
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>A school can be fully onboarded in under 2 days. This includes registering teachers, setting up classes, importing the parent list, and sending the first test notification. The syllabus upload and automation setup takes an additional 30 minutes per class.</p>
+        </div>
+      </div>
+      <div class="faq-item" data-aos="fade-up" data-aos-delay="240">
+        <button class="faq-question">
+          Can we try it before committing?
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+          <p>Yes. We offer a live demo where we upload your actual school syllabus, extract all events with AI, and send a test WhatsApp to your phone — all in under 5 minutes. Founding schools in Jalandhar get 3 months free in exchange for feedback and a testimonial. Book a demo to get started.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / DEMO BOOKING -->
+<section class="cta-section" id="demo">
+  <div class="cta-orb cta-orb-1"></div>
+  <div class="cta-orb cta-orb-2"></div>
+  <div class="container">
+    <div class="cta-grid">
+      <div class="cta-content" data-aos="fade-right" data-aos-delay="100">
+        <span class="section-tag">Book a Demo</span>
+        <h2 class="cta-title">See SchoolConnect work on <span class="gradient-text">your syllabus.</span></h2>
+        <p class="cta-subtitle">Bring your school's PDF syllabus. We'll upload it, extract all events with AI, and send a live WhatsApp to your phone — in under 5 minutes. No commitment required.</p>
+        <div class="cta-points">
+          <div class="cta-point"><i class="fas fa-check-circle"></i> Live AI demo with your actual syllabus</div>
+          <div class="cta-point"><i class="fas fa-check-circle"></i> WhatsApp sent to your phone in real time</div>
+          <div class="cta-point"><i class="fas fa-check-circle"></i> Founding school pricing available</div>
+          <div class="cta-point"><i class="fas fa-check-circle"></i> No commitment, no credit card</div>
+        </div>
+        <div class="cta-contact-info">
+          <div class="contact-item">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp: <a href="https://wa.me/919056343865">+91 90563 43865</a></span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>Email: <a href="mailto:schoolconnect.24.7@gmail.com">schoolconnect.24.7@gmail.com</a></span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Gurgaon, India · Serving Jalandhar, Ludhiana, Amritsar</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-form-wrap" data-aos="fade-left" data-aos-delay="100" id="contact">
+        <div class="cta-form-card">
+          <h3>Book Your Free Demo</h3>
+          <p>We'll reach out within 24 hours to schedule a call.</p>
+          <form class="demo-form" id="demoForm">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" placeholder="Principal / Owner name" required/>
+            </div>
+            <div class="form-group">
+              <label>School Name</label>
+              <input type="text" placeholder="e.g. DAV Public School" required/>
+            </div>
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" placeholder="e.g. Jalandhar" required/>
+            </div>
+            <div class="form-group">
+              <label>WhatsApp Number</label>
+              <input type="tel" placeholder="+91 98765 43210" required/>
+            </div>
+            <div class="form-group">
+              <label>Number of Students</label>
+              <select>
+                <option>100–300 students</option>
+                <option>300–800 students</option>
+                <option>800–2000 students</option>
+                <option>2000+ students</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full btn-lg">
+              <i class="fas fa-calendar-check"></i> Book My Free Demo
+            </button>
+            <p class="form-note">No spam. No commitment. We'll WhatsApp you to confirm.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo footer-logo">
+          <img src="images/favicon.png" alt="SchoolConnect" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="logo-icon" style="display:none"><i class="fab fa-whatsapp"></i></div>
+          <span>School<strong>Connect</strong></span>
+        </a>
+        <p>AI-powered school communication platform built on WhatsApp. Teachers WhatsApp naturally. Parents stay informed automatically.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#demo">Book a Demo</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Features</h4>
+        <ul>
+          <li><a href="#features">Teacher WhatsApp Agent</a></li>
+          <li><a href="#features">Syllabus Automation</a></li>
+          <li><a href="#features">Attendance Alerts</a></li>
+          <li><a href="#features">Fee Reminders</a></li>
+          <li><a href="#features">PTM Scheduler</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Data Processing Agreement</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SchoolConnect. All rights reserved. Built in India 🇮🇳 by Arshdeep Singh, Gurgaon.</p>
+      <p class="footer-compliance">DPDP Act 2023 Compliant &nbsp;·&nbsp; WhatsApp Business API &nbsp;·&nbsp; Data stored in India</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
