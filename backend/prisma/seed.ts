@@ -135,7 +135,7 @@ async function main() {
       rollNumber: '03',
       classKey: '8B',
       parentName: 'Harpreet Singh',
-      parentPhone: '+919000000003', // ← REPLACE with a test phone number
+      parentPhone: '+919056343865', // ← REPLACE with a test phone number
     },
     {
       name: 'Arjun Gupta',
@@ -149,7 +149,7 @@ async function main() {
       rollNumber: '05',
       classKey: '8B',
       parentName: 'Gurpreet Kaur',
-      parentPhone: '+919000000005', // ← REPLACE with a test phone number
+      parentPhone: '+916283967213', // ← REPLACE with a test phone number
     },
     // Class 8A — 3 students
     {
