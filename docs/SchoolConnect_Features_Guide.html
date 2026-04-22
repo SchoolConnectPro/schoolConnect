@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SchoolConnect - Complete Features Guide</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1a1a1a;margin:0;padding:0;background:#fff}
+.page{max-width:960px;margin:0 auto;padding:40px 60px}
+.cover{text-align:center;padding:80px 60px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);color:white;min-height:500px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.cover .logo{font-size:36pt;font-weight:800;letter-spacing:3px;margin-bottom:6px}
+.cover .tagline{font-size:12pt;opacity:.7;margin-bottom:50px;letter-spacing:1px}
+.cover .doc-title{font-size:22pt;font-weight:700;border-top:2px solid rgba(255,255,255,.35);border-bottom:2px solid rgba(255,255,255,.35);padding:16px 50px;margin-bottom:14px}
+.cover .subtitle{font-size:11pt;opacity:.65;margin-top:8px}
+.cover .date{margin-top:50px;font-size:9.5pt;opacity:.45}
+h1{font-size:18pt;color:#0f3460;border-bottom:3px solid #e94560;padding-bottom:8px;margin-top:48px}
+h2{font-size:13.5pt;color:#16213e;margin-top:30px;border-left:4px solid #0f3460;padding-left:12px}
+h3{font-size:11.5pt;color:#0f3460;margin-top:18px;font-weight:700}
+p{line-height:1.75;margin:10px 0}
+ul,ol{line-height:1.8;margin:8px 0;padding-left:22px}
+li{margin:3px 0}
+.info-box{background:#f0f4ff;border-left:5px solid #3b5bdb;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.warning-box{background:#fff5f5;border-left:5px solid #c0392b;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.success-box{background:#f0fff4;border-left:5px solid #27ae60;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.tip-box{background:#fffbf0;border-left:5px solid #f39c12;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.future-box{background:#f8f0ff;border-left:5px solid #8e44ad;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.info-box p,.warning-box p,.success-box p,.tip-box p,.future-box p{margin:4px 0;font-size:10.5pt}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:10pt}
+th{background:#0f3460;color:white;padding:10px 14px;text-align:left;font-weight:600}
+td{padding:9px 14px;border-bottom:1px solid #e8eef5;vertical-align:top}
+tr:nth-child(even) td{background:#f9f9fb}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:8.5pt;font-weight:700;margin-left:6px;vertical-align:middle}
+.badge.live{background:#d4edda;color:#155724}
+.badge.planned{background:#e2d9f3;color:#4a235a}
+.badge.partial{background:#fff3cd;color:#856404}
+.badge.mvp{background:#cce5ff;color:#004085}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+.feature-card{border:1px solid #dde3f0;border-radius:10px;overflow:hidden}
+.feature-card-header{padding:10px 16px;font-weight:700;font-size:10.5pt;color:white}
+.feature-card-header.green{background:#27ae60}
+.feature-card-header.blue{background:#2980b9}
+.feature-card-header.purple{background:#8e44ad}
+.feature-card-header.orange{background:#e67e22}
+.feature-card-body{padding:12px 16px;font-size:9.5pt;line-height:1.7}
+.feature-card-body li{margin:3px 0}
+.page-break{page-break-after:always}
+.footer{margin-top:60px;padding-top:20px;border-top:2px solid #e0e0e0;text-align:center;color:#999;font-size:9pt}
+.toc-item{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dotted #ddd;font-size:10.5pt}
+.toc-item a{color:#0f3460;text-decoration:none}
+.toc-num{color:#999;font-size:9.5pt}
+.wa-demo{background:#e5ddd5;padding:16px;border-radius:10px;margin:16px 0}
+.wa-demo-title{font-size:9pt;color:#555;margin-bottom:8px;font-weight:700}
+.wa-out{background:#dcf8c6;border-radius:12px 12px 0 12px;padding:10px 14px;margin:6px 0 6px 60px;font-size:10pt;display:block;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.wa-in{background:#fff;border-radius:12px 12px 12px 0;padding:10px 14px;margin:6px 60px 6px 0;font-size:10pt;display:block;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.section-intro{background:#f7f9fc;border:1px solid #dde3f0;border-radius:8px;padding:16px 20px;margin:16px 0;font-size:10.5pt}
+@media print{.page{padding:20px 40px}}
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="logo">SchoolConnect</div>
+  <div class="tagline">WhatsApp-First School Communication Platform</div>
+  <div class="doc-title">Complete Features Guide</div>
+  <div class="subtitle">Every feature explained &mdash; implemented, in progress, and planned</div>
+  <div class="date">April 2026 &nbsp;|&nbsp; Founder Reference Document &nbsp;|&nbsp; Confidential</div>
+</div>
+<div class="page">
+
+<h1>Table of Contents</h1>
+<div class="toc-item"><a href="#s1">1. Product Overview &amp; Philosophy</a><span class="toc-num">2</span></div>
+<div class="toc-item"><a href="#s2">2. Teacher WhatsApp Interface</a><span class="toc-num">3</span></div>
+<div class="toc-item"><a href="#s3">3. AI Message Engine</a><span class="toc-num">4</span></div>
+<div class="toc-item"><a href="#s4">4. Attendance Management</a><span class="toc-num">5</span></div>
+<div class="toc-item"><a href="#s5">5. Notification &amp; Broadcast System</a><span class="toc-num">6</span></div>
+<div class="toc-item"><a href="#s6">6. Parent WhatsApp Experience</a><span class="toc-num">7</span></div>
+<div class="toc-item"><a href="#s7">7. Parent AI Assistant</a><span class="toc-num">8</span></div>
+<div class="toc-item"><a href="#s8">8. School Admin Dashboard</a><span class="toc-num">9</span></div>
+<div class="toc-item"><a href="#s9">9. Data Management</a><span class="toc-num">10</span></div>
+<div class="toc-item"><a href="#s10">10. Academic Features</a><span class="toc-num">11</span></div>
+<div class="toc-item"><a href="#s11">11. Fee Management</a><span class="toc-num">12</span></div>
+<div class="toc-item"><a href="#s12">12. Reports &amp; Analytics</a><span class="toc-num">13</span></div>
+<div class="toc-item"><a href="#s13">13. Communication Features</a><span class="toc-num">14</span></div>
+<div class="toc-item"><a href="#s14">14. School Admin Tools</a><span class="toc-num">15</span></div>
+<div class="toc-item"><a href="#s15">15. Platform &amp; Technical Features</a><span class="toc-num">16</span></div>
+<div class="toc-item"><a href="#s16">16. Value Proposition Summary</a><span class="toc-num">17</span></div>
+<div class="page-break"></div>
+
+<h1 id="s1">1. Product Overview &amp; Philosophy</h1>
+<div class="section-intro">
+  <strong>SchoolConnect</strong> is a WhatsApp-first school communication and management platform built for Indian schools. The core insight: <em>every teacher and parent in India already uses WhatsApp</em>. SchoolConnect meets them where they are &mdash; no app to download, no login to remember, no training required.
+</div>
+<h2>1.1 The Core Problem</h2>
+<p>Indian schools (especially Tier 2/3 cities) struggle with:</p>
+<ul>
+  <li>Teachers spending 30&ndash;45 minutes/day on manual parent communication (calling, WhatsApp groups)</li>
+  <li>Parents missing important updates buried in noisy class WhatsApp groups</li>
+  <li>No reliable attendance tracking or parent notification system</li>
+  <li>School management software that requires training and is rarely used</li>
+  <li>Fee reminders sent manually, leading to delayed collections</li>
+  <li>No audit trail &mdash; disputes about whether a message was sent</li>
+</ul>
+<h2>1.2 The SchoolConnect Solution</h2>
+<p>A teacher types one natural language message on WhatsApp. SchoolConnect's AI understands it, formats it professionally, and delivers it to the right parents instantly. No forms, no portals, no training.</p>
+<div class="feature-grid">
+  <div class="feature-card">
+    <div class="feature-card-header green">&#128241; For Teachers</div>
+    <div class="feature-card-body"><ul>
+      <li>Send any message in plain language</li>
+      <li>AI understands and routes automatically</li>
+      <li>No app, no login &mdash; just WhatsApp</li>
+      <li>Saves 30&ndash;45 min/day per teacher</li>
+      <li>Instant delivery confirmation</li>
+    </ul></div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-card-header blue">&#128106; For Parents</div>
+    <div class="feature-card-body"><ul>
+      <li>Personalized, professional updates</li>
+      <li>Reply to attendance alerts (SICK/KNOWN)</li>
+      <li>Ask questions in natural language</li>
+      <li>No app to download</li>
+      <li>Works on any phone with WhatsApp</li>
+    </ul></div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-card-header purple">&#127979; For Principals</div>
+    <div class="feature-card-body"><ul>
+      <li>Real-time dashboard of all communications</li>
+      <li>Attendance reports by class/student</li>
+      <li>Fee collection tracking</li>
+      <li>Delivery analytics (sent/failed/read)</li>
+      <li>School-wide broadcast capability</li>
+    </ul></div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-card-header orange">&#127970; For School Owners</div>
+    <div class="feature-card-body"><ul>
+      <li>Professional image for the school</li>
+      <li>Reduced admin staff workload</li>
+      <li>Better parent satisfaction &amp; retention</li>
+      <li>Data-driven decisions</li>
+      <li>Full audit trail &amp; compliance</li>
+    </ul></div>
+  </div>
+</div>
+<h2>1.3 Feature Status Legend</h2>
+<table>
+  <tr><th>Badge</th><th>Meaning</th></tr>
+  <tr><td><span class="badge live">&#10003; Live</span></td><td>Fully implemented and working in production</td></tr>
+  <tr><td><span class="badge mvp">&#9654; MVP</span></td><td>Implemented in current MVP codebase, needs polish/UI</td></tr>
+  <tr><td><span class="badge partial">&#9654; Partial</span></td><td>Schema/types exist, core logic pending</td></tr>
+  <tr><td><span class="badge planned">&#9670; Planned</span></td><td>Designed and planned, not yet built</td></tr>
+</table>
+<div class="page-break"></div>
+
+<h1 id="s2">2. Teacher WhatsApp Interface</h1>
+<div class="section-intro">
+  The teacher interface is the heart of SchoolConnect. Teachers interact entirely through WhatsApp &mdash; the same app they already use. No training, no new software, no login.
+</div>
+<h2>2.1 Natural Language Message Input <span class="badge live">&#10003; Live</span></h2>
+<p>Teachers type messages exactly as they would to a colleague. The AI understands intent, extracts data, and takes action. Messages can be in English or Hinglish.</p>
+<div class="wa-demo">
+  <div class="wa-demo-title">&#128241; Example Teacher Messages &rarr; What SchoolConnect Does</div>
+  <span class="wa-in">"Diksha absent class 8B"</span>
+  <span class="wa-out">&#10003; Attendance Alert Sent | Student: Diksha Sharma | Parent notified on WhatsApp</span>
+  <span class="wa-in">"Math test Friday chapters 4-5 grade 8B"</span>
+  <span class="wa-out">&#10003; Sent | Class 8B | 32 parents notified | 09:15 AM</span>
+  <span class="wa-in">"Sports Day on 30 April all classes"</span>
+  <span class="wa-out">&#10003; Sent | All classes | 487 parents notified | 10:02 AM</span>
+  <span class="wa-in">"School closed tomorrow due to elections"</span>
+  <span class="wa-out">&#10003; Emergency alert sent | All classes | 487 parents notified</span>
+</div>
+<h2>2.2 Supported Message Types <span class="badge live">&#10003; Live</span></h2>
+<table>
+  <tr><th>Intent</th><th>Example Teacher Message</th><th>What Happens</th></tr>
+  <tr><td><strong>ATTENDANCE</strong></td><td>"Rahul absent 8B", "Priya nahi aayi class 7A"</td><td>Finds student, notifies parent with absence alert</td></tr>
+  <tr><td><strong>TEST_REMINDER</strong></td><td>"Math test Friday chapters 4-5 grade 8B"</td><td>Broadcasts test reminder to all parents in class</td></tr>
+  <tr><td><strong>EVENT</strong></td><td>"Sports Day 30 April all classes", "PTM Saturday 10am"</td><td>Broadcasts event notification school-wide or to class</td></tr>
+  <tr><td><strong>HOMEWORK</strong></td><td>"Science homework chapters 3-4 due Thursday 8B"</td><td>Broadcasts homework reminder to class parents</td></tr>
+  <tr><td><strong>EMERGENCY</strong></td><td>"School closed tomorrow", "Early dismissal today 1pm"</td><td>Broadcasts urgent alert to all parents immediately</td></tr>
+  <tr><td><strong>BROADCAST</strong></td><td>"Please bring sports kit tomorrow 8B"</td><td>General announcement to class or school</td></tr>
+</table>
+<h2>2.3 Built-in Commands <span class="badge live">&#10003; Live</span></h2>
+<table>
+  <tr><th>Command</th><th>What It Returns</th></tr>
+  <tr><td><strong>HELP</strong></td><td>List of all commands and example messages</td></tr>
+  <tr><td><strong>STATUS</strong></td><td>Last 3 messages sent: type, class, recipient count, date</td></tr>
+</table>
+<h2>2.4 Smart Student Matching <span class="badge live">&#10003; Live</span></h2>
+<p>Teachers don't need to type exact names. 3-tier fuzzy matching:</p>
+<ol>
+  <li><strong>Exact match</strong> &mdash; "Diksha" matches "Diksha Sharma"</li>
+  <li><strong>Partial/first name</strong> &mdash; "Dik" matches "Diksha Sharma"</li>
+  <li><strong>Parent name</strong> &mdash; "Meena" matches student whose parent is "Meena Sharma"</li>
+</ol>
+<p>If no match: teacher receives a helpful list of all students in the class.</p>
+<h2>2.5 Multi-Class Teacher Support <span class="badge live">&#10003; Live</span></h2>
+<p>A teacher can be assigned to multiple classes. If no class is specified, the system uses the teacher's primary class. Teachers can always override by specifying the class explicitly.</p>
+<h2>2.6 Delivery Confirmation <span class="badge live">&#10003; Live</span></h2>
+<p>After every action, the teacher receives an instant WhatsApp confirmation: student/class name, number of parents notified, failures (if any), and timestamp.</p>
+<h2>2.7 Scheduled Messages <span class="badge mvp">&#9654; MVP</span></h2>
+<p>The scheduler runs every 5 minutes and processes notifications with a future <code>scheduledAt</code> time. UI for scheduling is planned (e.g., "Send fee reminder tomorrow 8am").</p>
+<h2>2.8 Hinglish / Regional Language Input <span class="badge partial">&#9654; Partial</span></h2>
+<p>The AI understands Hinglish messages like "Rahul nahi aaya class 8B" or "kal school band hai". Language preference stored per parent (EN/HI/PA). Full regional language output to parents is planned.</p>
+<h2>2.9 Unregistered Teacher Handling <span class="badge live">&#10003; Live</span></h2>
+<p>If a message comes from an unregistered number, the system responds: "Your number is not registered in SchoolConnect. Please contact your school admin." No action is taken.</p>
+<div class="page-break"></div>
+
+<h1 id="s3">3. AI Message Engine</h1>
+<div class="section-intro">
+  SchoolConnect uses Claude (Anthropic) as its AI backbone. The AI does two jobs: (1) understand what the teacher means, and (2) write a professional, warm message for parents.
+</div>
+<h2>3.1 Intent Classification <span class="badge live">&#10003; Live</span></h2>
+<p>Every teacher message is classified into one of 7 intents. The AI returns a confidence level (HIGH/MEDIUM/LOW). Low confidence triggers a clarification prompt to the teacher rather than sending a wrong message.</p>
+<h2>3.2 Structured Data Extraction <span class="badge live">&#10003; Live</span></h2>
+<p>From a single natural language message, the AI extracts: intent, student name, class identifier (e.g. "8B"), subject, date (ISO format from relative dates like "Friday", "tomorrow", "25 April"), and confidence level.</p>
+<h2>3.3 Automatic Parent Message Formatting <span class="badge live">&#10003; Live</span></h2>
+<p>The AI writes the parent-facing message automatically: professional and warm tone, under 150 words, starts with a relevant emoji, includes all relevant details, contextually appropriate for the message type.</p>
+<div class="wa-demo">
+  <div class="wa-demo-title">Teacher types: "Math test Friday chapters 4-5 grade 8B" &rarr; Parent receives:</div>
+  <span class="wa-out">&#128218; <strong>Test Reminder &mdash; Class 8B</strong><br><br>Dear Parent,<br><br>This is a reminder that your child has a <strong>Mathematics test on Friday</strong>. The test will cover <strong>Chapters 4 and 5</strong>.<br><br>Please ensure your child revises the topics and is well-prepared. Wishing them all the best! &#127775;<br><br>&mdash; SchoolConnect</span>
+</div>
+<h2>3.4 Clarification Handling <span class="badge live">&#10003; Live</span></h2>
+<p>When the AI is unsure (LOW confidence or UNKNOWN intent), it asks the teacher to clarify with specific options. This prevents wrong messages from being sent to parents.</p>
+<h2>3.5 AI Model Flexibility <span class="badge live">&#10003; Live</span></h2>
+<p>Currently uses <strong>Claude Sonnet 4.5</strong>. The system is model-agnostic &mdash; can switch to GPT-4o-mini or Gemini Flash for cost optimization without changing application logic.</p>
+<h2>3.6 Parent AI Assistant <span class="badge planned">&#9670; Planned</span></h2>
+<p>Parents will ask questions in natural language via WhatsApp: "How many days was Rahul absent this month?", "What is the fee due?", "When is the next PTM?", "What homework is due tomorrow?". The AI queries the database and responds in the parent's preferred language. Cost: ~&#8377;0.017/query.</p>
+<h2>3.7 AI-Powered Report Summaries <span class="badge planned">&#9670; Planned</span></h2>
+<p>Monthly AI-generated summaries for principals: attendance trends, top absent students, fee collection status, communication effectiveness metrics.</p>
+<h2>3.8 Smart Duplicate Detection <span class="badge planned">&#9670; Planned</span></h2>
+<p>Detect if a teacher accidentally sends the same message twice within 5 minutes and ask for confirmation before sending again. Prevents duplicate notifications to parents.</p>
+<div class="page-break"></div>
+
+<h1 id="s4">4. Attendance Management</h1>
+<div class="section-intro">
+  Attendance is SchoolConnect's flagship feature. A teacher marks a student absent in 5 seconds via WhatsApp. The parent is notified instantly. The parent can reply to explain the absence.
+</div>
+<h2>4.1 WhatsApp Attendance Marking <span class="badge live">&#10003; Live</span></h2>
+<p>Teacher sends "Diksha absent class 8B". System: identifies teacher &rarr; finds student (fuzzy match) &rarr; finds parent's WhatsApp &rarr; sends AI-formatted alert &rarr; logs record &rarr; confirms to teacher. All in under 3 seconds.</p>
+<h2>4.2 Parent Absence Reply System <span class="badge live">&#10003; Live</span></h2>
+<table>
+  <tr><th>Parent Reply</th><th>Meaning</th><th>System Response</th><th>Stored In DB</th></tr>
+  <tr><td><strong>SICK</strong></td><td>Child is ill</td><td>"We hope [name] feels better soon!"</td><td>AttendanceLog.parentReply = SICK</td></tr>
+  <tr><td><strong>KNOWN</strong></td><td>Planned absence</td><td>"Noted. Thank you for informing us."</td><td>AttendanceLog.parentReply = KNOWN</td></tr>
+  <tr><td><strong>PRESENT</strong></td><td>Disputes the absence</td><td>"We will recheck and update you."</td><td>AttendanceLog.parentReply = PRESENT</td></tr>
+</table>
+<h2>4.3 Attendance Log &amp; History <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Every absence stored with: student, date, teacher, parent notification timestamp, parent reply. Admin API exposes last 50 logs. Full dashboard with filtering/search is planned.</p>
+<h2>4.4 Bulk Attendance Marking <span class="badge planned">&#9670; Planned</span></h2>
+<p>Teacher sends: "Absent today 8B: Rahul, Priya, Amit". System processes all students in one message, sends individual alerts to each parent, confirms with a summary to the teacher.</p>
+<h2>4.5 Daily Attendance Summary <span class="badge planned">&#9670; Planned</span></h2>
+<p>Automated daily report to principal at end of school day: total present/absent per class, names of absent students, parent reply status (SICK/KNOWN/no reply/disputed).</p>
+<h2>4.6 Monthly Attendance Report <span class="badge planned">&#9670; Planned</span></h2>
+<p>Monthly PDF per class: attendance % per student, trend charts, students below 75% threshold flagged for action. Sent to principal via WhatsApp and email.</p>
+<h2>4.7 Attendance Dispute Resolution <span class="badge planned">&#9670; Planned</span></h2>
+<p>When a parent replies PRESENT (disputes absence), the system flags it for the teacher/principal to review. Teacher can correct the record. Parent is notified of the correction.</p>
+<h2>4.8 Late Arrival Tracking <span class="badge planned">&#9670; Planned</span></h2>
+<p>Teacher sends "Rahul late 8B". System logs late arrival, notifies parent: "Your child Rahul arrived late today at [time]. Please ensure timely arrival."</p>
+<h2>4.9 Leave Application via WhatsApp <span class="badge planned">&#9670; Planned</span></h2>
+<p>Parent sends a leave request via WhatsApp: "Priya will be absent tomorrow for a family function". System logs the pre-approved leave, notifies the teacher, and marks it as KNOWN absence automatically.</p>
+<h2>4.10 Attendance Analytics <span class="badge planned">&#9670; Planned</span></h2>
+<p>Dashboard showing: class-wise attendance heatmap, students with chronic absenteeism, day-of-week patterns (which day has most absences), month-over-month trends.</p>
+<div class="page-break"></div>
+
+<h1 id="s5">5. Notification &amp; Broadcast System</h1>
+<div class="section-intro">
+  SchoolConnect's broadcast engine delivers personalized WhatsApp messages to hundreds of parents in seconds. Every message is tracked per-parent for delivery status.
+</div>
+<h2>5.1 Class-Level Broadcast <span class="badge live">&#10003; Live</span></h2>
+<p>Send a notification to all opted-in parents in a specific class. Teacher specifies class (e.g., "8B") and the message goes to all parents of students in that class only.</p>
+<h2>5.2 School-Wide Broadcast <span class="badge live">&#10003; Live</span></h2>
+<p>Send a notification to all opted-in parents across all classes in the school. Used for emergencies, school events, and general announcements. Teacher says "all classes" or sends an EMERGENCY type message.</p>
+<h2>5.3 Per-Parent Delivery Tracking <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Every message sent to every parent is logged in MessageLog with: Twilio message SID, delivery status (QUEUED/SENT/DELIVERED/FAILED), sent timestamp. Teacher sees summary (X sent, Y failed). Full per-parent status in dashboard is planned.</p>
+<h2>5.4 Opt-In / Opt-Out <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Parents can opt out of notifications. The <code>optedIn</code> flag is stored per parent. Only opted-in parents receive broadcasts. Opt-out via WhatsApp reply ("STOP") is planned.</p>
+<h2>5.5 Notification Types <span class="badge live">&#10003; Live</span></h2>
+<table>
+  <tr><th>Type</th><th>Use Case</th><th>Target</th></tr>
+
+  <tr><td>ATTENDANCE</td><td>Student absence alert</td><td>Individual parent</td></tr>
+  <tr><td>TEST_REMINDER</td><td>Upcoming test/exam</td><td>Class parents</td></tr>
+  <tr><td>EVENT</td><td>School events, PTM, Sports Day</td><td>Class or school-wide</td></tr>
+  <tr><td>HOMEWORK</td><td>Homework assignments</td><td>Class parents</td></tr>
+  <tr><td>EMERGENCY</td><td>School closure, early dismissal</td><td>School-wide (all parents)</td></tr>
+  <tr><td>BROADCAST</td><td>General announcements</td><td>Class or school-wide</td></tr>
+</table>
+<h2>5.6 Scheduled Notifications <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Notifications can be scheduled for future delivery. The scheduler checks every 5 minutes for pending notifications whose scheduled time has passed and sends them. Useful for: morning reminders, fee due date alerts, exam day reminders.</p>
+<h2>5.7 Notification History &amp; Audit Trail <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Every notification stored permanently with: type, raw teacher message, formatted parent message, target class, school, teacher, scheduled time, sent time, status, recipient count. Full audit trail for compliance.</p>
+<h2>5.8 Failed Message Retry <span class="badge planned">&#9670; Planned</span></h2>
+<p>When a WhatsApp message fails (invalid number, WhatsApp not installed), the system logs the failure and retries automatically after 30 minutes. Admin can see all failed deliveries and manually retry.</p>
+<h2>5.9 Message Templates <span class="badge planned">&#9670; Planned</span></h2>
+<p>Pre-approved WhatsApp message templates for common scenarios: monthly fee reminder, exam schedule, holiday notice, PTM invitation. Teachers select a template and fill in variables.</p>
+<div class="page-break"></div>
+
+<h1 id="s6">6. Parent WhatsApp Experience</h1>
+<div class="section-intro">
+  Parents receive personalized, professional notifications directly on WhatsApp. No app to download, no account to create. Designed to be simple enough for any parent regardless of tech literacy.
+</div>
+<h2>6.1 Personalized Notifications <span class="badge live">&#10003; Live</span></h2>
+<p>Every message sent to a parent is personalized with their child's name. Parents never receive generic group messages &mdash; every notification feels like it was written specifically for them.</p>
+<h2>6.2 Absence Alert with Reply Options <span class="badge live">&#10003; Live</span></h2>
+<p>When a parent receives an absence alert, they reply with SICK, KNOWN, or PRESENT. The system responds appropriately and logs the reply. No forms, no portals &mdash; just a one-word reply.</p>
+<h2>6.3 Language Preference <span class="badge partial">&#9654; Partial</span></h2>
+<p>Language preference stored per parent: English (EN), Hindi (HI), Punjabi (PA). Currently all messages sent in English. Hindi and Punjabi message generation planned using the same AI pipeline.</p>
+<h2>6.4 Opt-Out / Opt-In Control <span class="badge partial">&#9654; Partial</span></h2>
+<p>Parents can opt out of notifications. Opt-out flag stored in database. WhatsApp STOP/START command handling is planned. Parents who opt out will not receive broadcasts but will still receive individual attendance alerts.</p>
+<h2>6.5 Parent Self-Service Commands <span class="badge planned">&#9670; Planned</span></h2>
+<p>Parents send commands to get information without calling the school:</p>
+<ul>
+  <li><strong>ATTENDANCE</strong> &mdash; This month's attendance summary for their child</li>
+  <li><strong>FEES</strong> &mdash; Current fee balance and due date</li>
+  <li><strong>TIMETABLE</strong> &mdash; Today's class schedule</li>
+  <li><strong>HOMEWORK</strong> &mdash; Pending homework for their child's class</li>
+  <li><strong>RESULTS</strong> &mdash; Latest exam results</li>
+  <li><strong>CONTACT</strong> &mdash; School contact details</li>
+</ul>
+<h2>6.6 Fee Payment via WhatsApp <span class="badge planned">&#9670; Planned</span></h2>
+<p>Parents receive a fee reminder with a payment link embedded in the WhatsApp message. They pay directly via UPI/Razorpay without leaving WhatsApp. Payment confirmation sent automatically.</p>
+<h2>6.7 Parent Feedback <span class="badge planned">&#9670; Planned</span></h2>
+<p>After PTM or school events, parents receive a 1-question feedback request via WhatsApp: "How would you rate today's PTM? Reply 1-5". Responses aggregated for principal dashboard.</p>
+<div class="page-break"></div>
+
+<h1 id="s7">7. Parent AI Assistant</h1>
+<div class="section-intro">
+  The Parent AI Assistant is SchoolConnect's most powerful planned feature. Parents ask questions in natural language on WhatsApp and get instant, accurate answers from the school's data.
+</div>
+<h2>7.1 Natural Language Queries <span class="badge planned">&#9670; Planned</span></h2>
+<p>Parents type questions exactly as they would ask a person. The AI understands the question, queries the database, and responds in natural language in the parent's preferred language.</p>
+<div class="wa-demo">
+  <div class="wa-demo-title">&#128241; Parent AI Assistant Examples</div>
+  <span class="wa-in">"Rahul kitne din absent raha is mahine?"</span>
+  <span class="wa-out">&#128197; Rahul was absent <strong>4 days</strong> this month (April 2026):<br>Apr 3 (SICK), Apr 7 (KNOWN), Apr 14, Apr 18<br>Current attendance: <strong>82%</strong></span>
+  <span class="wa-in">"What is the fee due this month?"</span>
+  <span class="wa-out">&#128181; Fee for Priya Sharma (Class 8B)<br>Term 2 Fee: &#8377;8,500 | Due: 30 April 2026<br>Status: <strong>Unpaid</strong> &#128308;<br>Pay now: [Payment Link]</span>
+  <span class="wa-in">"When is the next PTM?"</span>
+  <span class="wa-out">&#128197; Next PTM: <strong>Saturday, 10 May 2026</strong>, 10:00 AM &ndash; 1:00 PM<br>Your slot: 10:30 AM (Class 8B parents)</span>
+</div>
+<h2>7.2 Attendance Queries <span class="badge planned">&#9670; Planned</span></h2>
+<p>Monthly attendance summary, specific date attendance, total absences this term, attendance percentage, comparison with class average.</p>
+<h2>7.3 Fee Queries <span class="badge planned">&#9670; Planned</span></h2>
+<p>Current fee balance, payment history, due dates, fee structure breakdown, receipt for last payment.</p>
+<h2>7.4 Academic Queries <span class="badge planned">&#9670; Planned</span></h2>
+<p>Latest exam results, homework due, upcoming tests, timetable for today/tomorrow, syllabus coverage.</p>
+<h2>7.5 School Information Queries <span class="badge planned">&#9670; Planned</span></h2>
+<p>School timings, holiday list, upcoming events, teacher contact, school address, bus routes.</p>
+<h2>7.6 Rate Limiting &amp; Cost Control <span class="badge planned">&#9670; Planned</span></h2>
+<p>Max 10 queries/parent/day. Common questions cached (school timings, holiday list). Rule-based responses for keyword matches before hitting the LLM. Cost: ~&#8377;0.017/query with GPT-4o-mini.</p>
+<h2>7.7 Multilingual Responses <span class="badge planned">&#9670; Planned</span></h2>
+<p>The AI responds in the parent's preferred language (EN/HI/PA). A parent who asks in Hindi gets a response in Hindi. Language detected from the query and from the stored preference.</p>
+<div class="page-break"></div>
+
+<h1 id="s8">8. School Admin Dashboard</h1>
+<div class="section-intro">
+  The web dashboard gives principals and school admins a real-time view of all school communications, attendance, and data. Built as a React/Next.js app hosted on Vercel.
+</div>
+<h2>8.1 Notification History <span class="badge mvp">&#9654; MVP</span></h2>
+<p>View all notifications sent: type, class, teacher, message, recipient count, sent time, status. Filter by date, class, type. Click any notification to see per-parent delivery status.</p>
+<h2>8.2 Attendance Dashboard <span class="badge mvp">&#9654; MVP</span></h2>
+<p>View all attendance logs: student, date, teacher, parent reply. Filter by class, date range, reply status. Export to CSV/PDF.</p>
+<h2>8.3 Student &amp; Parent Management <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Add/edit/remove students and their parents. Set language preference, opt-in status, roll number. Bulk import via CSV is planned.</p>
+<h2>8.4 Teacher Management <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Add/edit/remove teachers. Assign teachers to classes. View teacher activity (messages sent, last active).</p>
+<h2>8.5 Class Management <span class="badge mvp">&#9654; MVP</span></h2>
+<p>View all classes with student count. See all parents in a class. Manage class-teacher assignments.</p>
+<h2>8.6 Real-Time Analytics <span class="badge planned">&#9670; Planned</span></h2>
+<p>Live dashboard: messages sent today, parents reached, delivery rate, attendance rate by class, fee collection progress, AI query volume.</p>
+<h2>8.7 Principal WhatsApp Interface <span class="badge planned">&#9670; Planned</span></h2>
+<p>Principals can use WhatsApp to send school-wide broadcasts, get daily summaries, and receive alerts for important events (student with 5+ absences, fee overdue 30+ days).</p>
+<h2>8.8 Multi-School Support <span class="badge partial">&#9654; Partial</span></h2>
+<p>Data model supports multiple schools. Each school has its own teachers, classes, students, and notifications. Super-admin view across all schools is planned for the SchoolConnect operations team.</p>
+<h2>8.9 School Onboarding Flow <span class="badge planned">&#9670; Planned</span></h2>
+<p>Step-by-step onboarding wizard: enter school details &rarr; add classes &rarr; bulk import students (CSV) &rarr; add teachers &rarr; connect WhatsApp number &rarr; send test message. Target: school live in under 30 minutes.</p>
+<div class="page-break"></div>
+
+<h1 id="s9">9. Data Management</h1>
+<h2>9.1 School Data Model <span class="badge live">&#10003; Live</span></h2>
+<table>
+  <tr><th>Entity</th><th>Key Fields</th><th>Notes</th></tr>
+  <tr><td>School</td><td>name, address, city, whatsappNumber, logoUrl</td><td>One WhatsApp number per school</td></tr>
+  <tr><td>Teacher</td><td>name, phone, subject, schoolId</td><td>Phone = WhatsApp number for login</td></tr>
+  <tr><td>Class</td><td>grade, section, schoolId</td><td>Unique per school (e.g., 8B)</td></tr>
+  <tr><td>Student</td><td>name, rollNumber, classId</td><td>One parent per student</td></tr>
+  <tr><td>Parent</td><td>name, phone, languagePreference, optedIn</td><td>Phone = WhatsApp number</td></tr>
+  <tr><td>Notification</td><td>type, message, targetClass, status, recipientCount</td><td>Full audit trail</td></tr>
+  <tr><td>MessageLog</td><td>notificationId, parentId, twilioSid, status</td><td>Per-parent delivery tracking</td></tr>
+  <tr><td>AttendanceLog</td><td>studentId, date, teacherId, parentReply</td><td>SICK/KNOWN/PRESENT replies</td></tr>
+</table>
+<h2>9.2 Bulk Student Import <span class="badge planned">&#9670; Planned</span></h2>
+<p>Upload a CSV file with columns: student name, roll number, class, parent name, parent phone. System validates, deduplicates, and imports all records. Error report for invalid rows.</p>
+<h2>9.3 Data Export <span class="badge planned">&#9670; Planned</span></h2>
+<p>Export any data to CSV/Excel: student list, attendance records, notification history, fee records, message delivery logs. Useful for compliance, audits, and offline analysis.</p>
+<h2>9.4 Data Backup &amp; Recovery <span class="badge mvp">&#9654; MVP</span></h2>
+<p>PostgreSQL database on Railway with automatic daily backups. Point-in-time recovery available. Data is never deleted &mdash; soft deletes only.</p>
+<h2>9.5 Data Privacy &amp; GDPR <span class="badge planned">&#9670; Planned</span></h2>
+<p>Parent data deletion on request. Data retention policy (auto-delete logs older than 3 years). Privacy policy and consent management. Data stored in India (Railway Mumbai region).</p>
+<div class="page-break"></div>
+
+<h1 id="s10">10. Academic Features</h1>
+<h2>10.1 Homework Management <span class="badge partial">&#9654; Partial</span></h2>
+<p>Teacher sends "Science homework chapters 3-4 due Thursday 8B". System broadcasts to class parents. Planned: homework tracker in dashboard, pending homework list for parents via WhatsApp query, homework completion tracking.</p>
+<h2>10.2 Test &amp; Exam Reminders <span class="badge live">&#10003; Live</span></h2>
+<p>Teacher sends "Math test Friday chapters 4-5 grade 8B". AI extracts subject, date, topics and sends a professional reminder to all class parents. Planned: exam schedule calendar, result entry and sharing.</p>
+<h2>10.3 Exam Results Sharing <span class="badge planned">&#9670; Planned</span></h2>
+<p>Teacher enters marks via WhatsApp or dashboard. System sends personalized result to each parent: "Rahul scored 78/100 in Mathematics (Class Avg: 71). Well done!" Parents can query results anytime.</p>
+<h2>10.4 Timetable Management <span class="badge planned">&#9670; Planned</span></h2>
+<p>Upload class timetable to dashboard. Parents query "What is today's timetable for 8B?" via WhatsApp. Teachers get their daily schedule. Substitution alerts when a teacher is absent.</p>
+<h2>10.5 Syllabus Tracking <span class="badge planned">&#9670; Planned</span></h2>
+<p>Teachers mark syllabus topics as covered. Parents can see how much of the syllabus has been completed. Useful for exam preparation and parent-teacher alignment.</p>
+<h2>10.6 PTM Management <span class="badge planned">&#9670; Planned</span></h2>
+<p>Schedule PTM dates, send invitations to parents via WhatsApp, allow parents to confirm attendance, send slot reminders on the day. Post-PTM feedback collection.</p>
+<h2>10.7 Report Card Generation <span class="badge planned">&#9670; Planned</span></h2>
+<p>Generate PDF report cards from marks entered in the system. Send to parents via WhatsApp (PDF attachment) and email. Customizable template with school logo and branding.</p>
+<h2>10.8 Library Management <span class="badge planned">&#9670; Planned</span></h2>
+<p>Track books issued to students. Send return reminders via WhatsApp when due date approaches. Parents can query "Which books does Rahul have from the library?"</p>
+<div class="page-break"></div>
+
+<h1 id="s11">11. Fee Management</h1>
+<div class="section-intro">
+  Fee management is a major pain point for Indian schools. SchoolConnect automates fee reminders, tracks payments, and enables WhatsApp-based fee collection.
+</div>
+<h2>11.1 Fee Structure Setup <span class="badge planned">&#9670; Planned</span></h2>
+<p>Admin sets up fee structure per class: tuition fee, transport fee, activity fee, etc. Different fee structures for different classes. Annual, term-wise, or monthly billing cycles.</p>
+<h2>11.2 Automated Fee Reminders <span class="badge planned">&#9670; Planned</span></h2>
+<p>Automated WhatsApp reminders sent to parents with unpaid fees: 7 days before due date, on due date, 3 days after due date. Message includes amount due, due date, and payment link. Stops automatically when fee is paid.</p>
+<div class="wa-demo">
+  <div class="wa-demo-title">&#128181; Automated Fee Reminder to Parent</div>
+  <span class="wa-out">&#128181; <strong>Fee Reminder</strong><br><br>Dear Mrs. Sharma,<br><br>The <strong>Term 2 fee of &#8377;8,500</strong> for Priya (Class 8B) is due on <strong>30 April 2026</strong>.<br><br>Pay now: [Payment Link]<br><br>For queries, contact the school office. Thank you!</span>
+</div>
+<h2>11.3 Online Fee Payment <span class="badge planned">&#9670; Planned</span></h2>
+<p>Parents click the payment link in the WhatsApp message and pay via UPI, credit/debit card, or net banking (Razorpay integration). Payment confirmation sent automatically to parent and school admin.</p>
+<h2>11.4 Fee Collection Dashboard <span class="badge planned">&#9670; Planned</span></h2>
+<p>Principal sees: total fees collected this month, pending collections, class-wise collection rate, students with overdue fees, payment history per student.</p>
+<h2>11.5 Fee Receipt Generation <span class="badge planned">&#9670; Planned</span></h2>
+<p>Automatic PDF receipt generated after each payment. Sent to parent via WhatsApp and email. Stored in Cloudflare R2 for download anytime.</p>
+<h2>11.6 Scholarship &amp; Concession Management <span class="badge planned">&#9670; Planned</span></h2>
+<p>Mark students with fee concessions or scholarships. System adjusts fee amounts accordingly. Concession reason stored for audit.</p>
+<h2>11.7 Fee Defaulter Reports <span class="badge planned">&#9670; Planned</span></h2>
+<p>Monthly report of students with overdue fees: student name, class, amount due, days overdue. Exportable to Excel for follow-up.</p>
+<div class="page-break"></div>
+
+<h1 id="s12">12. Reports &amp; Analytics</h1>
+<h2>12.1 Notification Analytics <span class="badge mvp">&#9654; MVP</span></h2>
+<p>For every notification: total recipients, delivered count, failed count, delivery rate %. Teacher can see their last 3 messages via STATUS command. Full analytics dashboard is planned.</p>
+<h2>12.2 Attendance Reports <span class="badge planned">&#9670; Planned</span></h2>
+<ul>
+  <li><strong>Daily report</strong>: Present/absent per class, sent to principal at 4pm</li>
+  <li><strong>Weekly report</strong>: Attendance trend for the week</li>
+  <li><strong>Monthly report</strong>: Per-student attendance %, students below 75%</li>
+  <li><strong>Annual report</strong>: Full year attendance for each student</li>
+</ul>
+<h2>12.3 Communication Reports <span class="badge planned">&#9670; Planned</span></h2>
+<p>Messages sent per week/month by type (attendance/test/event/emergency), by teacher, delivery success rate, parent engagement rate (replies received).</p>
+<h2>12.4 Fee Reports <span class="badge planned">&#9670; Planned</span></h2>
+<p>Monthly collection summary, class-wise collection rate, pending fee aging report (30/60/90 days overdue), payment method breakdown (UPI/card/cash).</p>
+<h2>12.5 Parent Engagement Reports <span class="badge planned">&#9670; Planned</span></h2>
+<p>Which parents are most engaged (reply to messages, pay fees on time, attend PTM). Which parents are disengaged. Useful for targeted outreach.</p>
+<h2>12.6 Export &amp; Download <span class="badge planned">&#9670; Planned</span></h2>
+<p>All reports exportable to PDF and Excel. Scheduled email delivery of reports to principal (daily/weekly/monthly). WhatsApp delivery of summary reports.</p>
+<div class="page-break"></div>
+
+<h1 id="s13">13. Communication Features</h1>
+<h2>13.1 Emergency Broadcast <span class="badge live">&#10003; Live</span></h2>
+<p>Teacher sends "School closed tomorrow" or any EMERGENCY intent message. System immediately broadcasts to ALL parents in the school. No confirmation required &mdash; speed is critical for emergencies.</p>
+<h2>13.2 Event Notifications <span class="badge live">&#10003; Live</span></h2>
+<p>Sports Day, Annual Function, PTM, Republic Day &mdash; teacher sends one message, all relevant parents notified with a professionally formatted event announcement.</p>
+<h2>13.3 Circular Distribution <span class="badge planned">&#9670; Planned</span></h2>
+<p>Upload a PDF circular to the dashboard. System sends it to all parents via WhatsApp (PDF attachment). No more printing and sending physical circulars home.</p>
+<h2>13.4 Photo Sharing <span class="badge planned">&#9670; Planned</span></h2>
+<p>Teacher uploads photos from school events (Sports Day, Annual Function, field trips). System sends to relevant parents via WhatsApp. Photos stored in Cloudflare R2.</p>
+<h2>13.5 Two-Way Messaging (Shared Inbox) <span class="badge planned">&#9670; Planned</span></h2>
+<p>Parents can send messages to the school WhatsApp number. School admin sees all incoming messages in a shared inbox on the dashboard. Can reply from the dashboard. Messages routed to the right teacher/admin based on context.</p>
+<h2>13.6 Broadcast Campaigns <span class="badge planned">&#9670; Planned</span></h2>
+<p>Schedule a series of messages for a campaign: exam preparation reminders (7 days before, 3 days before, day before), fee collection campaign (reminder + follow-up + final notice), admission campaign for new academic year.</p>
+<h2>13.7 Multi-Language Notifications <span class="badge planned">&#9670; Planned</span></h2>
+<p>Send the same notification in multiple languages simultaneously. Parents with Hindi preference get Hindi message, English preference get English. Same teacher message, AI translates and formats for each language.</p>
+<div class="page-break"></div>
+
+<h1 id="s14">14. School Admin Tools</h1>
+<h2>14.1 Admin REST API <span class="badge mvp">&#9654; MVP</span></h2>
+<table>
+  <tr><th>Endpoint</th><th>Method</th><th>Purpose</th></tr>
+  <tr><td>/api/schools</td><td>GET</td><td>List all schools</td></tr>
+  <tr><td>/api/teachers</td><td>GET, POST</td><td>List/add teachers</td></tr>
+  <tr><td>/api/students</td><td>GET, POST</td><td>List/add students + parents</td></tr>
+  <tr><td>/api/classes</td><td>GET</td><td>List all classes with student count</td></tr>
+  <tr><td>/api/classes/:id/parents</td><td>GET</td><td>All parents in a class</td></tr>
+  <tr><td>/api/notifications</td><td>GET</td><td>Notification history (last 50)</td></tr>
+  <tr><td>/api/notifications/:id</td><td>GET</td><td>Single notification + per-parent delivery stats</td></tr>
+  <tr><td>/api/attendance</td><td>GET</td><td>Attendance logs (last 50)</td></tr>
+  <tr><td>/api/test-message</td><td>POST</td><td>Send test WhatsApp message to any number</td></tr>
+  <tr><td>/webhook/twilio</td><td>POST</td><td>Incoming WhatsApp messages from Twilio</td></tr>
+  <tr><td>/webhook/twilio/status</td><td>POST</td><td>Delivery status callbacks from Twilio</td></tr>
+</table>
+<h2>14.2 Test Message Tool <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Send a test WhatsApp message to any number from the admin panel. Used for onboarding new schools and verifying the WhatsApp connection is working.</p>
+<h2>14.3 School Branding <span class="badge partial">&#9654; Partial</span></h2>
+<p>School name, logo URL, and WhatsApp number stored per school. School name included in all parent notifications. Custom logo in dashboard header is planned.</p>
+<h2>14.4 Role-Based Access <span class="badge planned">&#9670; Planned</span></h2>
+<p>Different access levels: Super Admin (SchoolConnect team, all schools), School Admin (principal, one school), Teacher (own classes only). Login via OTP to school dashboard.</p>
+<h2>14.5 Bulk Operations <span class="badge planned">&#9670; Planned</span></h2>
+<p>Bulk add students (CSV import), bulk send fee reminders, bulk update parent phone numbers, bulk opt-out management. Essential for school onboarding and annual data refresh.</p>
+<div class="page-break"></div>
+
+<h1 id="s15">15. Platform &amp; Technical Features</h1>
+<h2>15.1 WhatsApp Integration <span class="badge live">&#10003; Live</span></h2>
+<p>Currently via <strong>Twilio WhatsApp API</strong> (MVP). Planned migration to <strong>Interakt</strong> (Meta-approved BSP) for production. Interakt provides lower per-message costs, better deliverability, and a shared inbox dashboard.</p>
+<h2>15.2 Multi-Tenant Architecture <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Single deployment serves multiple schools. Each school's data is isolated by schoolId. One Railway deployment, one database, multiple schools. Cost scales efficiently.</p>
+<h2>15.3 Notification Scheduler <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Cron-based scheduler runs every 5 minutes. Processes pending notifications with past scheduledAt time. Handles failures gracefully with status updates. Designed to be idempotent.</p>
+<h2>15.4 Error Handling &amp; Monitoring <span class="badge mvp">&#9654; MVP</span></h2>
+<p>All errors logged with context. Failed WhatsApp sends logged in MessageLog. Notification status updated to FAILED on error. Sentry integration planned for production error tracking.</p>
+<h2>15.5 Security <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Teacher authentication by phone number (only registered numbers can send commands). Webhook signature verification (Twilio). Environment variables for all secrets. HTTPS enforced on Railway and Vercel.</p>
+<h2>15.6 Scalability <span class="badge mvp">&#9654; MVP</span></h2>
+<p>Broadcasts use <code>Promise.allSettled</code> for parallel sending &mdash; 500 parents notified in ~2-3 seconds. Railway auto-scales on demand. Database connection pooling via Prisma.</p>
+<h2>15.7 File Storage <span class="badge planned">&#9670; Planned</span></h2>
+<p>Cloudflare R2 for storing: student profile photos, uploaded circulars/PDFs, exported reports, fee receipts. Zero egress fees. Free tier covers first 10GB (sufficient for 100+ schools).</p>
+<h2>15.8 Email Notifications <span class="badge planned">&#9670; Planned</span></h2>
+<p>Resend for transactional emails: OTP verification, monthly reports to principals, fee invoices, welcome emails for new schools. Free tier (3,000 emails/mo) covers initial stage.</p>
+<h2>15.9 Redis Cache <span class="badge planned">&#9670; Planned</span></h2>
+<p>Upstash Redis for: rate limiting AI queries, session caching, message queue for bulk broadcasts. Free tier (10,000 commands/day) covers initial stage.</p>
+<div class="page-break"></div>
+
+<h1 id="s16">16. Value Proposition Summary</h1>
+<div class="section-intro">
+  SchoolConnect delivers measurable value to every stakeholder. Here is the complete value proposition for each user type.
+</div>
+<h2>16.1 Value for Teachers</h2>
+<table>
+  <tr><th>Pain Point</th><th>SchoolConnect Solution</th><th>Time Saved</th></tr>
+  <tr><td>Calling parents about absent students (5-10 min/student)</td><td>One WhatsApp message, parent notified in 3 seconds</td><td>30-45 min/day</td></tr>
+  <tr><td>Sending test reminders to each parent individually</td><td>One message broadcasts to entire class</td><td>20-30 min/event</td></tr>
+  <tr><td>Managing WhatsApp groups (noise, wrong messages)</td><td>Personalized 1:1 messages, no group chaos</td><td>15-20 min/day</td></tr>
+  <tr><td>Tracking who received which message</td><td>Automatic delivery tracking per parent</td><td>10 min/day</td></tr>
+</table>
+<h2>16.2 Value for Parents</h2>
+<table>
+  <tr><th>Pain Point</th><th>SchoolConnect Solution</th></tr>
+  <tr><td>Missing important updates in noisy WhatsApp groups</td><td>Direct 1:1 message from school, never missed</td></tr>
+  <tr><td>Not knowing why child was marked absent</td><td>Instant absence alert with reply option (SICK/KNOWN)</td></tr>
+  <tr><td>Calling school to check fee balance</td><td>Ask via WhatsApp, get instant answer</td></tr>
+  <tr><td>Forgetting exam dates and homework</td><td>Personalized reminders sent directly to parent</td></tr>
+  <tr><td>Language barrier with English communications</td><td>Messages in preferred language (EN/HI/PA)</td></tr>
+</table>
+<h2>16.3 Value for Principals</h2>
+<table>
+  <tr><th>Pain Point</th><th>SchoolConnect Solution</th></tr>
+  <tr><td>No visibility into teacher-parent communication</td><td>Full dashboard with all notifications, delivery stats</td></tr>
+  <tr><td>Manual attendance registers, no digital record</td><td>Digital attendance log with parent reply tracking</td></tr>
+  <tr><td>Fee collection delays, manual reminders</td><td>Automated fee reminders, online payment, collection dashboard</td></tr>
+  <tr><td>No data for decision-making</td><td>Analytics: attendance trends, communication effectiveness, fee collection rate</td></tr>
+</table>
+<h2>16.4 Value for School Owners</h2>
+<table>
+  <tr><th>Metric</th><th>Before SchoolConnect</th><th>After SchoolConnect</th></tr>
+  <tr><td>Parent satisfaction</td><td>Low (missed updates, no transparency)</td><td>High (instant, personalized communication)</td></tr>
+  <tr><td>Admin staff time on communication</td><td>2-3 hours/day</td><td>15-20 minutes/day</td></tr>
+  <tr><td>Fee collection rate</td><td>70-80% (manual reminders)</td><td>90-95% (automated reminders + online payment)</td></tr>
+  <tr><td>School reputation</td><td>Average (no digital presence)</td><td>Professional (branded WhatsApp communication)</td></tr>
+  <tr><td>Parent retention</td><td>Baseline</td><td>+15-20% (better communication = happier parents)</td></tr>
+</table>
+<h2>16.5 Complete Feature Count</h2>
+<table>
+  <tr><th>Status</th><th>Count</th><th>Features</th></tr>
+  <tr><td><span class="badge live">&#10003; Live</span></td><td>18</td><td>Core WhatsApp interface, AI engine, attendance marking, parent reply, broadcast, delivery tracking</td></tr>
+  <tr><td><span class="badge mvp">&#9654; MVP</span></td><td>14</td><td>Scheduler, admin API, dashboard data, multi-tenant, opt-in, notification history</td></tr>
+  <tr><td><span class="badge partial">&#9654; Partial</span></td><td>6</td><td>Language preference, opt-out, school branding, multi-school, homework, data model</td></tr>
+  <tr><td><span class="badge planned">&#9670; Planned</span></td><td>45+</td><td>Fee management, parent AI assistant, reports, timetable, results, PTM, library, campaigns</td></tr>
+</table>
+<div class="success-box">
+  <p>&#9989; <strong>The core value is already live:</strong> A teacher can mark a student absent via WhatsApp and the parent is notified in under 3 seconds. This single feature alone saves 30-45 minutes per teacher per day and is the reason schools will pay for SchoolConnect.</p>
+</div>
+<div class="footer">
+  <p>SchoolConnect Complete Features Guide &mdash; April 2026</p>
+  <p>This document covers all features: implemented, in progress, and planned. Use it as your go-to reference for product decisions, sales conversations, and investor presentations.</p>
+  <p>Next review: July 2026 &nbsp;|&nbsp; Confidential &mdash; For Founder &amp; Team Use Only</p>
+</div>
+</div>
+</body>
+</html>
