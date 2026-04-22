@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SchoolConnect - Infrastructure &amp; Services Guide</title>
+<style>
+body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1a1a1a;margin:0;padding:0;background:#fff}
+.page{max-width:900px;margin:0 auto;padding:40px 60px}
+.cover{text-align:center;padding:80px 60px;background:linear-gradient(135deg,#0f2027 0%,#203a43 50%,#2c5364 100%);color:white;min-height:480px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.cover .logo-text{font-size:32pt;font-weight:700;letter-spacing:2px;margin-bottom:8px}
+.cover .logo-sub{font-size:12pt;opacity:.8;margin-bottom:50px}
+.cover .doc-title{font-size:20pt;font-weight:700;border-top:2px solid rgba(255,255,255,.4);border-bottom:2px solid rgba(255,255,255,.4);padding:14px 40px;margin-bottom:12px}
+.cover .subtitle{font-size:11pt;opacity:.7;margin-top:10px}
+.cover .date{margin-top:50px;font-size:10pt;opacity:.5}
+h1{font-size:17pt;color:#0f2027;border-bottom:3px solid #2c5364;padding-bottom:8px;margin-top:44px}
+h2{font-size:13pt;color:#203a43;margin-top:28px}
+h3{font-size:11.5pt;color:#2c5364;margin-top:20px;font-weight:700}
+p{line-height:1.7;margin:10px 0}
+.info-box{background:#f0f4ff;border-left:5px solid #3b5bdb;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.warning-box{background:#fff5f5;border-left:5px solid #c0392b;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.success-box{background:#f0fff4;border-left:5px solid #27ae60;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.tip-box{background:#fffbf0;border-left:5px solid #f39c12;padding:14px 18px;margin:18px 0;border-radius:0 8px 8px 0}
+.info-box p,.warning-box p,.success-box p,.tip-box p{margin:4px 0;font-size:10.5pt}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:10pt}
+th{background:#0f2027;color:white;padding:10px 14px;text-align:left;font-weight:600}
+th.blue{background:#2c5364}
+td{padding:9px 14px;border-bottom:1px solid #e8eef5;vertical-align:top}
+tr:nth-child(even) td{background:#f9f9fb}
+tr:last-child td{border-bottom:none}
+td.num{text-align:right;font-family:monospace}
+td.total{font-weight:700;background:#f0f4ff!important}
+td.loss{color:#c0392b;font-weight:700}
+td.profit{color:#27ae60;font-weight:700}
+td.warn{color:#e67e22;font-weight:700}
+td.center{text-align:center}
+.stage-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:20px 0}
+.stage-card{border-radius:10px;overflow:hidden;border:1px solid #dde3f0}
+.stage-card-header{padding:10px 16px;font-weight:700;font-size:10.5pt;color:white}
+.stage-card-header.s1{background:#27ae60}
+.stage-card-header.s2{background:#e67e22}
+.stage-card-header.s3{background:#c0392b}
+.stage-card-body{padding:12px 16px;font-size:9.5pt}
+.stage-card-body li{margin:4px 0}
+.service-block{border:1px solid #dde3f0;border-radius:10px;margin:20px 0;overflow:hidden}
+.service-header{display:flex;align-items:center;padding:12px 18px;background:#f7f9fc;border-bottom:1px solid #dde3f0}
+.service-icon{font-size:20pt;margin-right:14px}
+.service-title{font-size:13pt;font-weight:700;color:#0f2027}
+.service-subtitle{font-size:9.5pt;color:#666;margin-top:2px}
+.service-body{padding:14px 18px}
+.page-break{page-break-after:always}
+.footer{margin-top:60px;padding-top:20px;border-top:2px solid #e0e0e0;text-align:center;color:#999;font-size:9pt}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:8.5pt;font-weight:700;margin-left:6px}
+.badge.free{background:#d4edda;color:#155724}
+.badge.paid{background:#fff3cd;color:#856404}
+.badge.required{background:#f8d7da;color:#721c24}
+.badge.optional{background:#d1ecf1;color:#0c5460}
+@media print{.page{padding:20px 40px}}
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="logo-text">SchoolConnect</div>
+  <div class="logo-sub">Technical Operations Document</div>
+  <div class="doc-title">Infrastructure &amp; Services Guide</div>
+  <div class="subtitle">Every service, its purpose, plans, and when to upgrade</div>
+  <div class="date">April 2026 &nbsp;|&nbsp; For Founder &amp; Technical Team Use</div>
+</div>
+<div class="page">
+
+<h1>1. Overview &mdash; The Full Stack</h1>
+<p>SchoolConnect is a WhatsApp-first school communication platform. Here is every external service it depends on, grouped by category.</p>
+
+<div class="stage-grid">
+  <div class="stage-card">
+    <div class="stage-card-header s1">&#127807; Stage 1: Initial (0-5 schools)</div>
+    <div class="stage-card-body">
+      <ul>
+        <li>~500 students total</li>
+        <li>1 founder running everything</li>
+        <li>Monthly infra cost: ~&#8377;2,100/mo</li>
+        <li>Use free tiers wherever possible</li>
+        <li>Railway Hobby plan</li>
+        <li>Interakt Growth (&#8377;2,499/mo)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stage-card">
+    <div class="stage-card-header s2">&#127808; Stage 2: Medium (5-25 schools)</div>
+    <div class="stage-card-body">
+      <ul>
+        <li>~3,000-5,000 students total</li>
+        <li>Small team (2-3 people)</li>
+        <li>Monthly infra cost: ~&#8377;8,000-12,000/mo</li>
+        <li>Upgrade to paid tiers</li>
+        <li>Railway Pro plan</li>
+        <li>Interakt Advanced (&#8377;3,499/mo)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stage-card">
+    <div class="stage-card-header s3">&#127809; Stage 3: Large (25-100+ schools)</div>
+    <div class="stage-card-body">
+      <ul>
+        <li>~15,000-50,000 students total</li>
+        <li>Full team (5+ people)</li>
+        <li>Monthly infra cost: ~&#8377;25,000-60,000/mo</li>
+        <li>Enterprise plans, dedicated infra</li>
+        <li>Switch BSP to Wati/360dialog</li>
+        <li>Consider direct Meta API</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<table>
+  <tr><th>Service</th><th>Category</th><th>Purpose</th><th>Required?</th><th>Initial Plan</th><th>Medium Plan</th><th>Large Plan</th></tr>
+  <tr><td><strong>Railway</strong></td><td>Hosting</td><td>Run Node.js backend + PostgreSQL DB</td><td class="center"><span class="badge required">Required</span></td><td>Hobby $5/mo</td><td>Pro $20/mo</td><td>Pro + multiple services</td></tr>
+  <tr><td><strong>Vercel</strong></td><td>Frontend</td><td>Host school dashboard web app</td><td class="center"><span class="badge required">Required</span></td><td>Hobby FREE</td><td>Hobby FREE</td><td>Pro $20/seat/mo</td></tr>
+  <tr><td><strong>Interakt</strong></td><td>BSP / WhatsApp</td><td>WhatsApp Business API access + chatbot</td><td class="center"><span class="badge required">Required</span></td><td>Growth &#8377;2,499/mo</td><td>Advanced &#8377;3,499/mo</td><td>Enterprise / Switch BSP</td></tr>
+  <tr><td><strong>Cloudflare R2</strong></td><td>File Storage</td><td>Store profile photos, documents, exports</td><td class="center"><span class="badge required">Required</span></td><td>Free tier</td><td>Paid $0.015/GB</td><td>Paid $0.015/GB</td></tr>
+  <tr><td><strong>Resend</strong></td><td>Email</td><td>Send OTPs, reports, invoices via email</td><td class="center"><span class="badge required">Required</span></td><td>Free 3K/mo</td><td>Pro $20/mo</td><td>Scale $90/mo</td></tr>
+  <tr><td><strong>Upstash Redis</strong></td><td>Cache / Queue</td><td>Rate limiting, session cache, message queue</td><td class="center"><span class="badge required">Required</span></td><td>Free tier</td><td>Pay-as-you-go ~$10/mo</td><td>Pay-as-you-go ~$25/mo</td></tr>
+  <tr><td><strong>OpenAI / Gemini</strong></td><td>AI / LLM</td><td>Parent AI assistant (natural language queries)</td><td class="center"><span class="badge optional">Optional</span></td><td>Pay-per-use ~&#8377;50/mo</td><td>Pay-per-use ~&#8377;500/mo</td><td>Pay-per-use ~&#8377;3,000/mo</td></tr>
+  <tr><td><strong>Sentry</strong></td><td>Monitoring</td><td>Error tracking, performance monitoring</td><td class="center"><span class="badge optional">Optional</span></td><td>Free 5K errors/mo</td><td>Team $26/mo</td><td>Business $80/mo</td></tr>
+  <tr><td><strong>GitHub</strong></td><td>Code / CI-CD</td><td>Source code, CI/CD pipelines, deployments</td><td class="center"><span class="badge required">Required</span></td><td>Free</td><td>Free / Team $4/user/mo</td><td>Team $4/user/mo</td></tr>
+</table>
+<div class="page-break"></div>
+
+<h1>2. Railway &mdash; App Hosting &amp; Database</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#128642;</div>
+    <div>
+      <div class="service-title">Railway <span class="badge paid">Paid</span></div>
+      <div class="service-subtitle">railway.com &mdash; Cloud platform for deploying apps and databases</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>Railway runs your Node.js/TypeScript backend server and your PostgreSQL database. It handles deployment, scaling, environment variables, and networking. Think of it as your entire server infrastructure in one place.</p>
+
+    <h3>What you deploy on Railway</h3>
+    <table>
+      <tr><th>Service</th><th>What It Is</th><th>Typical Resources</th><th>Monthly Cost</th></tr>
+      <tr><td><strong>Node.js Backend</strong></td><td>Your main API server (Express/Fastify + Prisma)</td><td>0.5 vCPU, 512MB RAM</td><td class="num warn">~$15/mo</td></tr>
+      <tr><td><strong>PostgreSQL DB</strong></td><td>Built-in Railway PostgreSQL service</td><td>0.1 vCPU, 256MB RAM, 1GB disk</td><td class="num warn">~$5/mo</td></tr>
+      <tr><td><strong>Background Worker</strong> (optional)</td><td>Message queue processor, scheduled jobs</td><td>0.25 vCPU, 256MB RAM</td><td class="num warn">~$7/mo</td></tr>
+    </table>
+
+    <h3>Railway Plans</h3>
+    <table>
+      <tr><th>Plan</th><th>Monthly Base</th><th>Included Usage</th><th>CPU Rate</th><th>RAM Rate</th><th>Disk Rate</th><th>Egress</th></tr>
+      <tr><td><strong>Hobby</strong></td><td class="num">$5/mo (~&#8377;420)</td><td>$5 usage credits</td><td>$0.00000772/vCPU/sec</td><td>$0.00000386/GB/sec</td><td>$0.000000231/GB/sec (~$0.60/GB-mo)</td><td>$0.05/GB</td></tr>
+      <tr><td><strong>Pro</strong></td><td class="num">$20/mo (~&#8377;1,680)</td><td>$20 usage credits</td><td>Same rates</td><td>Same rates</td><td>Same rates</td><td>$0.05/GB</td></tr>
+    </table>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Plan</th><th>Services Running</th><th>Estimated Monthly Cost</th><th>When to Upgrade</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools)</td><td class="profit">Hobby $5/mo</td><td>Node.js backend + PostgreSQL</td><td class="num warn">~$20/mo (~&#8377;1,680)</td><td>When you need team members or hit resource limits</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools)</td><td class="warn">Pro $20/mo</td><td>Node.js backend + PostgreSQL + Worker</td><td class="num warn">~$45/mo (~&#8377;3,780)</td><td>When you need dedicated resources or multiple regions</td></tr>
+      <tr><td>&#127809; Large (25-100 schools)</td><td class="warn">Pro $20/mo</td><td>Multiple services, larger instances</td><td class="num loss">~$100-200/mo (~&#8377;8,400-16,800)</td><td>Consider moving to AWS/GCP for cost savings at this scale</td></tr>
+    </table>
+
+    <div class="success-box">
+      <p>&#9989; <strong>Railway PostgreSQL vs Neon:</strong> Use Railway's built-in PostgreSQL. It runs in the same project, same dashboard, same billing. No cold starts. No separate account. For SchoolConnect's scale, Railway PostgreSQL is sufficient and simpler.</p>
+    </div>
+    <div class="tip-box">
+      <p>&#128161; <strong>Cost tip:</strong> Railway bills by actual resource usage per second. If your app is idle at night (no school activity), costs drop significantly. A Node.js app that's 30% idle will cost ~30% less than the 24/7 estimate.</p>
+    </div>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h1>3. Vercel &mdash; Frontend Hosting</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#9651;</div>
+    <div>
+      <div class="service-title">Vercel <span class="badge free">Free to start</span></div>
+      <div class="service-subtitle">vercel.com &mdash; Frontend deployment platform (Next.js, React, static sites)</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>Vercel hosts your school-facing web dashboard (the portal where teachers mark attendance, principals view reports, etc.). It handles CDN, SSL, automatic deployments from GitHub, and preview URLs for every pull request.</p>
+
+    <h3>What you deploy on Vercel</h3>
+    <table>
+      <tr><th>App</th><th>What It Is</th><th>Framework</th><th>Users</th></tr>
+      <tr><td><strong>School Dashboard</strong></td><td>Teacher/principal web portal</td><td>Next.js / React</td><td>Teachers, principals, admins</td></tr>
+      <tr><td><strong>Marketing Website</strong></td><td>schoolconnect.in landing page</td><td>Static HTML or Next.js</td><td>Prospective schools</td></tr>
+    </table>
+
+    <h3>Vercel Plans</h3>
+    <table>
+      <tr><th>Plan</th><th>Monthly Price</th><th>Bandwidth</th><th>Serverless Functions</th><th>Team Members</th><th>Custom Domains</th></tr>
+      <tr><td><strong>Hobby</strong></td><td class="num profit">FREE</td><td>100 GB/mo</td><td>1M invocations/mo, 10s timeout</td><td>1 (personal only)</td><td>Unlimited</td></tr>
+      <tr><td><strong>Pro</strong></td><td class="num warn">$20/seat/mo (~&#8377;1,680)</td><td>1 TB/mo</td><td>Unlimited, 300s timeout</td><td>Unlimited</td><td>Unlimited</td></tr>
+      <tr><td><strong>Enterprise</strong></td><td class="num loss">Custom pricing</td><td>Custom</td><td>Custom</td><td>Unlimited</td><td>Unlimited + SLA</td></tr>
+    </table>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Plan</th><th>Monthly Cost</th><th>Limitation to Watch</th><th>When to Upgrade</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools)</td><td class="profit">Hobby FREE</td><td class="num profit">&#8377;0</td><td>Personal account only, 10s function timeout</td><td>When you hire a developer or need team access</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools)</td><td class="profit">Hobby FREE</td><td class="num profit">&#8377;0</td><td>100GB bandwidth (unlikely to hit)</td><td>When you need team collaboration or longer timeouts</td></tr>
+      <tr><td>&#127809; Large (25-100 schools)</td><td class="warn">Pro $20/seat/mo</td><td class="num warn">&#8377;1,680+/mo</td><td>None significant</td><td>Already on Pro at this stage</td></tr>
+    </table>
+
+    <div class="success-box">
+      <p>&#9989; <strong>Good news:</strong> Vercel Hobby plan is free and sufficient for the first 2 years of SchoolConnect. You only need to upgrade when you add team members who need deployment access.</p>
+    </div>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h1>4. Interakt &mdash; WhatsApp BSP (Business Solution Provider)</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#128242;</div>
+    <div>
+      <div class="service-title">Interakt <span class="badge required">Required for WhatsApp</span></div>
+      <div class="service-subtitle">interakt.shop &mdash; Meta-approved WhatsApp Business API provider</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>Interakt is your gateway to WhatsApp Business API. Without a BSP like Interakt, you cannot send WhatsApp messages programmatically. Interakt provides: the API connection to Meta, a dashboard to manage templates, a shared inbox for human agents, chatbot builder, and campaign tools.</p>
+
+    <div class="warning-box">
+      <p>&#9888; <strong>Interakt Starter plan (&#8377;999/mo) is Instagram-only &mdash; it does NOT include WhatsApp.</strong> The minimum plan for WhatsApp is Growth at &#8377;2,499/mo.</p>
+    </div>
+
+    <h3>Interakt Plans (Verified April 2026)</h3>
+    <table>
+      <tr><th>Plan</th><th>Price</th><th>Channels</th><th>Key Features</th><th>Template Markup</th></tr>
+      <tr><td><strong>Starter</strong></td><td class="num">&#8377;999/mo (+GST)</td><td>Instagram Only</td><td>Instagram DMs, Price Please, Giveaway automation</td><td>N/A (no WhatsApp)</td></tr>
+      <tr><td><strong>Growth</strong></td><td class="num">&#8377;2,499/mo (+GST)</td><td>WhatsApp + Instagram</td><td>Bulk campaigns, Shared inbox, FAQ chatbots, Catalogs, Native payments, Public APIs</td><td>Utility &#8377;0.150 | Marketing &#8377;0.958 | Auth &#8377;0.128</td></tr>
+      <tr><td><strong>Advanced</strong></td><td class="num">&#8377;3,499/mo (+GST)</td><td>WhatsApp + Instagram</td><td>Everything in Growth + Advanced chatbot flows (branching, API calls), Chat auto-assignment, Advanced webhooks, Priority support</td><td>Utility &#8377;0.140 | Marketing &#8377;0.949 | Auth &#8377;0.127</td></tr>
+      <tr><td><strong>Enterprise</strong></td><td class="num">On request</td><td>WhatsApp + Instagram + RCS</td><td>Everything in Advanced + No template markups, Higher rate limits, Better campaign speeds, Dedicated account manager</td><td>No markup (Meta base rate only)</td></tr>
+    </table>
+
+    <h3>What Each Feature Means for SchoolConnect</h3>
+    <table>
+      <tr><th>Feature</th><th>Available From</th><th>How SchoolConnect Uses It</th></tr>
+      <tr><td>Bulk campaigns</td><td>Growth</td><td>Send attendance reports, fee reminders, school broadcasts to all parents</td></tr>
+      <tr><td>Shared inbox</td><td>Growth</td><td>School admin can reply to parent messages from a web dashboard</td></tr>
+      <tr><td>FAQ chatbots</td><td>Growth</td><td>Auto-reply to common parent questions (school timings, holidays, fee due dates)</td></tr>
+      <tr><td>Public APIs</td><td>Growth</td><td>Your Node.js backend calls Interakt API to send messages programmatically</td></tr>
+      <tr><td>Native payments</td><td>Growth</td><td>Parents can pay fees directly via WhatsApp (future feature)</td></tr>
+      <tr><td>Advanced chatbot flows</td><td>Advanced</td><td>Multi-step conversations: "Check attendance" &rarr; "Which student?" &rarr; "Which month?" &rarr; Show data</td></tr>
+      <tr><td>Chat auto-assignment</td><td>Advanced</td><td>Route parent messages to the right teacher/admin automatically</td></tr>
+      <tr><td>No template markups</td><td>Enterprise</td><td>Pay Meta's base rate directly &mdash; saves &#8377;0.02-0.10 per message at high volume</td></tr>
+    </table>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Plan</th><th>Monthly Cost</th><th>Why This Plan</th><th>When to Upgrade</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools)</td><td class="warn">Growth &#8377;2,499/mo</td><td class="num warn">&#8377;2,499/mo (+GST = ~&#8377;2,949)</td><td>Minimum plan for WhatsApp. Has all APIs needed for automation.</td><td>When you need advanced chatbot flows (branching logic)</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools)</td><td class="warn">Advanced &#8377;3,499/mo</td><td class="num warn">&#8377;3,499/mo (+GST = ~&#8377;4,129)</td><td>Advanced chatbot flows for better parent experience. Lower per-message markup.</td><td>When template markup savings justify Enterprise pricing</td></tr>
+      <tr><td>&#127809; Large (25-100 schools)</td><td class="loss">Enterprise (on request)</td><td class="num loss">Negotiated (est. &#8377;8,000-15,000/mo)</td><td>No template markups saves &#8377;0.02-0.10/message. At 50K messages/day = &#8377;30,000-150,000/mo savings.</td><td>Consider switching to Wati or 360dialog for even lower costs</td></tr>
+    </table>
+
+    <div class="tip-box">
+      <p>&#128161; <strong>Alternative BSPs at scale:</strong> At 25+ schools, evaluate Wati ($49-99/mo, minimal markup) or 360dialog (&euro;49/mo, near-zero markup). The lower per-message cost can save more than the higher platform fee.</p>
+    </div>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h1>5. Cloudflare R2 &mdash; File Storage</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#9729;</div>
+    <div>
+      <div class="service-title">Cloudflare R2 <span class="badge free">Free to start</span></div>
+      <div class="service-subtitle">developers.cloudflare.com/r2 &mdash; S3-compatible object storage with zero egress fees</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>R2 stores files that your app needs to serve: student profile photos, uploaded documents (fee receipts, circulars), exported reports (PDF attendance sheets), and any media sent via WhatsApp. The key advantage over AWS S3 is <strong>zero egress fees</strong> &mdash; you never pay to download files.</p>
+
+    <h3>What SchoolConnect stores in R2</h3>
+    <table>
+      <tr><th>File Type</th><th>Typical Size</th><th>Volume</th><th>Monthly Storage</th></tr>
+      <tr><td>Student profile photos</td><td>50-200 KB each</td><td>500 students = 500 photos</td><td>~50 MB</td></tr>
+      <tr><td>School circulars / PDFs</td><td>100-500 KB each</td><td>~20 files/school/month</td><td>~50 MB/school</td></tr>
+      <tr><td>Exported attendance reports</td><td>50-200 KB each</td><td>~10 exports/school/month</td><td>~10 MB/school</td></tr>
+      <tr><td>Fee receipts</td><td>50-100 KB each</td><td>~200/school/month</td><td>~15 MB/school</td></tr>
+      <tr><td><strong>Total (5 schools)</strong></td><td></td><td></td><td class="num warn"><strong>~500 MB/mo</strong></td></tr>
+    </table>
+
+    <h3>R2 Pricing</h3>
+    <table>
+      <tr><th>Tier</th><th>Storage</th><th>Class A Ops (writes/lists)</th><th>Class B Ops (reads)</th><th>Egress (downloads)</th></tr>
+      <tr><td><strong>Free tier</strong></td><td class="profit">10 GB-month/mo FREE</td><td class="profit">1M requests/mo FREE</td><td class="profit">10M requests/mo FREE</td><td class="profit">FREE always</td></tr>
+      <tr><td><strong>Paid</strong></td><td>$0.015/GB-month (~&#8377;1.26/GB)</td><td>$4.50/million requests</td><td>$0.36/million requests</td><td class="profit">FREE always</td></tr>
+    </table>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Plan</th><th>Estimated Storage</th><th>Monthly Cost</th><th>When to Upgrade</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools)</td><td class="profit">Free tier</td><td>~500 MB</td><td class="num profit">&#8377;0 (well within 10GB free)</td><td>When total files exceed 10GB</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools)</td><td class="warn">Paid $0.015/GB</td><td>~5 GB</td><td class="num profit">~$0.075/mo (~&#8377;6)</td><td>Already on paid but very cheap</td></tr>
+      <tr><td>&#127809; Large (25-100 schools)</td><td class="warn">Paid $0.015/GB</td><td>~50 GB</td><td class="num warn">~$0.75/mo (~&#8377;63)</td><td>R2 scales cheaply, no action needed</td></tr>
+    </table>
+    <div class="success-box">
+      <p>&#9989; R2 is essentially free for SchoolConnect at all stages. Even at 100 schools, storage costs under $1/mo. The zero egress fee is a major advantage &mdash; every time a parent views a document, you pay nothing.</p>
+    </div>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h1>6. Resend &mdash; Transactional Email</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#9993;</div>
+    <div>
+      <div class="service-title">Resend <span class="badge free">Free to start</span></div>
+      <div class="service-subtitle">resend.com &mdash; Developer-first transactional email API</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>Resend sends transactional emails from your app: OTP verification emails, monthly attendance reports to principals, fee invoices, welcome emails for new schools, and password reset links. It is NOT for bulk marketing emails &mdash; use WhatsApp for that.</p>
+
+    <h3>What SchoolConnect sends via Resend</h3>
+    <table>
+      <tr><th>Email Type</th><th>Trigger</th><th>Volume (5 schools)</th><th>Volume (25 schools)</th></tr>
+      <tr><td>OTP / Login verification</td><td>Every teacher/admin login</td><td>~200/mo</td><td>~1,000/mo</td></tr>
+      <tr><td>Monthly attendance report</td><td>End of month, per school</td><td>5/mo</td><td>25/mo</td></tr>
+      <tr><td>Fee invoice to principal</td><td>Monthly billing</td><td>5/mo</td><td>25/mo</td></tr>
+      <tr><td>Welcome email (new school)</td><td>School onboarding</td><td>~1/mo</td><td>~3/mo</td></tr>
+      <tr><td>Password reset</td><td>On request</td><td>~20/mo</td><td>~100/mo</td></tr>
+      <tr><td><strong>Total</strong></td><td></td><td class="num profit"><strong>~231/mo</strong></td><td class="num warn"><strong>~1,153/mo</strong></td></tr>
+    </table>
+
+    <h3>Resend Plans</h3>
+    <table>
+      <tr><th>Plan</th><th>Monthly Price</th><th>Email Quota</th><th>Daily Limit</th><th>Domains</th><th>Team Members</th></tr>
+      <tr><td><strong>Free</strong></td><td class="num profit">$0/mo</td><td>3,000 emails/mo</td><td>100/day</td><td>1 domain</td><td>1</td></tr>
+      <tr><td><strong>Pro</strong></td><td class="num warn">$20/mo (~&#8377;1,680)</td><td>50,000 emails/mo</td><td>No limit</td><td>10 domains</td><td>3</td></tr>
+      <tr><td><strong>Scale</strong></td><td class="num loss">$90/mo (~&#8377;7,560)</td><td>100,000 emails/mo</td><td>No limit</td><td>1,000 domains</td><td>Unlimited</td></tr>
+    </table>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Plan</th><th>Monthly Cost</th><th>Why This Plan</th><th>When to Upgrade</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools)</td><td class="profit">Free</td><td class="num profit">&#8377;0</td><td>~231 emails/mo is well within 3,000 limit. 100/day limit is fine.</td><td>When daily emails exceed 100 or you need multiple domains</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools)</td><td class="profit">Free or Pro</td><td class="num profit">&#8377;0 or &#8377;1,680</td><td>~1,153 emails/mo still within free tier. Upgrade if you add email reports.</td><td>When monthly emails exceed 3,000 or need team access</td></tr>
+      <tr><td>&#127809; Large (25-100 schools)</td><td class="warn">Pro $20/mo</td><td class="num warn">&#8377;1,680/mo</td><td>~5,000+ emails/mo exceeds free tier. Pro handles up to 50K/mo.</td><td>When monthly emails exceed 50,000 (very unlikely)</td></tr>
+    </table>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h1>7. Upstash Redis &mdash; Cache &amp; Queue</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#9889;</div>
+    <div>
+      <div class="service-title">Upstash Redis <span class="badge free">Free to start</span></div>
+      <div class="service-subtitle">upstash.com &mdash; Serverless Redis for caching, rate limiting, and queuing</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>Redis is an in-memory data store used for three critical functions in SchoolConnect: (1) <strong>Rate limiting</strong> &mdash; prevent parents from spamming the AI assistant, (2) <strong>Session caching</strong> &mdash; store auth tokens and frequently accessed data to reduce DB queries, (3) <strong>Message queue</strong> &mdash; queue WhatsApp messages to send in batches rather than all at once.</p>
+
+    <h3>How SchoolConnect uses Redis</h3>
+    <table>
+      <tr><th>Use Case</th><th>What It Stores</th><th>TTL</th><th>Commands/Day (5 schools)</th></tr>
+      <tr><td>AI query rate limiting</td><td>Parent phone: query count</td><td>24 hours</td><td>~1,500</td></tr>
+      <tr><td>Session cache</td><td>JWT tokens, user data</td><td>1 hour</td><td>~2,000</td></tr>
+      <tr><td>School data cache</td><td>Student list, class list</td><td>5 minutes</td><td>~3,000</td></tr>
+      <tr><td>Message queue</td><td>Pending WhatsApp messages</td><td>Until processed</td><td>~2,000</td></tr>
+      <tr><td><strong>Total</strong></td><td></td><td></td><td class="num profit"><strong>~8,500/day</strong></td></tr>
+    </table>
+
+    <h3>Upstash Redis Plans</h3>
+    <table>
+      <tr><th>Plan</th><th>Monthly Price</th><th>Commands/Day</th><th>Max Data Size</th><th>Regions</th></tr>
+      <tr><td><strong>Free</strong></td><td class="num profit">$0/mo</td><td>10,000/day</td><td>256 MB</td><td>1</td></tr>
+      <tr><td><strong>Pay-as-you-go</strong></td><td class="num warn">~$5&ndash;25/mo</td><td>Unlimited</td><td>Unlimited</td><td>Multiple</td></tr>
+    </table>
+    <p><small>Pay-as-you-go pricing: $0.20 per 100K commands. 1M commands/day = $2/day = ~$60/mo.</small></p>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Plan</th><th>Commands/Day</th><th>Monthly Cost</th><th>When to Upgrade</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools)</td><td class="profit">Free</td><td>~8,500/day</td><td class="num profit">&#8377;0 (within 10K/day limit)</td><td>When daily commands exceed 10,000</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools)</td><td class="warn">Pay-as-you-go</td><td>~50,000/day</td><td class="num warn">~$3/mo (~&#8377;252)</td><td>Already on PAYG, costs scale linearly</td></tr>
+      <tr><td>&#127809; Large (25-100 schools)</td><td class="warn">Pay-as-you-go</td><td>~200,000/day</td><td class="num warn">~$12/mo (~&#8377;1,008)</td><td>Consider Redis Enterprise for SLA guarantees</td></tr>
+    </table>
+    <div class="tip-box">
+      <p>&#128161; <strong>Alternative:</strong> Railway also offers a Redis service. You can run Redis on Railway instead of Upstash for simplicity (same dashboard). Cost is similar at small scale.</p>
+    </div>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h1>8. OpenAI / Gemini &mdash; AI Language Model</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#129302;</div>
+    <div>
+      <div class="service-title">OpenAI / Google Gemini <span class="badge optional">Optional but recommended</span></div>
+      <div class="service-subtitle">openai.com / ai.google.dev &mdash; Large language models for parent AI assistant</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>Powers the AI Parent Assistant &mdash; when a parent sends a natural language message like "Why was Rahul absent on Monday?" or "What is the fee due this month?", the LLM understands the question, queries the database, and responds in natural language. WhatsApp inbound messages (service type) are FREE, so the only cost is the LLM compute.</p>
+
+    <h3>LLM Pricing (Verified April 2026 &mdash; llmpricecheck.com)</h3>
+    <table>
+      <tr><th>Model</th><th>Input (per 1M tokens)</th><th>Output (per 1M tokens)</th><th>Cost per Query (~500 in + 200 out tokens)</th><th>Best For</th></tr>
+      <tr><td><strong>GPT-4o-mini</strong> &#10003; Recommended</td><td class="num">$0.15 (~&#8377;12.60)</td><td class="num">$0.60 (~&#8377;50.40)</td><td class="num profit">~&#8377;0.017</td><td>90% of parent queries</td></tr>
+      <tr><td><strong>Gemini 1.5 Flash</strong></td><td class="num">$0.075 (~&#8377;6.30)</td><td class="num">$0.30 (~&#8377;25.20)</td><td class="num profit">~&#8377;0.008</td><td>Simple queries, cost-sensitive</td></tr>
+      <tr><td><strong>GPT-4o</strong></td><td class="num">$2.50 (~&#8377;210)</td><td class="num">$10.00 (~&#8377;840)</td><td class="num warn">~&#8377;0.27</td><td>Complex escalations only (&lt;5%)</td></tr>
+    </table>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Model</th><th>Queries/Month</th><th>Monthly Cost</th><th>When to Change</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools, ~500 students)</td><td>GPT-4o-mini</td><td>~750 queries (1.5/student)</td><td class="num profit">~&#8377;13/mo</td><td>When query volume grows significantly</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools, ~3,000 students)</td><td>GPT-4o-mini</td><td>~4,500 queries</td><td class="num profit">~&#8377;77/mo</td><td>Consider Gemini Flash for cost savings</td></tr>
+      <tr><td>&#127809; Large (25-100 schools, ~15,000 students)</td><td>GPT-4o-mini + Gemini Flash</td><td>~22,500 queries</td><td class="num warn">~&#8377;383/mo</td><td>Route simple queries to Gemini Flash to cut costs 50%</td></tr>
+    </table>
+    <div class="success-box">
+      <p>&#9989; <strong>Cost control:</strong> Cache answers to common questions (school timings, holiday list, fee structure). A cached answer costs &#8377;0. Rate limit to 10 queries/parent/day. Use rule-based responses for keyword matches before hitting the LLM.</p>
+    </div>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h1>9. Sentry &mdash; Error Monitoring</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#128269;</div>
+    <div>
+      <div class="service-title">Sentry <span class="badge free">Free to start</span></div>
+      <div class="service-subtitle">sentry.io &mdash; Application error tracking and performance monitoring</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>Sentry automatically captures errors in your Node.js backend and React frontend. When a WhatsApp message fails to send, when a teacher gets a 500 error, or when the attendance API crashes &mdash; Sentry captures the full stack trace, the user context, and alerts you immediately. Without Sentry, you find out about bugs when schools complain.</p>
+
+    <h3>Sentry Plans</h3>
+    <table>
+      <tr><th>Plan</th><th>Monthly Price</th><th>Error Events</th><th>Performance Traces</th><th>Data Retention</th><th>Team Members</th></tr>
+      <tr><td><strong>Free (Developer)</strong></td><td class="num profit">$0/mo</td><td>5,000/mo</td><td>10,000/mo</td><td>30 days</td><td>1</td></tr>
+      <tr><td><strong>Team</strong></td><td class="num warn">$26/mo (~&#8377;2,184)</td><td>50,000/mo</td><td>100,000/mo</td><td>90 days</td><td>Unlimited</td></tr>
+      <tr><td><strong>Business</strong></td><td class="num loss">$80/mo (~&#8377;6,720)</td><td>Unlimited</td><td>Unlimited</td><td>90 days</td><td>Unlimited</td></tr>
+    </table>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Plan</th><th>Monthly Cost</th><th>Why This Plan</th><th>When to Upgrade</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools)</td><td class="profit">Free</td><td class="num profit">&#8377;0</td><td>5K errors/mo is plenty. Solo founder doesn't need team features.</td><td>When you hire a developer or hit 5K errors/mo</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools)</td><td class="warn">Team $26/mo</td><td class="num warn">&#8377;2,184/mo</td><td>Team access for developers. 90-day retention for debugging.</td><td>When you need unlimited events or advanced features</td></tr>
+      <tr><td>&#127809; Large (25-100 schools)</td><td class="warn">Team or Business</td><td class="num warn">&#8377;2,184&ndash;6,720/mo</td><td>High event volume, multiple developers, SLA requirements.</td><td>Already at appropriate tier</td></tr>
+    </table>
+  </div>
+</div>
+
+<h1>10. GitHub &mdash; Code &amp; CI/CD</h1>
+<div class="service-block">
+  <div class="service-header">
+    <div class="service-icon">&#128008;</div>
+    <div>
+      <div class="service-title">GitHub <span class="badge free">Free to start</span></div>
+      <div class="service-subtitle">github.com &mdash; Source code hosting, CI/CD, and team collaboration</div>
+    </div>
+  </div>
+  <div class="service-body">
+    <h3>What it does</h3>
+    <p>GitHub stores your source code, runs automated tests on every commit (GitHub Actions), and triggers deployments to Railway and Vercel automatically when you push to main. It is the backbone of your development workflow.</p>
+
+    <h3>GitHub Plans</h3>
+    <table>
+      <tr><th>Plan</th><th>Monthly Price</th><th>Private Repos</th><th>GitHub Actions</th><th>Team Members</th></tr>
+      <tr><td><strong>Free</strong></td><td class="num profit">$0/mo</td><td>Unlimited</td><td>2,000 minutes/mo</td><td>Unlimited (public), 3 (private)</td></tr>
+      <tr><td><strong>Team</strong></td><td class="num warn">$4/user/mo (~&#8377;336/user)</td><td>Unlimited</td><td>3,000 minutes/mo</td><td>Unlimited</td></tr>
+    </table>
+
+    <h3>Stage-by-Stage Plan</h3>
+    <table>
+      <tr><th>Stage</th><th>Plan</th><th>Monthly Cost</th><th>When to Upgrade</th></tr>
+      <tr><td>&#127807; Initial (0-5 schools)</td><td class="profit">Free</td><td class="num profit">&#8377;0</td><td>When you add a developer who needs private repo access</td></tr>
+      <tr><td>&#127808; Medium (5-25 schools)</td><td class="warn">Team $4/user/mo</td><td class="num warn">&#8377;672/mo (2 devs)</td><td>Already on Team at this stage</td></tr>
+      <tr><td>&#127809; Large (25-100 schools)</td><td class="warn">Team $4/user/mo</td><td class="num warn">&#8377;1,680/mo (5 devs)</td><td>Consider GitHub Enterprise for SSO/compliance</td></tr>
+    </table>
+  </div>
+</div>
+<div class="page-break"></div>
+
+<h1>11. Total Cost Summary by Stage</h1>
+<h2>11.1 Monthly Infrastructure Cost</h2>
+<table>
+  <tr><th>Service</th><th>&#127807; Initial (0-5 schools)</th><th>&#127808; Medium (5-25 schools)</th><th>&#127809; Large (25-100 schools)</th></tr>
+  <tr><td>Railway (backend + PostgreSQL)</td><td class="num">&#8377;1,680/mo ($20)</td><td class="num">&#8377;3,780/mo ($45)</td><td class="num">&#8377;16,800/mo ($200)</td></tr>
+  <tr><td>Vercel (frontend)</td><td class="num profit">&#8377;0 (Free Hobby)</td><td class="num profit">&#8377;0 (Free Hobby)</td><td class="num">&#8377;1,680/mo ($20 Pro)</td></tr>
+  <tr><td>Interakt BSP</td><td class="num">&#8377;2,949/mo (Growth+GST)</td><td class="num">&#8377;4,129/mo (Advanced+GST)</td><td class="num">&#8377;10,000+/mo (Enterprise)</td></tr>
+  <tr><td>Cloudflare R2 (storage)</td><td class="num profit">&#8377;0 (Free tier)</td><td class="num profit">&#8377;6/mo ($0.075)</td><td class="num profit">&#8377;63/mo ($0.75)</td></tr>
+  <tr><td>Resend (email)</td><td class="num profit">&#8377;0 (Free tier)</td><td class="num profit">&#8377;0 (Free tier)</td><td class="num">&#8377;1,680/mo ($20 Pro)</td></tr>
+  <tr><td>Upstash Redis</td><td class="num profit">&#8377;0 (Free tier)</td><td class="num">&#8377;252/mo ($3)</td><td class="num">&#8377;1,008/mo ($12)</td></tr>
+  <tr><td>OpenAI / Gemini (LLM)</td><td class="num profit">&#8377;13/mo</td><td class="num">&#8377;77/mo</td><td class="num">&#8377;383/mo</td></tr>
+  <tr><td>Sentry (monitoring)</td><td class="num profit">&#8377;0 (Free tier)</td><td class="num">&#8377;2,184/mo ($26 Team)</td><td class="num">&#8377;2,184/mo ($26 Team)</td></tr>
+  <tr><td>GitHub</td><td class="num profit">&#8377;0 (Free)</td><td class="num">&#8377;672/mo ($8, 2 devs)</td><td class="num">&#8377;1,680/mo ($20, 5 devs)</td></tr>
+  <tr><td colspan="1" class="total">Total Monthly Infrastructure</td><td class="num total">~&#8377;4,642/mo</td><td class="num total">~&#8377;11,100/mo</td><td class="num total">~&#8377;35,478/mo</td></tr>
+</table>
+
+<h2>11.2 Infrastructure Cost Per Student</h2>
+<table>
+  <tr><th>Stage</th><th>Total Students</th><th>Total Infra/mo</th><th>Infra Cost/Student</th><th>Revenue/Student</th><th>Infra as % of Revenue</th></tr>
+  <tr><td>&#127807; Initial</td><td>500</td><td>&#8377;4,642</td><td class="num warn">&#8377;9.28/student</td><td>&#8377;33</td><td class="num warn">28%</td></tr>
+  <tr><td>&#127808; Medium</td><td>3,000</td><td>&#8377;11,100</td><td class="num profit">&#8377;3.70/student</td><td>&#8377;26</td><td class="num profit">14%</td></tr>
+  <tr><td>&#127809; Large</td><td>15,000</td><td>&#8377;35,478</td><td class="num profit">&#8377;2.37/student</td><td>&#8377;21</td><td class="num profit">11%</td></tr>
+</table>
+
+<div class="success-box">
+  <p>&#9989; <strong>Key insight:</strong> Infrastructure costs as a % of revenue drop from 28% at initial stage to 11% at large scale. This is the power of SaaS economics &mdash; fixed costs spread across more customers. The biggest cost driver is always Interakt BSP (&#8377;2,949-10,000/mo), not the technical infrastructure.</p>
+</div>
+
+<h2>11.3 Upgrade Trigger Checklist</h2>
+<table>
+  <tr><th>Service</th><th>Upgrade Trigger</th><th>Action</th></tr>
+  <tr><td>Railway</td><td>Need team members OR resource limits hit</td><td>Hobby &rarr; Pro ($20/mo)</td></tr>
+  <tr><td>Vercel</td><td>Hire a developer who needs deployment access</td><td>Hobby &rarr; Pro ($20/seat/mo)</td></tr>
+  <tr><td>Interakt</td><td>Need advanced chatbot flows (branching logic)</td><td>Growth &rarr; Advanced (&#8377;3,499/mo)</td></tr>
+  <tr><td>Interakt</td><td>25+ schools, template markup savings justify it</td><td>Advanced &rarr; Enterprise or switch to Wati/360dialog</td></tr>
+  <tr><td>Cloudflare R2</td><td>Total stored files exceed 10GB</td><td>Auto-upgrades to paid ($0.015/GB-month)</td></tr>
+  <tr><td>Resend</td><td>Monthly emails exceed 3,000 OR need multiple domains</td><td>Free &rarr; Pro ($20/mo)</td></tr>
+  <tr><td>Upstash Redis</td><td>Daily Redis commands exceed 10,000</td><td>Free &rarr; Pay-as-you-go (~$3-12/mo)</td></tr>
+  <tr><td>Sentry</td><td>Hire a developer OR hit 5K errors/mo</td><td>Free &rarr; Team ($26/mo)</td></tr>
+  <tr><td>GitHub</td><td>Add a developer who needs private repo access</td><td>Free &rarr; Team ($4/user/mo)</td></tr>
+</table>
+
+<div class="footer">
+  <p>SchoolConnect Infrastructure &amp; Services Guide &mdash; April 2026</p>
+  <p>All prices verified from live vendor websites. USD/INR rate: &#8377;84 per $1. Prices subject to change.</p>
+  <p>Next review date: October 2026</p>
+</div>
+</div>
+</body>
+</html>
