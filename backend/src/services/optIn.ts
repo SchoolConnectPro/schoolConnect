@@ -173,7 +173,7 @@ export async function handleParentOptInOut(
   }
 
   // ── 5. STATUS command for parents ─────────────────────────────────────────
-  if (upper === 'MY STATUS' || upper === 'STATUS ME') {
+  if (upper === 'MY STATUS' || upper === 'STATUS ME' || upper === 'STATUS') {
     const parent = await prisma.parent.findUnique({
       where: { phone },
       include: { student: { include: { class: true } } },
