@@ -103,13 +103,18 @@ export async function translateMessage(
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 512,
+    max_tokens: 2048, // Increased: Devanagari/Gurmukhi scripts use 2-3x more tokens than English
+    system:
+      `You are a professional translator for a school communication platform in India. ` +
+      `Translate messages completely and accurately. Never truncate or summarize. ` +
+      `Return ONLY the translated text — no explanations, no labels, no quotes.`,
     messages: [
       {
         role: 'user',
         content:
           `Translate the following WhatsApp school notification to ${langName}.\n` +
           `Rules:\n` +
+          `- Translate the COMPLETE message — do not cut it short\n` +
           `- Keep all emojis exactly as they are\n` +
           `- Keep phone numbers, dates, and class names (e.g. "8B") unchanged\n` +
           `- Use natural, warm, parent-friendly language\n` +
