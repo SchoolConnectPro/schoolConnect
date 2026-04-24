@@ -810,7 +810,11 @@ router.get('/analytics', async (req: Request, res: Response) => {
     for (const row of deliveryStats) {
       delivery[row.status] = row._count.id;
       totalMessages += row._count.id;
-      if (row.status === 'DELIVERED') totalDelivered = row._count.id;
+      // Count both SENT and DELIVERED as successfully delivered
+      // (SENT = accepted by WhatsApp API, DELIVERED = confirmed on device)
+      if (row.status === 'DELIVERED' || row.status === 'SENT') {
+        totalDelivered += row._count.id;
+      }
     }
 
     res.json({

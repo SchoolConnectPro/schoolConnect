@@ -192,7 +192,7 @@ export default function AnalyticsPage() {
           color="bg-blue-50 text-blue-600" />
         <StatCard icon={CheckCircle} label="Delivery Rate"
           value={`${data.overview.deliveryRate}%`}
-          sub={`${data.overview.totalMessages.toLocaleString()} messages sent`}
+          sub={`${data.overview.totalMessages.toLocaleString()} total messages`}
           color="bg-green-50 text-green-600" />
         <StatCard icon={TrendingUp} label="Active Teachers"
           value={data.teachers.filter((t) => t.totalNotifications > 0).length}
