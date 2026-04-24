@@ -86,6 +86,46 @@ export async function parseTeacherMessage(
 }
 
 // ─────────────────────────────────────────────
+// Translate a parent notification to Hindi or Punjabi
+// ─────────────────────────────────────────────
+const LANGUAGE_NAMES: Record<string, string> = {
+  HI: 'Hindi (Devanagari script)',
+  PA: 'Punjabi (Gurmukhi script)',
+};
+
+export async function translateMessage(
+  message: string,
+  targetLanguage: 'HI' | 'PA'
+): Promise<string> {
+  const langName = LANGUAGE_NAMES[targetLanguage];
+
+  const response = await client.messages.create({
+    model: MODEL,
+    max_tokens: 512,
+    messages: [
+      {
+        role: 'user',
+        content:
+          `Translate the following WhatsApp school notification to ${langName}.\n` +
+          `Rules:\n` +
+          `- Keep all emojis exactly as they are\n` +
+          `- Keep phone numbers, dates, and class names (e.g. "8B") unchanged\n` +
+          `- Use natural, warm, parent-friendly language\n` +
+          `- Return ONLY the translated text — no explanation, no quotes\n\n` +
+          `Message:\n${message}`,
+      },
+    ],
+  });
+
+  const content = response.content[0];
+  if (content.type !== 'text') {
+    throw new Error('Unexpected response type from Claude during translation');
+  }
+
+  return content.text.trim();
+}
+
+// ─────────────────────────────────────────────
 // Format a parent notification message
 // ─────────────────────────────────────────────
 export async function formatParentNotification(

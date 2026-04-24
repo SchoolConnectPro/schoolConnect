@@ -244,6 +244,186 @@ router.post('/teachers', async (req: Request, res: Response) => {
 });
 
 // ─────────────────────────────────────────────
+// PARENTS
+// ─────────────────────────────────────────────
+
+/**
+ * GET /api/parents
+ * List all parents with opt-in status and language preference
+ */
+router.get('/parents', async (req: Request, res: Response) => {
+  const { schoolId, classId, optedIn } = req.query as {
+    schoolId?: string;
+    classId?: string;
+    optedIn?: string;
+  };
+
+  try {
+    const parents = await prisma.parent.findMany({
+      where: {
+        ...(optedIn !== undefined && { optedIn: optedIn === 'true' }),
+        student: {
+          ...(classId && { classId }),
+          ...(schoolId && { class: { schoolId } }),
+        },
+      },
+      include: {
+        student: {
+          include: {
+            class: { select: { grade: true, section: true, schoolId: true } },
+          },
+        },
+      },
+      orderBy: { student: { name: 'asc' } },
+    });
+    res.json({ success: true, data: parents });
+  } catch (err) {
+    console.error('[Admin] GET /parents error:', err);
+    res.status(500).json({ success: false, error: 'Failed to fetch parents' });
+  }
+});
+
+/**
+ * PATCH /api/parents/:id
+ * Update a parent's opt-in status and/or language preference.
+ *
+ * Body (all fields optional):
+ *   { optedIn?: boolean, languagePreference?: 'EN' | 'HI' | 'PA' }
+ */
+router.patch('/parents/:id', async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+  const { optedIn, languagePreference } = req.body as {
+    optedIn?: boolean;
+    languagePreference?: 'EN' | 'HI' | 'PA';
+  };
+
+  if (optedIn === undefined && languagePreference === undefined) {
+    res.status(400).json({
+      success: false,
+      error: 'Provide at least one field to update: optedIn or languagePreference',
+    });
+    return;
+  }
+
+  const VALID_LANGUAGES = ['EN', 'HI', 'PA'];
+  if (languagePreference !== undefined && !VALID_LANGUAGES.includes(languagePreference)) {
+    res.status(400).json({
+      success: false,
+      error: `Invalid languagePreference. Must be one of: ${VALID_LANGUAGES.join(', ')}`,
+    });
+    return;
+  }
+
+  try {
+    const parent = await prisma.parent.update({
+      where: { id },
+      data: {
+        ...(optedIn !== undefined && { optedIn }),
+        ...(languagePreference !== undefined && { languagePreference }),
+      },
+      include: {
+        student: { select: { name: true } },
+      },
+    });
+
+    console.log(
+      `[Admin] Parent ${parent.id} (${parent.name}) updated — ` +
+        `optedIn: ${parent.optedIn}, language: ${parent.languagePreference}`
+    );
+
+    res.json({ success: true, data: parent });
+  } catch (err: unknown) {
+    const isNotFound =
+      typeof err === 'object' &&
+      err !== null &&
+      'code' in err &&
+      (err as { code: string }).code === 'P2025';
+
+    if (isNotFound) {
+      res.status(404).json({ success: false, error: 'Parent not found' });
+      return;
+    }
+    console.error('[Admin] PATCH /parents/:id error:', err);
+    res.status(500).json({ success: false, error: 'Failed to update parent' });
+  }
+});
+
+/**
+ * POST /api/parents/:id/opt-in
+ * Convenience endpoint: opt a parent IN and optionally set language.
+ */
+router.post('/parents/:id/opt-in', async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+  const { languagePreference } = req.body as { languagePreference?: 'EN' | 'HI' | 'PA' };
+
+  const VALID_LANGUAGES = ['EN', 'HI', 'PA'];
+  if (languagePreference !== undefined && !VALID_LANGUAGES.includes(languagePreference)) {
+    res.status(400).json({
+      success: false,
+      error: `Invalid languagePreference. Must be one of: ${VALID_LANGUAGES.join(', ')}`,
+    });
+    return;
+  }
+
+  try {
+    const parent = await prisma.parent.update({
+      where: { id },
+      data: {
+        optedIn: true,
+        ...(languagePreference && { languagePreference }),
+      },
+      include: { student: { select: { name: true } } },
+    });
+
+    res.json({ success: true, data: parent });
+  } catch (err: unknown) {
+    const isNotFound =
+      typeof err === 'object' &&
+      err !== null &&
+      'code' in err &&
+      (err as { code: string }).code === 'P2025';
+
+    if (isNotFound) {
+      res.status(404).json({ success: false, error: 'Parent not found' });
+      return;
+    }
+    console.error('[Admin] POST /parents/:id/opt-in error:', err);
+    res.status(500).json({ success: false, error: 'Failed to opt in parent' });
+  }
+});
+
+/**
+ * POST /api/parents/:id/opt-out
+ * Convenience endpoint: opt a parent OUT.
+ */
+router.post('/parents/:id/opt-out', async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+
+  try {
+    const parent = await prisma.parent.update({
+      where: { id },
+      data: { optedIn: false },
+      include: { student: { select: { name: true } } },
+    });
+
+    res.json({ success: true, data: parent });
+  } catch (err: unknown) {
+    const isNotFound =
+      typeof err === 'object' &&
+      err !== null &&
+      'code' in err &&
+      (err as { code: string }).code === 'P2025';
+
+    if (isNotFound) {
+      res.status(404).json({ success: false, error: 'Parent not found' });
+      return;
+    }
+    console.error('[Admin] POST /parents/:id/opt-out error:', err);
+    res.status(500).json({ success: false, error: 'Failed to opt out parent' });
+  }
+});
+
+// ─────────────────────────────────────────────
 // TEST MESSAGE
 // ─────────────────────────────────────────────
 

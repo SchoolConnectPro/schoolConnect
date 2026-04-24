@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { processTeacherMessage } from '../services/messageAgent';
 import { handleParentAttendanceReply } from '../services/attendance';
+import { handleParentOptInOut } from '../services/optIn';
 import { buildTwiMLResponse } from '../lib/twilio';
 
 const router = Router();
@@ -30,6 +31,15 @@ router.post('/twilio', async (req: Request, res: Response) => {
   res.set('Content-Type', 'text/xml');
 
   try {
+    // ── Check if this is a parent opt-in / opt-out / language command ──────
+    const optInResponse = await handleParentOptInOut(From, Body);
+
+    if (optInResponse !== null) {
+      console.log(`[Webhook] Opt-in/out handled for ${From}`);
+      res.send(optInResponse);
+      return;
+    }
+
     // ── Check if this is a parent reply (SICK / KNOWN / PRESENT) ──────────
     const parentReply = await handleParentAttendanceReply(From, Body);
 

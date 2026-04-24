@@ -1,6 +1,7 @@
 import { NotificationType } from '@prisma/client';
 import { sendWhatsApp } from '../lib/twilio';
 import { BroadcastResult } from '../types';
+import { getLocalizedMessage } from './translation';
 import prisma from '../lib/prisma';
 
 /**
@@ -77,13 +78,25 @@ export async function broadcastToClass(
     return { success: true, recipientCount: 0, failedCount: 0, notificationId: notification.id };
   }
 
-  // ── 4. Send WhatsApp to each parent ─────────────────────────────────────
+  // ── 4. Send WhatsApp to each parent (with per-language translation) ──────
   let successCount = 0;
   let failedCount = 0;
 
+  // Shared translation cache for this broadcast batch.
+  // Claude is called at most once per non-English language (e.g. one call for
+  // all Hindi-preferring parents, one call for all Punjabi-preferring parents).
+  const translationCache = new Map<string, string>();
+
   const sendPromises = parents.map(async (parent) => {
     try {
-      const sid = await sendWhatsApp(parent.phone, message);
+      // Translate the message to this parent's preferred language
+      const localizedMessage = await getLocalizedMessage(
+        message,
+        parent.languagePreference as 'EN' | 'HI' | 'PA',
+        translationCache
+      );
+
+      const sid = await sendWhatsApp(parent.phone, localizedMessage);
 
       await prisma.messageLog.create({
         data: {

@@ -1,6 +1,7 @@
 import { sendWhatsApp } from '../lib/twilio';
 import { AttendanceResult } from '../types';
 import { parseClassIdentifier } from './broadcast';
+import { getLocalizedMessage } from './translation';
 import prisma from '../lib/prisma';
 
 /**
@@ -92,7 +93,19 @@ export async function handleAbsence(
 
   const parent = student.parent;
 
-  // ── 3. Create Notification record ───────────────────────────────────────
+  // ── 3. Check if parent has opted in ────────────────────────────────────
+  if (!parent.optedIn) {
+    return {
+      success: false,
+      studentName: student.name,
+      parentName: parent.name,
+      parentPhone: parent.phone,
+      notificationId: '',
+      error: `Parent of ${student.name} has opted out of notifications. No message sent.`,
+    };
+  }
+
+  // ── 4. Create Notification record ───────────────────────────────────────
   const notification = await prisma.notification.create({
     data: {
       type: 'ATTENDANCE',
@@ -105,7 +118,7 @@ export async function handleAbsence(
     },
   });
 
-  // ── 4. Create AttendanceLog ─────────────────────────────────────────────
+  // ── 5. Create AttendanceLog ─────────────────────────────────────────────
   const attendanceLog = await prisma.attendanceLog.create({
     data: {
       studentId: student.id,
@@ -114,9 +127,14 @@ export async function handleAbsence(
     },
   });
 
-  // ── 5. Send WhatsApp to parent ──────────────────────────────────────────
+  // ── 6. Send WhatsApp to parent (in their preferred language) ───────────
   try {
-    const sid = await sendWhatsApp(parent.phone, parentMessage);
+    const localizedMessage = await getLocalizedMessage(
+      parentMessage,
+      parent.languagePreference as 'EN' | 'HI' | 'PA'
+    );
+
+    const sid = await sendWhatsApp(parent.phone, localizedMessage);
 
     await prisma.messageLog.create({
       data: {
