@@ -89,6 +89,18 @@ export interface AttendanceLog {
   markedByTeacher?: { name: string };
 }
 
+export interface PageMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface StudentListResponse {
+  data: Student[];
+  meta: PageMeta;
+}
+
 // ─── API calls ───────────────────────────────────────────────────────────────
 
 export const api = {
@@ -100,7 +112,32 @@ export const api = {
     parents: (id: string) => request<Parent[]>(`/classes/${id}/parents`),
   },
   students: {
-    list: () => request<Student[]>('/students'),
+    list: (params?: {
+      page?: number;
+      limit?: number;
+      search?: string;
+      classId?: string;
+      optedIn?: boolean;
+      sortBy?: 'name' | 'rollNumber' | 'grade' | 'parentName' | 'optedIn';
+      sortOrder?: 'asc' | 'desc';
+    }) => {
+      const qs = new URLSearchParams();
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
+      if (params?.search) qs.set('search', params.search);
+      if (params?.classId) qs.set('classId', params.classId);
+      if (params?.optedIn !== undefined) qs.set('optedIn', String(params.optedIn));
+      if (params?.sortBy) qs.set('sortBy', params.sortBy);
+      if (params?.sortOrder) qs.set('sortOrder', params.sortOrder);
+      const base = getApiBase();
+      const url = `${base}/students${qs.toString() ? '?' + qs.toString() : ''}`;
+      return fetch(url, { headers: { 'Content-Type': 'application/json' } })
+        .then((r) => r.json())
+        .then((json) => {
+          if (!json.success) throw new Error(json.error || 'Request failed');
+          return { data: json.data as Student[], meta: json.meta as PageMeta };
+        });
+    },
     get: (id: string) => request<Student>(`/students/${id}`),
     create: (data: {
       studentName: string;

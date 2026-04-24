@@ -111,18 +111,108 @@ router.get('/classes/:id/parents', async (req: Request, res: Response) => {
 
 /**
  * GET /api/students
- * List all students
+ * List students with pagination, search, filtering, and sorting.
+ *
+ * Query params:
+ *   page      - page number (default 1)
+ *   limit     - rows per page (default 50, max 200)
+ *   search    - search student name, parent name, or roll number
+ *   classId   - filter by class ID
+ *   optedIn   - filter by parent opt-in (true/false)
+ *   sortBy    - name | rollNumber | grade | parentName | optedIn (default: name)
+ *   sortOrder - asc | desc (default: asc)
  */
-router.get('/students', async (_req: Request, res: Response) => {
+router.get('/students', async (req: Request, res: Response) => {
   try {
-    const students = await prisma.student.findMany({
+    const {
+      page: pageStr,
+      limit: limitStr,
+      search,
+      classId,
+      optedIn,
+      sortBy = 'name',
+      sortOrder = 'asc',
+    } = req.query as Record<string, string | undefined>;
+
+    const page = Math.max(1, parseInt(pageStr || '1', 10) || 1);
+    const limit = Math.min(200, Math.max(1, parseInt(limitStr || '50', 10) || 50));
+    const skip = (page - 1) * limit;
+    const order = sortOrder === 'desc' ? 'desc' : 'asc';
+
+    // Build where clause
+    const where: Record<string, unknown> = {};
+
+    if (search && search.trim()) {
+      const q = search.trim();
+      where.OR = [
+        { name: { contains: q, mode: 'insensitive' } },
+        { rollNumber: { contains: q, mode: 'insensitive' } },
+        { parent: { name: { contains: q, mode: 'insensitive' } } },
+      ];
+    }
+
+    if (classId) {
+      where.classId = classId;
+    }
+
+    if (optedIn !== undefined) {
+      where.parent = { ...(where.parent as object || {}), optedIn: optedIn === 'true' };
+    }
+
+    // Build orderBy clause
+    let orderBy: unknown;
+    switch (sortBy) {
+      case 'rollNumber':
+        orderBy = { rollNumber: order };
+        break;
+      case 'grade':
+        orderBy = [{ class: { grade: order } }, { class: { section: order } }];
+        break;
+      case 'parentName':
+        orderBy = { parent: { name: order } };
+        break;
+      case 'optedIn':
+        orderBy = { parent: { optedIn: order } };
+        break;
+      case 'name':
+      default:
+        orderBy = { name: order };
+        break;
+    }
+
+    // Run count + data queries in parallel
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const findArgs: any = {
+      where,
       include: {
-        class: { select: { grade: true, section: true } },
-        parent: { select: { name: true, phone: true, optedIn: true } },
+        class: { select: { id: true, grade: true, section: true } },
+        parent: {
+          select: {
+            id: true, name: true, phone: true,
+            optedIn: true, languagePreference: true,
+          },
+        },
       },
-      orderBy: { name: 'asc' },
+      orderBy,
+      skip,
+      take: limit,
+    };
+
+    const [total, students] = await Promise.all([
+      prisma.student.count({ where }),
+      prisma.student.findMany(findArgs),
+    ]);
+
+    res.json({
+      success: true,
+      data: students,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     });
-    res.json({ success: true, data: students });
   } catch (err) {
     console.error('[Admin] GET /students error:', err);
     res.status(500).json({ success: false, error: 'Failed to fetch students' });
