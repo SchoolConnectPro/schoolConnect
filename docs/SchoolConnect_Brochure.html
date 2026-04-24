@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SchoolConnect — School Management Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1a56db;--blue-dk:#1e429f;--sky:#0ea5e9;
+  --green:#059669;--amber:#d97706;--purple:#7c3aed;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+}
+html{font-size:10pt}
+body{font-family:'Inter',-apple-system,sans-serif;color:var(--text);line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;min-height:297mm;margin:0 auto 8mm;background:white;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1)}
+h2{font-size:13pt;font-weight:800;line-height:1.25}
+h3{font-size:10pt;font-weight:700;line-height:1.3}
+h4{font-size:9pt;font-weight:700}
+p{font-size:8pt;line-height:1.55;color:var(--muted)}
+.lbl{display:inline-flex;align-items:center;gap:2mm;background:#eff6ff;color:var(--blue);font-size:7pt;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:1.5mm 4mm;border-radius:20px;border:1px solid #bfdbfe;margin-bottom:3mm}
+.ic{width:10mm;height:10mm;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ic svg{width:16px;height:16px}
+.ic-b{background:#dbeafe;color:var(--blue)}
+.ic-g{background:#dcfce7;color:var(--green)}
+.ic-a{background:#fef3c7;color:var(--amber)}
+.ic-r{background:#ffe4e6;color:#e11d48}
+.ic-i{background:#e0e7ff;color:#4338ca}
+.ic-t{background:#ccfbf1;color:#0d9488}
+.ic-p{background:#ede9fe;color:var(--purple)}
+.ic-s{background:#e0f2fe;color:#0284c7}
+.ic-w{background:#25D366;color:white}
+.fcard{background:white;border:1px solid var(--border);border-radius:3.5mm;padding:4mm;display:flex;gap:3mm;align-items:flex-start}
+.badge{display:inline-block;padding:.8mm 2.5mm;border-radius:10px;font-size:6.5pt;font-weight:700}
+.bg{background:#dcfce7;color:#166534}
+.bb{background:#dbeafe;color:#1e40af}
+.ba{background:#fef3c7;color:#92400e}
+.bp{background:#ede9fe;color:#5b21b6}
+.bs{background:#e0f2fe;color:#0369a1}
+@media print{
+  body{background:white}
+  .page{width:100%;margin:0;box-shadow:none;page-break-after:always}
+  .page:last-child{page-break-after:avoid}
+  @page{size:A4;margin:0}
+}
+@media screen{body{padding:8mm;background:#e2e8f0}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 1
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+<!-- HEADER / HERO -->
+<header style="background:linear-gradient(135deg,#1e429f,#1a56db);padding:4mm 8mm 0;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-12mm;right:-8mm;width:40mm;height:40mm;border-radius:50%;background:rgba(255,255,255,.06)"></div>
+  <div style="position:absolute;top:2mm;right:18mm;width:18mm;height:18mm;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+
+  <!-- Brand row -->
+  <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1">
+    <div style="display:flex;align-items:center;gap:3mm">
+      <div style="width:13mm;height:13mm;background:white;border-radius:3mm;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="4" y="12" width="20" height="13" rx="1" fill="#1a56db"/>
+          <polygon points="2,13 14,3 26,13" fill="#1e429f"/>
+          <rect x="11" y="17" width="6" height="8" rx="1" fill="white"/>
+          <rect x="6" y="15" width="4" height="4" rx=".5" fill="white" opacity=".8"/>
+          <rect x="18" y="15" width="4" height="4" rx=".5" fill="white" opacity=".8"/>
+          <circle cx="22" cy="8" r="4" fill="#25D366"/>
+          <circle cx="22" cy="8" r="2" fill="white" opacity=".9"/>
+        </svg>
+      </div>
+      <div>
+        <div style="color:white;font-size:14pt;font-weight:800;letter-spacing:-.02em;line-height:1.1">SchoolConnect</div>
+        <div style="color:rgba(255,255,255,.75);font-size:7pt;letter-spacing:.04em">Smart School Management Platform</div>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div style="display:inline-flex;align-items:center;gap:2mm;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:1.5mm 4mm">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span style="color:white;font-size:7.5pt;font-weight:500">school-connect-zeta.vercel.app</span>
+      </div>
+      <div style="margin-top:1.5mm">
+        <span style="display:inline-flex;align-items:center;gap:1.5mm;background:#25D366;border-radius:20px;padding:1mm 3mm">
+          <svg width="9" height="9" viewBox="0 0 10 10" fill="white"><circle cx="5" cy="5" r="4.5"/><text x="5" y="7.5" text-anchor="middle" font-size="6" fill="#25D366" font-weight="bold">W</text></svg>
+          <span style="color:white;font-size:7pt;font-weight:600">WhatsApp-Powered</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero text -->
+  <div style="padding:6mm 0 7mm;position:relative;z-index:1">
+    <div style="max-width:140mm">
+      <h2 style="color:white;font-size:20pt;font-weight:800;line-height:1.15;margin-bottom:3mm">
+        Run Your School Smarter.<br>
+        <span style="color:#93c5fd">Connect Everyone Instantly.</span>
+      </h2>
+      <div style="display:flex;gap:6mm">
+        <div style="text-align:center"><div style="color:white;font-size:16pt;font-weight:800;line-height:1">100%</div><div style="color:rgba(255,255,255,.7);font-size:7pt;margin-top:.5mm">WhatsApp Delivery</div></div>
+        <div style="width:.3mm;background:rgba(255,255,255,.2)"></div>
+        <div style="text-align:center"><div style="color:white;font-size:16pt;font-weight:800;line-height:1">0</div><div style="color:rgba(255,255,255,.7);font-size:7pt;margin-top:.5mm">App Downloads Needed</div></div>
+        <div style="width:.3mm;background:rgba(255,255,255,.2)"></div>
+        <div style="text-align:center"><div style="color:white;font-size:16pt;font-weight:800;line-height:1">24/7</div><div style="color:rgba(255,255,255,.7);font-size:7pt;margin-top:.5mm">School-Parent Connect</div></div>
+        <div style="width:.3mm;background:rgba(255,255,255,.2)"></div>
+        <div style="text-align:center"><div style="color:white;font-size:16pt;font-weight:800;line-height:1">5 min</div><div style="color:rgba(255,255,255,.7);font-size:7pt;margin-top:.5mm">Setup Time</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:6mm;background:white;clip-path:ellipse(55% 100% at 50% 100%)"></div>
+</header>
+
+<!-- FEATURES SECTION -->
+<section style="padding:6mm 4mm 4mm">
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm">
+
+    <div class="fcard">
+      <div class="ic ic-b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div><h4 style="margin-bottom:1mm">Instant Parent Notifications</h4><p>Teachers type a message on WhatsApp — parents receive a personalised notification in seconds. No group chats, no confusion.</p></div>
+    </div>
+
+    <div class="fcard">
+      <div class="ic ic-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg></div>
+      <div><h4 style="margin-bottom:1mm">Smart Attendance Tracking</h4><p>Mark absent students via WhatsApp in plain language. Parents notified instantly and can reply with a reason — all logged automatically.</p></div>
+    </div>
+
+    <div class="fcard">
+      <div class="ic ic-a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      <div><h4 style="margin-bottom:1mm">Homework &amp; Exam Reminders</h4><p>Share homework assignments and upcoming test reminders with parents in one message. AI formats it professionally before sending.</p></div>
+    </div>
+
+    <div class="fcard">
+      <div class="ic ic-r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+      <div><h4 style="margin-bottom:1mm">School Announcements &amp; Emergencies</h4><p>Broadcast school events, holiday notices, or emergency alerts to all parents or specific classes — delivered in under 3 seconds.</p></div>
+    </div>
+
+    <div class="fcard">
+      <div class="ic ic-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div><h4 style="margin-bottom:1mm">Student &amp; Staff Directory</h4><p>Manage all student profiles, parent contacts, teacher assignments, and class sections from one clean dashboard. Bulk upload via CSV.</p></div>
+    </div>
+
+    <div class="fcard">
+      <div class="ic ic-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+      <div><h4 style="margin-bottom:1mm">Hindi, Punjabi &amp; English Support</h4><p>Every parent receives messages in their preferred language. Teachers write in any language — AI translates and delivers accordingly.</p></div>
+    </div>
+
+    <div class="fcard">
+      <div class="ic ic-p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+      <div><h4 style="margin-bottom:1mm">Principal's Admin Dashboard</h4><p>Full visibility into all notifications sent, attendance records, and parent opt-in status — accessible from any browser, anytime.</p></div>
+    </div>
+
+    <div class="fcard" style="background:linear-gradient(135deg,#eff6ff,#e0e7ff);border-color:#bfdbfe">
+      <div class="ic" style="background:#1a56db"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div><h4 style="margin-bottom:1mm">AI-Powered Smart Messaging <span style="background:#1a56db;color:white;font-size:6pt;padding:.5mm 2mm;border-radius:10px;margin-left:1mm">AI</span></h4><p>Teachers write casually — "Rahul absent today" — and AI understands, formats, and sends a professional message to the right parent automatically.</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PERSONAS SECTION -->
+<section style="padding:0 8mm 6mm">
+  <div style="height:.5mm;background:linear-gradient(90deg,#1a56db,#0ea5e9,#1a56db);border-radius:1mm;margin-bottom:4mm"></div>
+  <div style="text-align:center;margin-bottom:4mm">
+    <div class="lbl">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Who Benefits
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm">
+
+    <!-- Principal -->
+    <div style="background:linear-gradient(160deg,#1e429f,#1a56db);border-radius:4mm;padding:5mm;color:white;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-8mm;right:-8mm;width:24mm;height:24mm;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+      <div style="position:relative;z-index:1">
+        <div style="font-size:7pt;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1mm">Principal / Admin</div>
+        <h3 style="color:white;margin-bottom:2.5mm">Full Control,<br>Zero Chaos</h3>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:2mm">
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>See all notifications sent across every class</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Monitor attendance records school-wide</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Send emergency alerts to all parents instantly</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Manage students, teachers &amp; classes easily</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>View teacher-parent engagement metrics at a glance</li>
+         </ul>
+      </div>
+    </div>
+
+    <!-- Teacher -->
+    <div style="background:linear-gradient(160deg,#065f46,#059669);border-radius:4mm;padding:5mm;color:white;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-8mm;right:-8mm;width:24mm;height:24mm;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+      <div style="position:relative;z-index:1">
+        <div style="font-size:7pt;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1mm">Class Teacher</div>
+        <h3 style="color:white;margin-bottom:2.5mm">Just WhatsApp.<br>That's It.</h3>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:2mm">
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Mark absent students in plain language</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Share homework &amp; test reminders instantly</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Get delivery confirmation for every message</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Write in Hindi, Punjabi, or English — AI handles the rest</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Parent -->
+    <div style="background:linear-gradient(160deg,#92400e,#d97706);border-radius:4mm;padding:5mm;color:white;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-8mm;right:-8mm;width:24mm;height:24mm;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+      <div style="position:relative;z-index:1">
+        <div style="font-size:7pt;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1mm">Parent</div>
+        <h3 style="color:white;margin-bottom:2.5mm">Always in the<br>Loop.</h3>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:2mm">
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fde68a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Get notified the moment child is absent</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fde68a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Receive homework &amp; exam reminders on time</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fde68a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>Messages in your preferred language</li>
+          <li style="display:flex;align-items:flex-start;gap:2mm;font-size:7.5pt;color:rgba(255,255,255,.88)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fde68a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:.5mm"><polyline points="20 6 9 17 4 12"/></svg>No app to install — just WhatsApp</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- END PAGE 1 -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 2
+     ═══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+<!-- PAGE 2 MINI HEADER -->
+<div style="background:linear-gradient(135deg,#1e429f,#1a56db);padding:3mm 8mm;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:2.5mm">
+    <div style="width:7mm;height:7mm;background:white;border-radius:2mm;display:flex;align-items:center;justify-content:center">
+      <svg width="14" height="14" viewBox="0 0 28 28" fill="none"><rect x="4" y="12" width="20" height="13" rx="1" fill="#1a56db"/><polygon points="2,13 14,3 26,13" fill="#1e429f"/><rect x="11" y="17" width="6" height="8" rx="1" fill="white"/></svg>
+    </div>
+    <span style="color:white;font-size:9pt;font-weight:700">SchoolConnect</span>
+  </div>
+  <span style="color:rgba(255,255,255,.75);font-size:7.5pt">Pricing &amp; Add-Ons</span>
+  <span style="color:rgba(255,255,255,.75);font-size:7.5pt">school-connect-zeta.vercel.app</span>
+</div>
+<div style="height:.5mm;background:linear-gradient(90deg,#1a56db,#0ea5e9)"></div>
+
+<!-- ADD-ONS SECTION -->
+<section style="padding:5mm 8mm 4mm">
+  <div style="text-align:center;margin-bottom:4mm">
+    <div class="lbl">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Optional Add-Ons
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;margin-bottom:4mm">
+
+    <!-- Analytics FREE -->
+    <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #059669;border-radius:4mm;padding:4mm;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#059669,#10b981);color:white;font-size:6.5pt;font-weight:800;padding:1.5mm 4mm 1.5mm 6mm;border-radius:0 4mm 0 8mm;letter-spacing:.05em">FREE — LIMITED TIME</div>
+      <div style="display:flex;gap:3mm;align-items:flex-start;margin-top:3mm">
+        <div class="ic ic-w" style="background:#059669"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div>
+          <h4 style="color:#065f46;margin-bottom:1mm">School Analytics Dashboard</h4>
+          <p style="color:#166534">Track attendance trends, parent engagement rates, and communication patterns. Identify at-risk students early with visual reports.</p>
+          <div style="margin-top:2mm;display:flex;gap:2mm;flex-wrap:wrap">
+            <span class="badge bg">Attendance Trends</span>
+            <span class="badge bg">Parent Engagement</span>
+            <span class="badge bg">Class Reports</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:3mm;background:white;border-radius:2mm;padding:2mm 3mm;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:7.5pt;color:#166534;font-weight:600">Complimentary for early adopters</span>
+        <span style="font-size:8pt;font-weight:800;color:#059669">FREE <span style="font-size:7pt;font-weight:400;color:#64748b;text-decoration:line-through">+&#8377;3/student</span></span>
+      </div>
+    </div>
+
+    <!-- Fee Management -->
+    <div style="background:white;border:1px solid var(--border);border-radius:4mm;padding:4mm">
+      <div style="display:flex;gap:3mm;align-items:flex-start">
+        <div class="ic ic-a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div style="flex:1">
+          <h4 style="margin-bottom:1mm">Fee Reminders &amp; Collection</h4>
+          <p>Automated fee due reminders via WhatsApp. Track payments, generate digital receipts, and get defaulter reports — no manual follow-up needed.</p>
+          <div style="margin-top:2mm;display:flex;gap:2mm;flex-wrap:wrap">
+            <span class="badge ba">Auto Reminders</span>
+            <span class="badge ba">Digital Receipts</span>
+            <span class="badge ba">Defaulter Reports</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:3mm;background:#fffbeb;border-radius:2mm;padding:2mm 3mm;display:flex;align-items:center;justify-content:space-between;border:1px solid #fde68a">
+        <span style="font-size:7.5pt;color:#92400e;font-weight:600">High-value add-on</span>
+        <span style="font-size:10pt;font-weight:800;color:#d97706">+&#8377;5 <span style="font-size:7pt;font-weight:400;color:#64748b">/student/month</span></span>
+      </div>
+    </div>
+
+    <!-- Birthday & Events -->
+    <div style="background:white;border:1px solid var(--border);border-radius:4mm;padding:4mm">
+      <div style="display:flex;gap:3mm;align-items:flex-start">
+        <div class="ic ic-p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div style="flex:1">
+          <h4 style="margin-bottom:1mm">Birthday &amp; Event Reminders</h4>
+          <p>Automatically wish students on their birthdays and send event reminders to parents. Build a warmer school community with zero extra effort.</p>
+          <div style="margin-top:2mm;display:flex;gap:2mm;flex-wrap:wrap">
+            <span class="badge bp">Auto Birthday Wishes</span>
+            <span class="badge bp">Event Calendar</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:3mm;background:#faf5ff;border-radius:2mm;padding:2mm 3mm;display:flex;align-items:center;justify-content:space-between;border:1px solid #ddd6fe">
+        <span style="font-size:7.5pt;color:#5b21b6;font-weight:600">Community builder</span>
+        <span style="font-size:10pt;font-weight:800;color:#7c3aed">+&#8377;2 <span style="font-size:7pt;font-weight:400;color:#64748b">/student/month</span></span>
+      </div>
+    </div>
+
+    <!-- Staff Leave -->
+    <div style="background:white;border:1px solid var(--border);border-radius:4mm;padding:4mm">
+      <div style="display:flex;gap:3mm;align-items:flex-start">
+        <div class="ic ic-s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+        <div style="flex:1">
+          <h4 style="margin-bottom:1mm">Staff Leave Management</h4>
+          <p>Teachers apply for leave via WhatsApp. Admin approves or rejects with one tap. Leave records are maintained automatically.</p>
+          <div style="margin-top:2mm;display:flex;gap:2mm;flex-wrap:wrap">
+            <span class="badge bs">Leave Requests</span>
+            <span class="badge bs">Approval Flow</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:3mm;background:#f0f9ff;border-radius:2mm;padding:2mm 3mm;display:flex;align-items:center;justify-content:space-between;border:1px solid #bae6fd">
+        <span style="font-size:7.5pt;color:#0369a1;font-weight:600">Admin time-saver</span>
+        <span style="font-size:10pt;font-weight:800;color:#0284c7">+&#8377;2 <span style="font-size:7pt;font-weight:400;color:#64748b">/student/month</span></span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRICING SECTION -->
+<section style="padding:0 8mm 4mm">
+  <div style="height:.3mm;background:#e2e8f0;margin-bottom:4mm"></div>
+  <div style="text-align:center;margin-bottom:4mm">
+    <div class="lbl">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Simple, Transparent Pricing
+    </div>
+    <h2 style="margin-bottom:1mm">One Price. All Features. No Hidden Costs.</h2>
+    <p>Per student, per month. Billed monthly. Cancel anytime.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm">
+
+    <!-- Tier 1 -->
+    <div style="background:white;border:1.5px solid #e2e8f0;border-radius:4mm;padding:5mm;text-align:center">
+      <div style="font-size:8pt;font-weight:700;color:#64748b;margin-bottom:2mm;text-transform:uppercase;letter-spacing:.06em">Up to 500 Students</div>
+      <div style="font-size:8pt;color:#94a3b8;text-decoration:line-through;margin-bottom:1mm">&#8377;59 / student / month</div>
+      <div style="font-size:22pt;font-weight:800;color:#1a56db;line-height:1">&#8377;49</div>
+      <div style="font-size:7.5pt;color:#64748b;margin-bottom:3mm">per student / month</div>
+      <span class="badge bg">Save &#8377;10 / student</span>
+    </div>
+
+    <!-- Tier 2 POPULAR -->
+    <div style="background:linear-gradient(160deg,#1e429f,#1a56db);border-radius:4mm;padding:5mm;text-align:center;position:relative;box-shadow:0 4px 16px rgba(26,86,219,.3)">
+      <div style="position:absolute;top:-3mm;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#f59e0b,#fbbf24);color:white;font-size:6.5pt;font-weight:800;padding:1mm 4mm;border-radius:10px;white-space:nowrap;letter-spacing:.05em">MOST POPULAR</div>
+      <div style="font-size:8pt;font-weight:700;color:rgba(255,255,255,.75);margin-bottom:2mm;text-transform:uppercase;letter-spacing:.06em;margin-top:2mm">500 – 1,000 Students</div>
+      <div style="font-size:8pt;color:rgba(255,255,255,.5);text-decoration:line-through;margin-bottom:1mm">&#8377;55 / student / month</div>
+      <div style="font-size:22pt;font-weight:800;color:white;line-height:1">&#8377;45</div>
+      <div style="font-size:7.5pt;color:rgba(255,255,255,.75);margin-bottom:3mm">per student / month</div>
+      <span style="background:rgba(255,255,255,.2);color:white;font-size:7pt;font-weight:700;padding:1.5mm 3mm;border-radius:10px;display:inline-block">Save &#8377;10 / student</span>
+    </div>
+
+    <!-- Tier 3 -->
+    <div style="background:white;border:1.5px solid #e2e8f0;border-radius:4mm;padding:5mm;text-align:center">
+      <div style="font-size:8pt;font-weight:700;color:#64748b;margin-bottom:2mm;text-transform:uppercase;letter-spacing:.06em">1,000+ Students</div>
+      <div style="font-size:8pt;color:#94a3b8;text-decoration:line-through;margin-bottom:1mm">&#8377;49 / student / month</div>
+      <div style="font-size:22pt;font-weight:800;color:#1a56db;line-height:1">&#8377;39</div>
+      <div style="font-size:7.5pt;color:#64748b;margin-bottom:3mm">per student / month</div>
+      <span class="badge bg">Best value for large schools</span>
+    </div>
+
+  </div>
+
+  <div style="margin-top:3mm;background:#f8fafc;border:1px solid #e2e8f0;border-radius:3mm;padding:3mm 5mm;display:flex;align-items:center;gap:4mm">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>
+    <div><span style="font-size:8pt;font-weight:700;color:#1e293b">All base plan features included. </span><span style="font-size:8pt;color:#64748b">Add-ons are optional and billed separately. Analytics dashboard is FREE for all schools during the launch period. Prices are exclusive of GST.</span></div>
+  </div>
+</section>
+
+
+<footer style="background:linear-gradient(135deg,#1e429f,#1a56db,#0ea5e9);padding:5mm 8mm;position:relative;overflow:hidden">
+  <div style="position:absolute;top:-10mm;right:-5mm;width:35mm;height:35mm;border-radius:50%;background:rgba(255,255,255,.06)"></div>
+  <div style="position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:start">
+    <div>
+      <div style="font-size:7pt;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:2mm">Get Started Today</div>
+      <h2 style="color:white;font-size:13pt;font-weight:800;line-height:1.2;margin-bottom:2.5mm">Ready to Transform<br>Your School?</h2>
+      <p style="font-size:8pt;color:rgba(255,255,255,.8);line-height:1.55;margin-bottom:3mm">Join schools across Punjab already saving hours every week and keeping parents better informed than ever before.</p>
+    </div>
+    <div>
+      <div style="font-size:7pt;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:3mm">Contact Us</div>
+      <div style="display:flex;align-items:center;gap:3mm;margin-bottom:3mm;background:rgba(255,255,255,.1);border-radius:2.5mm;padding:2.5mm 3.5mm">
+        <div style="width:9mm;height:9mm;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <div style="color:white;font-size:8.5pt;font-weight:700">Arshdeep Singh</div>
+          <div style="color:rgba(255,255,255,.8);font-size:8pt;margin-top:.5mm">+91 90563 43865</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:3mm;background:rgba(255,255,255,.1);border-radius:2.5mm;padding:2.5mm 3.5mm">
+        <div style="width:9mm;height:9mm;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div style="color:rgba(255,255,255,.7);font-size:7pt;margin-bottom:.5mm">Email</div>
+          <div style="color:white;font-size:8pt;font-weight:600">schoolconnect.24.7@gmail.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

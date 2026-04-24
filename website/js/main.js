@@ -259,7 +259,7 @@ const demoForm = document.getElementById('demoForm');
 if (demoForm) {
   demoForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const formCard = demoForm.closest('.cta-form-card');
+    const formCard = demoForm.closest('.cta-form-card') || demoForm.closest('.demo-form-card');
     formCard.innerHTML = `
       <div class="form-success">
         <div class="form-success-icon"><i class="fas fa-check"></i></div>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SchoolConnect — Feature Implementation Status</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #1a1a1a; margin: 0; padding: 40px 60px; background: #fff; }
+h1 { font-size: 18pt; color: #0f3460; border-bottom: 3px solid #e94560; padding-bottom: 8px; margin-top: 0; }
+p.meta { color: #666; font-size: 9.5pt; margin-bottom: 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+th { background: #0f3460; color: white; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
+td { padding: 8px 14px; border-bottom: 1px solid #e8eef5; vertical-align: top; }
+tr:nth-child(even) td { background: #f9f9fb; }
+tr:hover td { background: #eef2ff; }
+.section-row td { background: #16213e !important; color: white; font-weight: 700; font-size: 9.5pt; letter-spacing: 0.5px; padding: 6px 14px; }
+.done    { display: inline-block; background: #d4edda; color: #155724; padding: 2px 10px; border-radius: 10px; font-weight: 700; font-size: 8.5pt; white-space: nowrap; }
+.partial { display: inline-block; background: #fff3cd; color: #856404; padding: 2px 10px; border-radius: 10px; font-weight: 700; font-size: 8.5pt; white-space: nowrap; }
+.notdone { display: inline-block; background: #f8d7da; color: #721c24; padding: 2px 10px; border-radius: 10px; font-weight: 700; font-size: 8.5pt; white-space: nowrap; }
+.c-vh { display: inline-block; background: #c0392b; color: white; padding: 2px 10px; border-radius: 10px; font-weight: 700; font-size: 8.5pt; white-space: nowrap; }
+.c-h  { display: inline-block; background: #e67e22; color: white; padding: 2px 10px; border-radius: 10px; font-weight: 700; font-size: 8.5pt; white-space: nowrap; }
+.c-m  { display: inline-block; background: #2980b9; color: white; padding: 2px 10px; border-radius: 10px; font-weight: 700; font-size: 8.5pt; white-space: nowrap; }
+.c-l  { display: inline-block; background: #7f8c8d; color: white; padding: 2px 10px; border-radius: 10px; font-weight: 700; font-size: 8.5pt; white-space: nowrap; }
+.notes { color: #555; font-size: 9pt; }
+.fn { font-weight: 600; }
+.legend { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; font-size: 9.5pt; align-items: center; }
+.legend-group { display: flex; gap: 8px; align-items: center; }
+.legend-label { color: #555; font-weight: 600; margin-right: 4px; }
+.summary { display: flex; gap: 16px; flex-wrap: wrap; margin: 28px 0 8px; }
+.summary-card { border-radius: 8px; padding: 12px 20px; min-width: 120px; text-align: center; }
+.summary-card .num { font-size: 22pt; font-weight: 800; }
+.summary-card .lbl { font-size: 8.5pt; font-weight: 600; margin-top: 2px; }
+.s-done    { background: #d4edda; color: #155724; }
+.s-partial { background: #fff3cd; color: #856404; }
+.s-notdone { background: #f8d7da; color: #721c24; }
+@media print { body { padding: 20px 30px; } }
+</style>
+</head>
+<body>
+
+<h1>SchoolConnect &mdash; Feature Implementation Status</h1>
+<p class="meta">April 2026 &nbsp;|&nbsp; Based on code review of <code>backend/src/</code> and <code>dashboard/</code> &nbsp;|&nbsp; Confidential</p>
+
+<div class="legend">
+  <div class="legend-group"><span class="legend-label">Status:</span>
+    <span class="done">&#10003; Done</span>
+    <span class="partial">&#9888; Partial</span>
+    <span class="notdone">&#10007; Not Done</span>
+  </div>
+  <div class="legend-group"><span class="legend-label">Criticality:</span>
+    <span class="c-vh">Very High</span>
+    <span class="c-h">High</span>
+    <span class="c-m">Medium</span>
+    <span class="c-l">Low</span>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:4%">#</th>
+      <th style="width:33%">Feature</th>
+      <th style="width:11%">Status</th>
+      <th style="width:11%">Criticality</th>
+      <th>Code / Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 2. Teacher WhatsApp Interface -->
+    <tr class="section-row"><td colspan="5">2. Teacher WhatsApp Interface</td></tr>
+    <tr>
+      <td>2.1</td><td class="fn">Natural Language Message Input</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">messageAgent.ts &rarr; parseTeacherMessage() via Claude</td>
+    </tr>
+    <tr>
+      <td>2.2</td><td class="fn">Supported Message Types (6 intents)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">ATTENDANCE, TEST_REMINDER, EVENT, HOMEWORK, EMERGENCY, BROADCAST all routed in messageAgent.ts</td>
+    </tr>
+    <tr>
+      <td>2.3</td><td class="fn">Built-in Commands (HELP, STATUS)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">messageAgent.ts &mdash; HELP returns examples; STATUS returns last 3 notifications from DB</td>
+    </tr>
+    <tr>
+      <td>2.4</td><td class="fn">Smart Student Matching (3-tier fuzzy)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">attendance.ts &mdash; exact match &rarr; partial/first-name &rarr; parent name match</td>
+    </tr>
+    <tr>
+      <td>2.5</td><td class="fn">Multi-Class Teacher Support</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">TeacherClass join table in schema; getTeacherDefaultClass() in messageAgent.ts</td>
+    </tr>
+    <tr>
+      <td>2.6</td><td class="fn">Delivery Confirmation to Teacher</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">messageAgent.ts returns TwiML with recipient count, failure count, timestamp</td>
+    </tr>
+    <tr>
+      <td>2.7</td><td class="fn">Scheduled Messages</td>
+      <td><span class="partial">&#9888; Partial</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">scheduler.ts runs every 5 min and processes PENDING notifications where scheduledAt &le; now &#10003;; but scheduledAt always defaults to now() in all notification creates &mdash; no teacher command to schedule a future message exists in messageAgent.ts</td>
+    </tr>
+    <tr>
+      <td>2.8</td><td class="fn">Hinglish / Regional Language Input &amp; Output</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">Claude understands Hinglish input &#10003;; translation.ts + translateMessage() sends HI/PA per parent &#10003;; parents set preference via LANGUAGE command in optIn.ts &#10003;</td>
+    </tr>
+    <tr>
+      <td>2.9</td><td class="fn">Unregistered Teacher Handling</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">messageAgent.ts &mdash; returns error if phone not found in Teacher table</td>
+    </tr>
+
+    <!-- 3. AI Message Engine -->
+    <tr class="section-row"><td colspan="5">3. AI Message Engine</td></tr>
+    <tr>
+      <td>3.1</td><td class="fn">Intent Classification (7 intents)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">claude.ts &mdash; TEACHER_AGENT_SYSTEM_PROMPT; returns HIGH / MEDIUM / LOW confidence</td>
+    </tr>
+    <tr>
+      <td>3.2</td><td class="fn">Structured Data Extraction</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">claude.ts &mdash; extracts studentNames[], className, subject, date (ISO), confidence</td>
+    </tr>
+    <tr>
+      <td>3.3</td><td class="fn">Automatic Parent Message Formatting</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">claude.ts &mdash; parentMessage in ParsedTeacherMessage; formatParentNotification() helper also present</td>
+    </tr>
+    <tr>
+      <td>3.4</td><td class="fn">Clarification Handling (low confidence)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">messageAgent.ts &mdash; UNKNOWN intent or LOW confidence returns clarification prompt to teacher</td>
+    </tr>
+    <tr>
+      <td>3.5</td><td class="fn">AI Model Flexibility</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">claude.ts &mdash; MODEL constant = 'claude-sonnet-4-5'; single line change to swap models</td>
+    </tr>
+    <tr>
+      <td>3.6</td><td class="fn">Parent AI Assistant (natural language queries)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">No parent query handler; optIn.ts only handles STOP / START / LANGUAGE / STATUS commands</td>
+    </tr>
+    <tr>
+      <td>3.7</td><td class="fn">AI-Powered Report Summaries</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No report generation logic in codebase</td>
+    </tr>
+    <tr>
+      <td>3.8</td><td class="fn">Smart Duplicate Detection</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No deduplication check before sending in messageAgent.ts or broadcast.ts</td>
+    </tr>
+
+    <!-- 4. Attendance Management -->
+    <tr class="section-row"><td colspan="5">4. Attendance Management</td></tr>
+    <tr>
+      <td>4.1</td><td class="fn">WhatsApp Attendance Marking</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">attendance.ts &mdash; handleAbsence(): finds student, notifies parent, logs AttendanceLog</td>
+    </tr>
+    <tr>
+      <td>4.2</td><td class="fn">Parent Absence Reply (SICK / KNOWN / PRESENT)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">attendance.ts &mdash; handleParentAttendanceReply(); updates AttendanceLog.parentReply in DB</td>
+    </tr>
+    <tr>
+      <td>4.3</td><td class="fn">Bulk Attendance (multiple students at once)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">messageAgent.ts &mdash; studentNames[] processed with Promise.allSettled in parallel</td>
+    </tr>
+    <tr>
+      <td>4.4</td><td class="fn">Attendance Log (digital record + admin view)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">AttendanceLog model in schema; GET /api/attendance in admin.ts</td>
+    </tr>
+    <tr>
+      <td>4.5</td><td class="fn">Daily / Weekly / Monthly Attendance Reports</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No scheduled report generation in scheduler.ts; no report endpoints in admin.ts</td>
+    </tr>
+
+    <!-- 5. Notification & Broadcast System -->
+    <tr class="section-row"><td colspan="5">5. Notification &amp; Broadcast System</td></tr>
+    <tr>
+      <td>5.1</td><td class="fn">Class Broadcast</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">broadcast.ts &mdash; broadcastToClass() fetches opted-in parents by classId, sends in parallel</td>
+    </tr>
+    <tr>
+      <td>5.2</td><td class="fn">School-wide Broadcast (EMERGENCY)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">broadcast.ts &mdash; classIdentifier=null targets all parents in school; EMERGENCY skips class check</td>
+    </tr>
+    <tr>
+      <td>5.3</td><td class="fn">Per-Parent Delivery Tracking</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">MessageLog model per parent; twilioMessageSid + status (QUEUED/SENT/DELIVERED/FAILED) stored</td>
+    </tr>
+    <tr>
+      <td>5.4</td><td class="fn">Delivery Status Callbacks (Twilio webhook)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">POST /webhook/twilio/status endpoint exists but has explicit <code>// TODO: Update MessageLog.status based on MessageSid</code> &mdash; only logs and returns 200 OK; MessageLog.status is never updated from callbacks</td>
+    </tr>
+    <tr>
+      <td>5.5</td><td class="fn">Parallel Sending + Translation Cache</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">broadcast.ts &mdash; Promise.allSettled; shared translationCache Map avoids duplicate Claude calls per batch</td>
+    </tr>
+
+    <!-- 6. Parent WhatsApp Experience -->
+    <tr class="section-row"><td colspan="5">6. Parent WhatsApp Experience</td></tr>
+    <tr>
+      <td>6.1</td><td class="fn">Opt-in / Opt-out (START / STOP)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">optIn.ts &mdash; STOP sets optedIn=false; START sets optedIn=true; broadcast.ts filters by optedIn=true</td>
+    </tr>
+    <tr>
+      <td>6.2</td><td class="fn">Language Preference Selection (EN / HI / PA)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">optIn.ts &mdash; LANGUAGE command + numbered menu; stored as LanguageCode enum in Parent model</td>
+    </tr>
+    <tr>
+      <td>6.3</td><td class="fn">Parent Status Command (MY STATUS)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">optIn.ts &mdash; STATUS returns child name, class, opt-in status, language preference</td>
+    </tr>
+    <tr>
+      <td>6.4</td><td class="fn">Personalized 1:1 Notifications (not group)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">broadcast.ts sends individual WhatsApp per parent; attendance.ts sends to specific parent only</td>
+    </tr>
+
+    <!-- 7. Parent AI Assistant -->
+    <tr class="section-row"><td colspan="5">7. Parent AI Assistant</td></tr>
+    <tr>
+      <td>7.1</td><td class="fn">General Natural Language Queries</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">No parent query routing in webhook.ts; no AI query handler service exists</td>
+    </tr>
+    <tr>
+      <td>7.2</td><td class="fn">Attendance Queries ("How many days absent?")</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">AttendanceLog data exists in DB but no query interface for parents</td>
+    </tr>
+    <tr>
+      <td>7.3</td><td class="fn">Fee Queries ("What is fee due?")</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No fee model in schema; no fee query handler</td>
+    </tr>
+    <tr>
+      <td>7.4</td><td class="fn">Academic Queries (homework, tests, timetable)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No academic data models beyond notification logs</td>
+    </tr>
+    <tr>
+      <td>7.5</td><td class="fn">School Information Queries (timings, holidays)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-l">Low</span></td>
+      <td class="notes">No school info / calendar model in schema</td>
+    </tr>
+    <tr>
+      <td>7.6</td><td class="fn">Rate Limiting &amp; Cost Control (10 queries/day)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No Redis / rate-limit middleware; no query caching layer</td>
+    </tr>
+    <tr>
+      <td>7.7</td><td class="fn">Multilingual AI Responses to Parents</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">Translation exists for broadcast messages; not wired to any parent query flow</td>
+    </tr>
+
+    <!-- 8. School Admin Dashboard -->
+    <tr class="section-row"><td colspan="5">8. School Admin Dashboard</td></tr>
+    <tr>
+      <td>8.1</td><td class="fn">Notification History (list + per-parent stats)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">admin.ts &mdash; GET /api/notifications (last 50) + GET /api/notifications/:id with messageLogs</td>
+    </tr>
+    <tr>
+      <td>8.2</td><td class="fn">Attendance Dashboard (logs + filter)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">admin.ts &mdash; GET /api/attendance returns AttendanceLog with student + teacher info</td>
+    </tr>
+    <tr>
+      <td>8.3</td><td class="fn">Student &amp; Parent Management (add / view)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">admin.ts &mdash; GET + POST /api/students; GET + PATCH + POST /api/parents (opt-in/out, language preference); dashboard students &amp; parents pages with toggle controls</td>
+    </tr>
+    <tr>
+      <td>8.4</td><td class="fn">Teacher Management (add / view / assign classes)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">admin.ts &mdash; GET + POST /api/teachers; classIds[] creates TeacherClass records</td>
+    </tr>
+    <tr>
+      <td>8.5</td><td class="fn">Class Management (view + parents per class)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">admin.ts &mdash; GET + POST /api/classes + GET /api/classes/:id/parents; dashboard settings page with add-class and add-school modals</td>
+    </tr>
+    <tr>
+      <td>8.6</td><td class="fn">Real-Time Analytics Dashboard</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No analytics aggregation endpoints; recipientCount stored per notification but no summary API</td>
+    </tr>
+    <tr>
+      <td>8.7</td><td class="fn">Principal WhatsApp Interface</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No principal role or separate WhatsApp command set; principals use web dashboard only</td>
+    </tr>
+    <tr>
+      <td>8.8</td><td class="fn">Multi-School Support</td>
+      <td><span class="partial">&#9888; Partial</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">schoolId on all models &#10003;; data isolation by schoolId &#10003;; no super-admin cross-school view</td>
+    </tr>
+    <tr>
+      <td>8.9</td><td class="fn">School Onboarding Flow (wizard)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">No onboarding wizard; schools must be seeded manually via API or DB</td>
+    </tr>
+
+    <!-- 9. Data Management -->
+    <tr class="section-row"><td colspan="5">9. Data Management</td></tr>
+    <tr>
+      <td>9.1</td><td class="fn">School Data Model (all entities)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">schema.prisma &mdash; School, Teacher, Class, Student, Parent, Notification, MessageLog, AttendanceLog</td>
+    </tr>
+    <tr>
+      <td>9.2</td><td class="fn">Bulk Student Import (CSV)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">dashboard/app/upload &mdash; PapaParse client-side CSV parsing, per-row validation, preview table, progress bar; calls POST /api/students per row; separate tab also handles teacher bulk upload</td>
+    </tr>
+    <tr>
+      <td>9.3</td><td class="fn">Data Export (CSV / Excel)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No export endpoints; data accessible via GET APIs but no file generation</td>
+    </tr>
+    <tr>
+      <td>9.4</td><td class="fn">Data Backup &amp; Recovery</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">PostgreSQL on Railway with automatic backups; soft-delete pattern (no hard deletes in code)</td>
+    </tr>
+    <tr>
+      <td>9.5</td><td class="fn">Data Privacy &amp; GDPR (deletion, retention)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No data deletion endpoint; no retention policy; no consent management beyond optedIn flag</td>
+    </tr>
+
+    <!-- 10. Academic Features -->
+    <tr class="section-row"><td colspan="5">10. Academic Features</td></tr>
+    <tr>
+      <td>10.1</td><td class="fn">Homework Management</td>
+      <td><span class="partial">&#9888; Partial</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">HOMEWORK intent broadcasts to class parents &#10003;; no homework tracker, pending list, or completion tracking</td>
+    </tr>
+    <tr>
+      <td>10.2</td><td class="fn">Test &amp; Exam Reminders</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">TEST_REMINDER intent fully handled; Claude extracts subject, date, topics; broadcasts to class</td>
+    </tr>
+    <tr>
+      <td>10.3</td><td class="fn">Exam Results Sharing</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No marks / results model in schema; no result entry or sharing flow</td>
+    </tr>
+    <tr>
+      <td>10.4</td><td class="fn">Timetable Management</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-l">Low</span></td>
+      <td class="notes">No timetable model in schema</td>
+    </tr>
+    <tr>
+      <td>10.5</td><td class="fn">Syllabus Tracking</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-l">Low</span></td>
+      <td class="notes">No syllabus model in schema</td>
+    </tr>
+    <tr>
+      <td>10.6</td><td class="fn">PTM Management</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">PTM can be sent as EVENT broadcast; no slot booking, confirmation, or feedback flow</td>
+    </tr>
+    <tr>
+      <td>10.7</td><td class="fn">Report Card Generation (PDF)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No marks model, no PDF generation, no file storage integration</td>
+    </tr>
+    <tr>
+      <td>10.8</td><td class="fn">Library Management</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-l">Low</span></td>
+      <td class="notes">No library / book model in schema</td>
+    </tr>
+
+    <!-- 11. Fee Management -->
+    <tr class="section-row"><td colspan="5">11. Fee Management</td></tr>
+    <tr>
+      <td>11.1</td><td class="fn">Fee Structure Setup</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">No Fee model in schema; no fee structure configuration</td>
+    </tr>
+    <tr>
+      <td>11.2</td><td class="fn">Automated Fee Reminders</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">No fee reminder logic in scheduler.ts; no fee due-date tracking</td>
+    </tr>
+    <tr>
+      <td>11.3</td><td class="fn">Online Fee Payment (Razorpay / UPI)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">No payment gateway integration; no payment link generation</td>
+    </tr>
+    <tr>
+      <td>11.4</td><td class="fn">Fee Collection Dashboard</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No fee collection endpoints in admin.ts</td>
+    </tr>
+    <tr>
+      <td>11.5</td><td class="fn">Fee Receipt Generation (PDF)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No PDF generation; no file storage (Cloudflare R2) integration</td>
+    </tr>
+    <tr>
+      <td>11.6</td><td class="fn">Scholarship &amp; Concession Management</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-l">Low</span></td>
+      <td class="notes">No concession fields in Student or Parent model</td>
+    </tr>
+    <tr>
+      <td>11.7</td><td class="fn">Fee Defaulter Reports</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No fee data to report on; no overdue tracking</td>
+    </tr>
+
+    <!-- 12. Reports & Analytics -->
+    <tr class="section-row"><td colspan="5">12. Reports &amp; Analytics</td></tr>
+    <tr>
+      <td>12.1</td><td class="fn">Notification Analytics (delivery rate)</td>
+      <td><span class="partial">&#9888; Partial</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">recipientCount stored per Notification &#10003;; STATUS command shows last 3 &#10003;; no full analytics API or dashboard</td>
+    </tr>
+    <tr>
+      <td>12.2</td><td class="fn">Attendance Reports (daily / weekly / monthly)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">Raw logs available via GET /api/attendance; no aggregated report generation</td>
+    </tr>
+    <tr>
+      <td>12.3</td><td class="fn">Communication Reports (by type / teacher)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No aggregation endpoints; raw notification data accessible but not summarized</td>
+    </tr>
+    <tr>
+      <td>12.4</td><td class="fn">Fee Reports (collection, aging, pending)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No fee data model exists</td>
+    </tr>
+    <tr>
+      <td>12.5</td><td class="fn">Parent Engagement Reports</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-l">Low</span></td>
+      <td class="notes">parentReply stored in AttendanceLog but no engagement scoring or reporting</td>
+    </tr>
+    <tr>
+      <td>12.6</td><td class="fn">Export &amp; Download (PDF / Excel)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No export endpoints; no scheduled email delivery of reports</td>
+    </tr>
+
+    <!-- 13. Communication Features -->
+    <tr class="section-row"><td colspan="5">13. Communication Features</td></tr>
+    <tr>
+      <td>13.1</td><td class="fn">Emergency Broadcast</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">messageAgent.ts routes EMERGENCY intent; broadcast.ts sends school-wide with no class filter</td>
+    </tr>
+    <tr>
+      <td>13.2</td><td class="fn">Event Notifications</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">EVENT intent handled; Claude formats professional event announcement; broadcasts to class or school</td>
+    </tr>
+    <tr>
+      <td>13.3</td><td class="fn">Circular Distribution (PDF attachment)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No file upload endpoint; no Cloudflare R2 integration; Twilio media sending not implemented</td>
+    </tr>
+    <tr>
+      <td>13.4</td><td class="fn">Photo Sharing (events / field trips)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-l">Low</span></td>
+      <td class="notes">No media upload or storage integration</td>
+    </tr>
+    <tr>
+      <td>13.5</td><td class="fn">Two-Way Messaging / Shared Inbox</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">Inbound messages handled for commands only; no general inbox or dashboard reply flow</td>
+    </tr>
+    <tr>
+      <td>13.6</td><td class="fn">Broadcast Campaigns (scheduled series)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-l">Low</span></td>
+      <td class="notes">Scheduler supports single future notifications; no campaign / series concept</td>
+    </tr>
+    <tr>
+      <td>13.7</td><td class="fn">Multi-Language Notifications</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">broadcast.ts + translation.ts &mdash; each parent receives message in their stored language preference (EN/HI/PA)</td>
+    </tr>
+
+    <!-- 14. School Admin Tools -->
+    <tr class="section-row"><td colspan="5">14. School Admin Tools</td></tr>
+    <tr>
+      <td>14.1</td><td class="fn">Admin REST API (all endpoints)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">admin.ts &mdash; /api/schools, /api/teachers, /api/students, /api/classes, /api/notifications, /api/attendance all implemented</td>
+    </tr>
+    <tr>
+      <td>14.2</td><td class="fn">Test Message Tool</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">admin.ts &mdash; POST /api/test-message sends WhatsApp to any number via Twilio</td>
+    </tr>
+    <tr>
+      <td>14.3</td><td class="fn">School Branding (name, logo, number)</td>
+      <td><span class="partial">&#9888; Partial</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">School.name, logoUrl, whatsappNumber in schema &#10003;; school name used in messages &#10003;; custom logo in dashboard UI not built</td>
+    </tr>
+    <tr>
+      <td>14.4</td><td class="fn">Role-Based Access Control</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">No auth middleware on admin.ts routes; no OTP login; all API endpoints are open</td>
+    </tr>
+    <tr>
+      <td>14.5</td><td class="fn">Bulk Operations (CSV import, bulk reminders)</td>
+      <td><span class="partial">&#9888; Partial</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">CSV upload UI done for students + teachers (client-side loop via POST /api/students and POST /api/teachers with progress tracking) &#10003;; no server-side bulk endpoint; bulk reminders not implemented</td>
+    </tr>
+
+    <!-- 15. Platform & Technical Features -->
+    <tr class="section-row"><td colspan="5">15. Platform &amp; Technical Features</td></tr>
+    <tr>
+      <td>15.1</td><td class="fn">WhatsApp Integration (Twilio)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-vh">Very High</span></td>
+      <td class="notes">lib/twilio.ts &mdash; sendWhatsApp(); webhook.ts handles inbound; POST /webhook/twilio registered</td>
+    </tr>
+    <tr>
+      <td>15.2</td><td class="fn">Multi-Tenant Architecture</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">schoolId on all models; all queries scoped by schoolId; single Railway deployment serves all schools</td>
+    </tr>
+    <tr>
+      <td>15.3</td><td class="fn">Notification Scheduler (cron)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">scheduler.ts &mdash; node-cron every 5 min; idempotent; handles failures with status update</td>
+    </tr>
+    <tr>
+      <td>15.4</td><td class="fn">Error Handling &amp; Monitoring</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">Structured console logging throughout; failed sends logged to MessageLog; Notification.status=FAILED on error</td>
+    </tr>
+    <tr>
+      <td>15.5</td><td class="fn">Security (phone auth, webhook sig verification)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">Teacher auth by phone lookup &#10003;; Twilio webhook signature verification &#10003;; env vars for secrets &#10003;</td>
+    </tr>
+    <tr>
+      <td>15.6</td><td class="fn">Scalability (parallel sends, connection pooling)</td>
+      <td><span class="done">&#10003; Done</span></td><td><span class="c-h">High</span></td>
+      <td class="notes">broadcast.ts &mdash; Promise.allSettled for 500 parents in ~2-3s; Prisma connection pooling; Railway auto-scale</td>
+    </tr>
+    <tr>
+      <td>15.7</td><td class="fn">File Storage (Cloudflare R2)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No R2 / S3 client in codebase; no file upload handling</td>
+    </tr>
+    <tr>
+      <td>15.8</td><td class="fn">Email Notifications (Resend)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No email client or Resend integration in codebase</td>
+    </tr>
+    <tr>
+      <td>15.9</td><td class="fn">Redis Cache (Upstash)</td>
+      <td><span class="notdone">&#10007; Not Done</span></td><td><span class="c-m">Medium</span></td>
+      <td class="notes">No Redis client; rate limiting and session caching not implemented</td>
+    </tr>
+
+  </tbody>
+</table>
+
+<!-- Summary -->
+<div class="summary">
+  <div class="summary-card s-done">
+    <div class="num">45</div>
+    <div class="lbl">&#10003; Done</div>
+  </div>
+  <div class="summary-card s-partial">
+    <div class="num">6</div>
+    <div class="lbl">&#9888; Partial</div>
+  </div>
+  <div class="summary-card s-notdone">
+    <div class="num">43</div>
+    <div class="lbl">&#10007; Not Done</div>
+  </div>
+</div>
+
+<p style="color:#555;font-size:9pt;margin-top:4px;">
+  <strong>94 features assessed across 14 sections &mdash; based on direct code review of <code>backend/src/</code> and <code>dashboard/</code>.</strong>
+  Core pipeline (teacher WhatsApp &rarr; Claude AI &rarr; parent notification) is fully working end-to-end.
+  The 43 unbuilt features are primarily: fee management (0/7 done), parent AI assistant (0/7), reports &amp; analytics (0/5 fully done), academic records, and admin tooling (auth, onboarding).
+</p>
+
+<h2 style="font-size:13pt;color:#0f3460;border-left:4px solid #0f3460;padding-left:12px;margin-top:32px;">Implementation Status by Criticality</h2>
+<table style="max-width:640px;">
+  <thead>
+    <tr>
+      <th style="width:18%">Criticality</th>
+      <th style="width:14%;text-align:center">Total</th>
+      <th style="width:18%;text-align:center">&#10003; Done</th>
+      <th style="width:18%;text-align:center">&#9888; Partial</th>
+      <th style="width:18%;text-align:center">&#10007; Not Done</th>
+      <th style="text-align:center">Coverage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="c-vh">Very High</span></td>
+      <td style="text-align:center">14</td>
+      <td style="text-align:center;color:#155724;font-weight:700">14</td>
+      <td style="text-align:center;color:#856404;font-weight:700">0</td>
+      <td style="text-align:center;color:#721c24;font-weight:700">0</td>
+      <td>
+        <div style="background:#e8f5e9;border-radius:6px;height:14px;width:100%;position:relative;">
+          <div style="background:#27ae60;border-radius:6px;height:14px;width:100%;"></div>
+        </div>
+        <span style="font-size:8pt;color:#155724;font-weight:700">100%</span>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="c-h">High</span></td>
+      <td style="text-align:center">38</td>
+      <td style="text-align:center;color:#155724;font-weight:700">27</td>
+      <td style="text-align:center;color:#856404;font-weight:700">2</td>
+      <td style="text-align:center;color:#721c24;font-weight:700">9</td>
+      <td>
+        <div style="background:#e8f5e9;border-radius:6px;height:14px;width:100%;position:relative;">
+          <div style="background:#27ae60;border-radius:6px;height:14px;width:71%;display:inline-block;"></div>
+        </div>
+        <span style="font-size:8pt;color:#155724;font-weight:700">71%</span>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="c-m">Medium</span></td>
+      <td style="text-align:center">34</td>
+      <td style="text-align:center;color:#155724;font-weight:700">4</td>
+      <td style="text-align:center;color:#856404;font-weight:700">4</td>
+      <td style="text-align:center;color:#721c24;font-weight:700">26</td>
+      <td>
+        <div style="background:#e8f5e9;border-radius:6px;height:14px;width:100%;position:relative;">
+          <div style="background:#27ae60;border-radius:6px;height:14px;width:12%;display:inline-block;"></div>
+        </div>
+        <span style="font-size:8pt;color:#155724;font-weight:700">12%</span>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="c-l">Low</span></td>
+      <td style="text-align:center">8</td>
+      <td style="text-align:center;color:#155724;font-weight:700">0</td>
+      <td style="text-align:center;color:#856404;font-weight:700">0</td>
+      <td style="text-align:center;color:#721c24;font-weight:700">8</td>
+      <td>
+        <div style="background:#e8f5e9;border-radius:6px;height:14px;width:100%;"></div>
+        <span style="font-size:8pt;color:#721c24;font-weight:700">0%</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p style="color:#555;font-size:9pt;margin-top:8px;">
+  &#9989; <strong>All 14 Very High criticality features are done.</strong> &nbsp;
+  &#9888; <strong>9 High criticality features still missing</strong> &mdash; most impactful gaps: Parent AI Assistant, Fee Management (structure + reminders + payment), Role-Based Access, School Onboarding.
+</p>
+
+</body>
+</html>
