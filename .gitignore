@@ -1,0 +1,53 @@
+# ─── Node / npm ──────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+
+# ─── Next.js (dashboard) ─────────────────────────────────────────────────────
+dashboard/.next/
+dashboard/out/
+dashboard/build/
+dashboard/next-env.d.ts
+
+# ─── TypeScript build ─────────────────────────────────────────────────────────
+*.tsbuildinfo
+backend/dist/
+
+# ─── Environment / secrets ───────────────────────────────────────────────────
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# Keep .env.example files (they are templates, not secrets)
+!.env.example
+!**/.env.example
+
+# ─── Prisma ──────────────────────────────────────────────────────────────────
+backend/prisma/migrations/*/migration_lock.toml
+
+# ─── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ─── Editor ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+*.user
+
+# ─── Logs ────────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ─── Misc ────────────────────────────────────────────────────────────────────
+.cache/
+.turbo/
