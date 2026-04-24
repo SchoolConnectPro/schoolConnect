@@ -86,7 +86,8 @@ export async function processTeacherMessage(
 
   try {
     parsed = await parseTeacherMessage(body, teacher.school.name);
-    console.log(`[MessageAgent] 🤖 Claude → intent: ${parsed.intent} | confidence: ${parsed.confidence} | student: ${parsed.studentName ?? 'N/A'} | class: ${parsed.className ?? 'N/A'}`);
+    const namesLog = parsed.studentNames?.join(', ') || parsed.studentName || 'N/A';
+    console.log(`[MessageAgent] 🤖 Claude → intent: ${parsed.intent} | confidence: ${parsed.confidence} | students: [${namesLog}] | class: ${parsed.className ?? 'N/A'}`);
   } catch (err) {
     console.error('[MessageAgent] ❌ Claude parsing error:', err);
     return buildTwiMLResponse(
@@ -111,11 +112,19 @@ export async function processTeacherMessage(
 
   try {
     if (parsed.intent === 'ATTENDANCE') {
-      console.log(`[MessageAgent] ATTENDANCE — studentName: "${parsed.studentName}", class: "${parsed.className}"`);
+      // Resolve student names — support both new (studentNames[]) and legacy (studentName)
+      const rawNames: string[] =
+        parsed.studentNames && parsed.studentNames.length > 0
+          ? parsed.studentNames
+          : parsed.studentName
+            ? [parsed.studentName]
+            : [];
 
-      if (!parsed.studentName) {
+      console.log(`[MessageAgent] ATTENDANCE — students: [${rawNames.join(', ')}], class: "${parsed.className}"`);
+
+      if (rawNames.length === 0) {
         return buildTwiMLResponse(
-          "❌ I couldn't find a student name in your message. Please include the student's name, e.g. 'Diksha absent class 8B'"
+          "❌ I couldn't find any student names in your message. Please include the student's name, e.g. 'Diksha absent class 8B'"
         );
       }
 
@@ -129,28 +138,51 @@ export async function processTeacherMessage(
         );
       }
 
-      console.log(`[MessageAgent] Calling handleAbsence — student: "${parsed.studentName}", class: "${classIdentifier}"`);
+      // ── Process all students in parallel ─────────────────────────────
+      const baseMessage = parsed.parentMessage;
 
-      const result = await handleAbsence(
-        parsed.studentName,
-        classIdentifier,
-        teacher.id,
-        teacher.school.id,
-        parsed.parentMessage
+      const results = await Promise.allSettled(
+        rawNames.map((name) => {
+          // Replace {studentName} placeholder if Claude used it, otherwise use as-is
+          const personalizedMessage = baseMessage.includes('{studentName}')
+            ? baseMessage.replace(/\{studentName\}/g, name)
+            : baseMessage;
+
+          console.log(`[MessageAgent] → handleAbsence: "${name}" | class: "${classIdentifier}"`);
+          return handleAbsence(name, classIdentifier, teacher.id, teacher.school.id, personalizedMessage);
+        })
       );
 
-      console.log(`[MessageAgent] handleAbsence result:`, JSON.stringify(result, null, 2));
+      // ── Build summary reply for teacher ──────────────────────────────
+      const sent: string[] = [];
+      const failed: string[] = [];
 
-      if (!result.success) {
-        return buildTwiMLResponse(`❌ ${result.error}`);
+      results.forEach((r, i) => {
+        const name = rawNames[i];
+        if (r.status === 'fulfilled' && r.value.success) {
+          sent.push(`${r.value.studentName} → ${r.value.parentName}`);
+        } else {
+          const errMsg = r.status === 'fulfilled' ? r.value.error : String(r.reason);
+          failed.push(`${name}: ${errMsg}`);
+          console.warn(`[MessageAgent] ⚠️  Failed for "${name}": ${errMsg}`);
+        }
+      });
+
+      console.log(`[MessageAgent] Bulk attendance done — sent: ${sent.length}, failed: ${failed.length}`);
+
+      let reply = `✅ *Attendance Recorded*\n\n`;
+
+      if (sent.length > 0) {
+        reply += `📤 *Notified (${sent.length}):*\n`;
+        sent.forEach((s) => (reply += `• ${s}\n`));
       }
 
-      return buildTwiMLResponse(
-        `✅ *Attendance Alert Sent*\n\n` +
-          `Student: ${result.studentName}\n` +
-          `Parent: ${result.parentName}\n` +
-          `Message delivered to parent's WhatsApp.`
-      );
+      if (failed.length > 0) {
+        reply += `\n⚠️ *Could not notify (${failed.length}):*\n`;
+        failed.forEach((f) => (reply += `• ${f}\n`));
+      }
+
+      return buildTwiMLResponse(reply.trim());
     }
 
     // BROADCAST / TEST_REMINDER / EVENT / HOMEWORK / EMERGENCY

@@ -16,7 +16,12 @@ export type IntentType =
  */
 export interface ParsedTeacherMessage {
   intent: IntentType;
-  /** Student name — only present for ATTENDANCE intent */
+  /**
+   * One or more student names — only present for ATTENDANCE intent.
+   * Supports bulk: ["Amit", "Arsh", "Harman"]
+   */
+  studentNames?: string[];
+  /** @deprecated Use studentNames[0] — kept for backward compat with old Claude responses */
   studentName?: string;
   /** Class identifier e.g. "8B", "7A" */
   className?: string;

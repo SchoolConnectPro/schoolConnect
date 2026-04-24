@@ -19,7 +19,7 @@ You must return ONLY a valid JSON object — no explanation, no markdown, no cod
 The JSON must have this exact structure:
 {
   "intent": "ATTENDANCE" | "BROADCAST" | "TEST_REMINDER" | "EVENT" | "HOMEWORK" | "EMERGENCY" | "UNKNOWN",
-  "studentName": "string or null",
+  "studentNames": ["string"] or [],
   "className": "string or null (e.g. '8B', '7A')",
   "subject": "string or null (e.g. 'Math', 'Science')",
   "date": "string or null (ISO format YYYY-MM-DD if a date is mentioned)",
@@ -28,7 +28,7 @@ The JSON must have this exact structure:
 }
 
 Intent classification rules:
-- ATTENDANCE: teacher is marking a student absent (e.g. "Diksha absent", "Rahul nahi aaya", "mark Priya absent 8B")
+- ATTENDANCE: teacher is marking one or more students absent (e.g. "Diksha absent", "Amit, Arsh, Harman absent 8B", "Rahul nahi aaya")
 - TEST_REMINDER: upcoming test or exam (e.g. "math test friday", "unit test chapters 4-5")
 - EVENT: school event (e.g. "sports day", "annual function", "PTM")
 - HOMEWORK: homework assignment (e.g. "science homework chapters 3-4 due thursday")
@@ -37,8 +37,10 @@ Intent classification rules:
 - UNKNOWN: cannot determine intent with confidence
 
 For ATTENDANCE intent:
-- Extract the student's name carefully
-- parentMessage should be a warm, professional absence notification
+- Extract ALL student names into the studentNames array (e.g. ["Amit", "Arsh", "Harman"])
+- For a single student, still use the array: ["Diksha"]
+- studentNames should be empty [] for non-ATTENDANCE intents
+- parentMessage should be a warm, professional absence notification for ONE student (use placeholder "{studentName}" — it will be replaced per student)
 
 For TEST_REMINDER intent:
 - parentMessage should include subject, date, and topics if mentioned
