@@ -67,10 +67,11 @@ export async function handleParentOptInOut(
       });
 
       if (updated.count === 0) {
-        // Phone not found — clear state and ignore
+        console.warn(`[OptIn] ⚠️  Language choice received but phone not found in DB: ${phone}`);
         return null;
       }
 
+      console.log(`[OptIn] 🌐 Language set to ${langCode} for ${phone}`);
       const langLabel = LANGUAGE_LABELS[langCode];
       return buildTwiMLResponse(
         `✅ *Language updated!*\n\n` +
@@ -80,16 +81,13 @@ export async function handleParentOptInOut(
     }
 
     // ── Not a language choice ──────────────────────────────────────────────
-    // If the parent sends an opt-out keyword while in the language flow,
-    // clear the pending state and fall through to the opt-out handler below.
     const OPT_OUT_WHILE_PENDING = ['STOP', 'UNSUBSCRIBE', 'OPT OUT', 'OPTOUT', 'CANCEL', 'QUIT'];
     if (OPT_OUT_WHILE_PENDING.includes(upper)) {
+      console.log(`[OptIn] 🔄 Opt-out received during language flow — clearing pending state for ${phone}`);
       pendingLanguageSelection.delete(phone);
       // Fall through to the opt-out handler below
     } else {
-      // Any other message (e.g. SICK, a teacher message, random text):
-      // clear the pending state and pass to the next handler so the parent
-      // is never permanently stuck in the language-selection flow.
+      console.log(`[OptIn] ↩️  Non-language message "${upper}" during language flow — clearing state, passing through for ${phone}`);
       pendingLanguageSelection.delete(phone);
       return null;
     }
@@ -98,11 +96,16 @@ export async function handleParentOptInOut(
   // ── 2. OPT-OUT commands ───────────────────────────────────────────────────
   const OPT_OUT_KEYWORDS = ['STOP', 'UNSUBSCRIBE', 'OPT OUT', 'OPTOUT', 'CANCEL', 'QUIT'];
   if (OPT_OUT_KEYWORDS.includes(upper)) {
+    console.log(`[OptIn] 🛑 Opt-out command "${upper}" from ${phone}`);
     const parent = await prisma.parent.findUnique({ where: { phone } });
 
-    if (!parent) return null; // Not a registered parent — let other handlers deal with it
+    if (!parent) {
+      console.log(`[OptIn]    → Not a registered parent — passing through`);
+      return null;
+    }
 
     if (!parent.optedIn) {
+      console.log(`[OptIn]    → Already opted out (${parent.name})`);
       return buildTwiMLResponse(
         `ℹ️ You are already opted out of SchoolConnect notifications.\n\n` +
           `To opt back in, reply *START*.`
@@ -114,7 +117,7 @@ export async function handleParentOptInOut(
       data: { optedIn: false },
     });
 
-    console.log(`[OptIn] Parent ${phone} opted OUT`);
+    console.log(`[OptIn] ✅ ${parent.name} (${phone}) opted OUT`);
 
     return buildTwiMLResponse(
       `✅ *You have been unsubscribed.*\n\n` +
@@ -126,12 +129,16 @@ export async function handleParentOptInOut(
   // ── 3. OPT-IN commands ────────────────────────────────────────────────────
   const OPT_IN_KEYWORDS = ['START', 'SUBSCRIBE', 'OPT IN', 'OPTIN', 'JOIN', 'YES'];
   if (OPT_IN_KEYWORDS.includes(upper)) {
+    console.log(`[OptIn] 🟢 Opt-in command "${upper}" from ${phone}`);
     const parent = await prisma.parent.findUnique({ where: { phone } });
 
-    if (!parent) return null; // Not a registered parent
+    if (!parent) {
+      console.log(`[OptIn]    → Not a registered parent — passing through`);
+      return null;
+    }
 
     if (parent.optedIn) {
-      // Already opted in — offer language change
+      console.log(`[OptIn]    → Already opted in (${parent.name}) — offering language change`);
       pendingLanguageSelection.set(phone, 'AWAITING_LANGUAGE');
       return buildTwiMLResponse(
         `ℹ️ You are already subscribed to SchoolConnect notifications.\n\n` +
@@ -145,7 +152,7 @@ export async function handleParentOptInOut(
       data: { optedIn: true },
     });
 
-    console.log(`[OptIn] Parent ${phone} opted IN`);
+    console.log(`[OptIn] ✅ ${parent.name} (${phone}) opted IN`);
 
     // Ask for language preference
     pendingLanguageSelection.set(phone, 'AWAITING_LANGUAGE');
@@ -159,10 +166,15 @@ export async function handleParentOptInOut(
 
   // ── 4. LANGUAGE change command (anytime) ──────────────────────────────────
   if (upper === 'LANGUAGE' || upper === 'LANG' || upper === 'CHANGE LANGUAGE') {
+    console.log(`[OptIn] 🌐 Language change command from ${phone}`);
     const parent = await prisma.parent.findUnique({ where: { phone } });
 
-    if (!parent) return null;
+    if (!parent) {
+      console.log(`[OptIn]    → Not a registered parent — passing through`);
+      return null;
+    }
 
+    console.log(`[OptIn]    → Current language: ${parent.languagePreference} (${parent.name})`);
     pendingLanguageSelection.set(phone, 'AWAITING_LANGUAGE');
 
     return buildTwiMLResponse(
@@ -174,12 +186,18 @@ export async function handleParentOptInOut(
 
   // ── 5. STATUS command for parents ─────────────────────────────────────────
   if (upper === 'MY STATUS' || upper === 'STATUS ME' || upper === 'STATUS') {
+    console.log(`[OptIn] 📋 Status command from ${phone}`);
     const parent = await prisma.parent.findUnique({
       where: { phone },
       include: { student: { include: { class: true } } },
     });
 
-    if (!parent) return null;
+    if (!parent) {
+      console.log(`[OptIn]    → Not a registered parent — passing through`);
+      return null;
+    }
+
+    console.log(`[OptIn]    → Found: ${parent.name} | optedIn: ${parent.optedIn} | lang: ${parent.languagePreference}`);
 
     const statusEmoji = parent.optedIn ? '✅' : '❌';
     const langLabel = LANGUAGE_LABELS[parent.languagePreference] || parent.languagePreference;

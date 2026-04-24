@@ -34,10 +34,13 @@ export async function processTeacherMessage(
   });
 
   if (!teacher) {
+    console.log(`[MessageAgent] ⚠️  Unregistered number: ${phone} — not a teacher`);
     return buildTwiMLResponse(
       '❌ Your number is not registered in SchoolConnect. Please contact your school admin.'
     );
   }
+
+  console.log(`[MessageAgent] 👩‍🏫 Teacher: ${teacher.name} (${phone}) | School: ${teacher.school.name}`);
 
   // ── 2. Handle simple commands ───────────────────────────────────────────
   const command = body.toUpperCase().trim();
@@ -79,13 +82,13 @@ export async function processTeacherMessage(
   // ── 3. Parse message with Claude ────────────────────────────────────────
   let parsed: ParsedTeacherMessage;
 
-  console.log(`[MessageAgent] Sending to Claude — school: ${teacher.school.name}, message: "${body}"`);
+  console.log(`[MessageAgent] 🤖 Sending to Claude | School: ${teacher.school.name} | Message: "${body}"`);
 
   try {
     parsed = await parseTeacherMessage(body, teacher.school.name);
-    console.log(`[MessageAgent] Claude result:`, JSON.stringify(parsed, null, 2));
+    console.log(`[MessageAgent] 🤖 Claude → intent: ${parsed.intent} | confidence: ${parsed.confidence} | student: ${parsed.studentName ?? 'N/A'} | class: ${parsed.className ?? 'N/A'}`);
   } catch (err) {
-    console.error('[MessageAgent] Claude parsing error:', err);
+    console.error('[MessageAgent] ❌ Claude parsing error:', err);
     return buildTwiMLResponse(
       '⚠️ Sorry, I could not understand that message. Please try again or type HELP for examples.'
     );
@@ -188,7 +191,7 @@ export async function processTeacherMessage(
         `🕐 ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`
     );
   } catch (err) {
-    console.error('[MessageAgent] Service error:', err);
+    console.error('[MessageAgent] ❌ Service error:', err);
     return buildTwiMLResponse(
       '⚠️ Something went wrong while sending the notification. Please try again.'
     );

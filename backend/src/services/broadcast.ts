@@ -71,6 +71,7 @@ export async function broadcastToClass(
   });
 
   if (parents.length === 0) {
+    console.log(`[Broadcast] ℹ️  No opted-in parents found for ${classIdentifier ?? 'school-wide'} — nothing to send`);
     await prisma.notification.update({
       where: { id: notification.id },
       data: { status: 'SENT', sentAt: new Date(), recipientCount: 0 },
@@ -78,24 +79,25 @@ export async function broadcastToClass(
     return { success: true, recipientCount: 0, failedCount: 0, notificationId: notification.id };
   }
 
+  // Language breakdown for logging
+  const langCounts = parents.reduce<Record<string, number>>((acc, p) => {
+    acc[p.languagePreference] = (acc[p.languagePreference] || 0) + 1;
+    return acc;
+  }, {});
+  console.log(`[Broadcast] 📤 Sending to ${parents.length} parent(s) | Languages: ${JSON.stringify(langCounts)} | Type: ${type}`);
+
   // ── 4. Send WhatsApp to each parent (with per-language translation) ──────
   let successCount = 0;
   let failedCount = 0;
 
   // Shared translation cache for this broadcast batch.
-  // Claude is called at most once per non-English language (e.g. one call for
-  // all Hindi-preferring parents, one call for all Punjabi-preferring parents).
+  // Claude is called at most once per non-English language.
   const translationCache = new Map<string, string>();
 
   const sendPromises = parents.map(async (parent) => {
     try {
-      // Translate the message to this parent's preferred language
-      const localizedMessage = await getLocalizedMessage(
-        message,
-        parent.languagePreference as 'EN' | 'HI' | 'PA',
-        translationCache
-      );
-
+      const lang = parent.languagePreference as 'EN' | 'HI' | 'PA';
+      const localizedMessage = await getLocalizedMessage(message, lang, translationCache);
       const sid = await sendWhatsApp(parent.phone, localizedMessage);
 
       await prisma.messageLog.create({
@@ -108,9 +110,10 @@ export async function broadcastToClass(
         },
       });
 
+      console.log(`[Broadcast]    ✅ Sent to ${parent.name} (${parent.phone}) [${lang}] | SID: ${sid}`);
       successCount++;
     } catch (err) {
-      console.error(`[Broadcast] Failed to send to parent ${parent.id}:`, err);
+      console.error(`[Broadcast]    ❌ Failed to send to ${parent.name} (${parent.phone}):`, err);
 
       await prisma.messageLog.create({
         data: {
@@ -127,10 +130,13 @@ export async function broadcastToClass(
   await Promise.allSettled(sendPromises);
 
   // ── 5. Update Notification status ───────────────────────────────────────
+  const finalStatus = failedCount === parents.length ? 'FAILED' : 'SENT';
+  console.log(`[Broadcast] 📊 Result: ${successCount} sent, ${failedCount} failed | Status: ${finalStatus} | NotificationID: ${notification.id}`);
+
   await prisma.notification.update({
     where: { id: notification.id },
     data: {
-      status: failedCount === parents.length ? 'FAILED' : 'SENT',
+      status: finalStatus,
       sentAt: new Date(),
       recipientCount: successCount,
     },

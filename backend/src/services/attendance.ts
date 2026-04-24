@@ -95,6 +95,7 @@ export async function handleAbsence(
 
   // ── 3. Check if parent has opted in ────────────────────────────────────
   if (!parent.optedIn) {
+    console.warn(`[Attendance] ⚠️  Parent ${parent.name} (${parent.phone}) has opted out — skipping notification for ${student.name}`);
     return {
       success: false,
       studentName: student.name,
@@ -104,6 +105,8 @@ export async function handleAbsence(
       error: `Parent of ${student.name} has opted out of notifications. No message sent.`,
     };
   }
+
+  console.log(`[Attendance] 📋 Processing absence: ${student.name} | Class ${grade}${section} | Parent: ${parent.name} (${parent.phone}) | Lang: ${parent.languagePreference}`);
 
   // ── 4. Create Notification record ───────────────────────────────────────
   const notification = await prisma.notification.create({
@@ -129,11 +132,10 @@ export async function handleAbsence(
 
   // ── 6. Send WhatsApp to parent (in their preferred language) ───────────
   try {
-    const localizedMessage = await getLocalizedMessage(
-      parentMessage,
-      parent.languagePreference as 'EN' | 'HI' | 'PA'
-    );
+    const lang = parent.languagePreference as 'EN' | 'HI' | 'PA';
+    console.log(`[Attendance] 📤 Sending to ${parent.phone} in ${lang}…`);
 
+    const localizedMessage = await getLocalizedMessage(parentMessage, lang);
     const sid = await sendWhatsApp(parent.phone, localizedMessage);
 
     await prisma.messageLog.create({
@@ -156,6 +158,8 @@ export async function handleAbsence(
       data: { status: 'SENT', sentAt: new Date(), recipientCount: 1 },
     });
 
+    console.log(`[Attendance] ✅ Notification sent | SID: ${sid} | Student: ${student.name} | Parent: ${parent.name}`);
+
     return {
       success: true,
       studentName: student.name,
@@ -164,7 +168,7 @@ export async function handleAbsence(
       notificationId: notification.id,
     };
   } catch (err) {
-    console.error(`[Attendance] Failed to send WhatsApp to parent ${parent.id}:`, err);
+    console.error(`[Attendance] ❌ Failed to send WhatsApp to ${parent.name} (${parent.phone}):`, err);
 
     await prisma.messageLog.create({
       data: {
@@ -204,6 +208,8 @@ export async function handleParentAttendanceReply(
     return null;
   }
 
+  console.log(`[Attendance] 📩 Parent reply "${reply}" from ${phone}`);
+
   const parent = await prisma.parent.findUnique({
     where: { phone },
     include: { student: true },
@@ -220,7 +226,12 @@ export async function handleParentAttendanceReply(
     orderBy: { createdAt: 'desc' },
   });
 
-  if (!log) return null;
+  if (!log) {
+    console.warn(`[Attendance] ⚠️  No pending attendance log found for ${parent.student.name} (${phone})`);
+    return null;
+  }
+
+  console.log(`[Attendance] ✅ Attendance reply recorded: ${reply} for ${parent.student.name}`);
 
   await prisma.attendanceLog.update({
     where: { id: log.id },

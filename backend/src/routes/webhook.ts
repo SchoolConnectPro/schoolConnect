@@ -19,10 +19,15 @@ router.post('/twilio', async (req: Request, res: Response) => {
     MessageSid: string;
   };
 
-  console.log(`[Webhook] Incoming message | From: ${From} | SID: ${MessageSid}`);
-  console.log(`[Webhook] Body: "${Body}"`);
+  const phone = From?.replace('whatsapp:', '') ?? 'unknown';
+  console.log(`\n${'─'.repeat(60)}`);
+  console.log(`[Webhook] 📨 Incoming message`);
+  console.log(`[Webhook]    From : ${phone}`);
+  console.log(`[Webhook]    SID  : ${MessageSid}`);
+  console.log(`[Webhook]    Body : "${Body}"`);
 
   if (!From || !Body) {
+    console.warn(`[Webhook] ⚠️  Missing From or Body — rejected`);
     res.status(400).send('Missing From or Body');
     return;
   }
@@ -35,7 +40,7 @@ router.post('/twilio', async (req: Request, res: Response) => {
     const optInResponse = await handleParentOptInOut(From, Body);
 
     if (optInResponse !== null) {
-      console.log(`[Webhook] Opt-in/out handled for ${From}`);
+      console.log(`[Webhook] ✅ Handler: opt-in/out | Phone: ${phone}`);
       res.send(optInResponse);
       return;
     }
@@ -44,16 +49,17 @@ router.post('/twilio', async (req: Request, res: Response) => {
     const parentReply = await handleParentAttendanceReply(From, Body);
 
     if (parentReply !== null) {
-      console.log(`[Webhook] Parent reply handled for ${From}`);
+      console.log(`[Webhook] ✅ Handler: attendance-reply | Phone: ${phone}`);
       res.send(buildTwiMLResponse(parentReply));
       return;
     }
 
     // ── Otherwise treat as a teacher message ──────────────────────────────
+    console.log(`[Webhook] ➡️  Handler: teacher-agent | Phone: ${phone}`);
     const twimlResponse = await processTeacherMessage(From, Body);
     res.send(twimlResponse);
   } catch (err) {
-    console.error('[Webhook] Unhandled error:', err);
+    console.error(`[Webhook] ❌ Unhandled error for ${phone}:`, err);
     res.send(
       buildTwiMLResponse(
         '⚠️ An unexpected error occurred. Please try again or contact support.'
