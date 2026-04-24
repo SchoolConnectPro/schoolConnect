@@ -112,11 +112,11 @@ function NotificationsContent() {
 
   // Derive unique filter options from loaded data
   const teacherOptions = useMemo(() =>
-    [...new Set(notifs.map((n) => n.createdByTeacher?.name).filter(Boolean) as string[])].sort(),
+    Array.from(new Set(notifs.map((n) => n.createdByTeacher?.name).filter(Boolean) as string[])).sort(),
     [notifs]
   );
   const classOptions = useMemo(() =>
-    [...new Set(notifs.map(classLabel).filter(Boolean) as string[])].sort((a, b) => {
+    Array.from(new Set(notifs.map(classLabel).filter(Boolean) as string[])).sort((a, b) => {
       // Sort by grade number then section
       const [, ga, sa] = a.match(/Grade (\d+)(.*)/) || [];
       const [, gb, sb] = b.match(/Grade (\d+)(.*)/) || [];
@@ -125,7 +125,7 @@ function NotificationsContent() {
     [notifs]
   );
   const typeOptions = useMemo(() =>
-    [...new Set(notifs.map((n) => n.type))].sort(),
+    Array.from(new Set(notifs.map((n) => n.type))).sort(),
     [notifs]
   );
 
