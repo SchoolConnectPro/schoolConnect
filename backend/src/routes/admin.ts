@@ -701,8 +701,27 @@ router.get('/attendance', async (_req: Request, res: Response) => {
  *   - Per-teacher: notification counts by type, recipients reached, attendance marked, last active
  *   - Overview: notification type breakdown, delivery stats
  */
-router.get('/analytics', async (_req: Request, res: Response) => {
+router.get('/analytics', async (req: Request, res: Response) => {
   try {
+    // Optional period filter
+    const { period } = req.query as { period?: string };
+    let startDate: Date | undefined;
+    const now = new Date();
+    if (period === 'today') {
+      startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // start of today
+    } else if (period === '7d') {
+      startDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    } else if (period === '30d') {
+      startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    } else if (period === '90d') {
+      startDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+    } else if (period === '180d') {
+      startDate = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000);
+    } else if (period === 'year') {
+      startDate = new Date(now.getFullYear(), 0, 1); // Jan 1 of current year
+    }
+    const dateFilter = startDate ? { gte: startDate } : undefined;
+
     // Fetch all teachers with their notifications and attendance logs
     const [teachers, deliveryStats, overviewByType] = await Promise.all([
       prisma.teacher.findMany({
@@ -716,14 +735,12 @@ router.get('/analytics', async (_req: Request, res: Response) => {
               sentAt: true,
               createdAt: true,
             },
+            ...(dateFilter && { where: { createdAt: dateFilter } }),
           },
           attendanceLogs: {
             select: { id: true, createdAt: true },
             orderBy: { createdAt: 'desc' },
-            take: 1,
-          },
-          _count: {
-            select: { notifications: true, attendanceLogs: true },
+            ...(dateFilter && { where: { createdAt: dateFilter } }),
           },
         },
         orderBy: { name: 'asc' },
@@ -733,6 +750,7 @@ router.get('/analytics', async (_req: Request, res: Response) => {
       prisma.messageLog.groupBy({
         by: ['status'],
         _count: { id: true },
+        ...(dateFilter && { where: { createdAt: dateFilter } }),
       }),
 
       // Notification counts by type (school-wide)
@@ -740,6 +758,7 @@ router.get('/analytics', async (_req: Request, res: Response) => {
         by: ['type'],
         _count: { id: true },
         _sum: { recipientCount: true },
+        ...(dateFilter && { where: { createdAt: dateFilter } }),
       }),
     ]);
 
@@ -768,8 +787,8 @@ router.get('/analytics', async (_req: Request, res: Response) => {
         phone: t.phone,
         subject: t.subject,
         school: t.school,
-        totalNotifications: t._count.notifications,
-        totalAttendanceMarked: t._count.attendanceLogs,
+        totalNotifications: t.notifications.length,
+        totalAttendanceMarked: t.attendanceLogs.length,
         totalRecipients,
         byType,
         lastActive,

@@ -5,6 +5,7 @@ import { api, TeacherStat, AnalyticsData } from '@/lib/api';
 import {
   BarChart2, RefreshCw, TrendingUp, Users, Bell,
   CheckCircle, XCircle, Clock, Loader2, ChevronUp, ChevronDown,
+  Calendar,
 } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 
@@ -17,12 +18,24 @@ const TYPE_CONFIG: Record<string, { label: string; color: string; bg: string }> 
   EMERGENCY:     { label: 'Emergency',     color: 'text-red-700',    bg: 'bg-red-500' },
 };
 
+// DELIVERED removed — only show the 3 actionable statuses
 const DELIVERY_CONFIG: Record<string, { label: string; dot: string }> = {
-  DELIVERED: { label: 'Delivered', dot: 'bg-green-500' },
-  SENT:      { label: 'Sent',      dot: 'bg-blue-500' },
-  QUEUED:    { label: 'Queued',    dot: 'bg-yellow-500' },
-  FAILED:    { label: 'Failed',    dot: 'bg-red-500' },
+  SENT:   { label: 'Sent',   dot: 'bg-blue-500' },
+  QUEUED: { label: 'Queued', dot: 'bg-yellow-500' },
+  FAILED: { label: 'Failed', dot: 'bg-red-500' },
 };
+
+type Period = 'today' | '7d' | '30d' | '90d' | '180d' | 'year' | 'all';
+
+const PERIOD_OPTIONS: { value: Period; label: string; description: string }[] = [
+  { value: 'today',  label: 'Today',           description: 'Activity since midnight' },
+  { value: '7d',     label: 'Last 7 Days',      description: 'Rolling 7-day window' },
+  { value: '30d',    label: 'Last 30 Days',     description: 'Rolling 30-day window' },
+  { value: '90d',    label: 'Last 3 Months',    description: 'Rolling 90-day window' },
+  { value: '180d',   label: 'Last 6 Months',    description: 'Rolling 180-day window' },
+  { value: 'year',   label: 'This Year',        description: `Jan 1 – today` },
+  { value: 'all',    label: 'All Time',         description: 'Complete history' },
+];
 
 function StatCard({ icon: Icon, label, value, sub, color }: {
   icon: React.ElementType; label: string; value: string | number;
@@ -48,17 +61,23 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [period, setPeriod] = useState<Period>('30d');
   const [sortField, setSortField] = useState<SortField>('totalNotifications');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const load = async () => {
+  const load = async (p: Period = period) => {
     setLoading(true); setError(null);
-    try { setData(await api.analytics.get()); }
+    try { setData(await api.analytics.get(p)); }
     catch (e: unknown) { setError(e instanceof Error ? e.message : 'Failed to load'); }
     finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handlePeriod = (p: Period) => {
+    setPeriod(p);
+    load(p);
+  };
 
   const handleSort = (field: SortField) => {
     if (sortField === field) setSortOrder((o) => (o === 'asc' ? 'desc' : 'asc'));
@@ -112,7 +131,7 @@ export default function AnalyticsPage() {
       <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
         <XCircle className="w-8 h-8 text-red-400 mx-auto mb-2" />
         <p className="text-sm text-red-700">{error}</p>
-        <button onClick={load} className="btn-secondary mt-3">Retry</button>
+        <button onClick={() => load()} className="btn-secondary mt-3">Retry</button>
       </div>
     );
   }
@@ -122,14 +141,39 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-lg font-bold text-gray-900">Teacher Engagement Analytics</h1>
           <p className="text-sm text-gray-500 mt-0.5">How actively each teacher communicates with parents</p>
         </div>
-        <button onClick={load} className="btn-secondary flex items-center gap-2">
-          <RefreshCw className="w-4 h-4" /> Refresh
-        </button>
+
+        <div className="flex items-center gap-2">
+          {/* Period filter dropdown */}
+          <div className="relative flex items-center gap-1.5 bg-white border border-gray-200 rounded-lg px-3 py-1.5 shadow-sm">
+            <Calendar className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
+            <select
+              value={period}
+              onChange={(e) => handlePeriod(e.target.value as Period)}
+              className="text-xs font-medium text-gray-700 bg-transparent border-none outline-none cursor-pointer pr-1 appearance-none"
+            >
+              {PERIOD_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="w-3 h-3 text-gray-400 flex-shrink-0 pointer-events-none" />
+          </div>
+
+          {/* Active period badge */}
+          <span className="text-xs text-gray-400 hidden sm:block">
+            {PERIOD_OPTIONS.find((o) => o.value === period)?.description}
+          </span>
+
+          <button onClick={() => load()} className="btn-secondary flex items-center gap-2">
+            <RefreshCw className="w-4 h-4" /> Refresh
+          </button>
+        </div>
       </div>
 
       {/* Overview cards */}
@@ -141,7 +185,7 @@ export default function AnalyticsPage() {
           color="bg-blue-50 text-blue-600" />
         <StatCard icon={CheckCircle} label="Delivery Rate"
           value={`${data.overview.deliveryRate}%`}
-          sub={`${(data.overview.delivery['DELIVERED'] || 0).toLocaleString()} delivered`}
+          sub={`${data.overview.totalMessages.toLocaleString()} messages sent`}
           color="bg-green-50 text-green-600" />
         <StatCard icon={TrendingUp} label="Active Teachers"
           value={data.teachers.filter((t) => t.totalNotifications > 0).length}
@@ -185,7 +229,7 @@ export default function AnalyticsPage() {
           )}
         </div>
 
-        {/* Delivery stats */}
+        {/* Delivery stats — DELIVERED removed, showing Sent / Queued / Failed */}
         <div className="card p-5">
           <div className="flex items-center gap-2 mb-4">
             <CheckCircle className="w-4 h-4 text-gray-500" />

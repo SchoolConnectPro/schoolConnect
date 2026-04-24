@@ -216,7 +216,10 @@ export const api = {
     get: (id: string) => request<Notification>(`/notifications/${id}`),
   },
   analytics: {
-    get: () => request<AnalyticsData>('/analytics'),
+    get: (period?: 'today' | '7d' | '30d' | '90d' | '180d' | 'year' | 'all') => {
+      const qs = period && period !== 'all' ? `?period=${period}` : '';
+      return request<AnalyticsData>(`/analytics${qs}`);
+    },
   },
   testMessage: (phone: string, message: string) =>
     request<{ messageSid: string }>('/test-message', {
