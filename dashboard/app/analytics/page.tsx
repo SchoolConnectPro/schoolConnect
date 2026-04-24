@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api, TeacherStat, AnalyticsData } from '@/lib/api';
 import {
   BarChart2, RefreshCw, TrendingUp, Users, Bell,
   CheckCircle, XCircle, Clock, Loader2, ChevronUp, ChevronDown,
-  Calendar,
+  Calendar, ExternalLink,
 } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 
@@ -58,12 +59,18 @@ function StatCard({ icon: Icon, label, value, sub, color }: {
 type SortField = 'name' | 'totalNotifications' | 'totalAttendanceMarked' | 'totalRecipients' | 'lastActive';
 
 export default function AnalyticsPage() {
+  const router = useRouter();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [period, setPeriod] = useState<Period>('30d');
   const [sortField, setSortField] = useState<SortField>('totalNotifications');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+  const viewTeacherNotifications = (teacherName: string) => {
+    const params = new URLSearchParams({ teacher: teacherName, period });
+    router.push(`/notifications?${params.toString()}`);
+  };
 
   const load = async (p: Period = period) => {
     setLoading(true); setError(null);
@@ -287,26 +294,34 @@ export default function AnalyticsPage() {
               <p className="text-sm">No teachers yet</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-1">
               {[...data.teachers]
                 .sort((a, b) => b.totalNotifications - a.totalNotifications)
                 .slice(0, 5)
                 .map((t, i) => (
-                  <div key={t.id} className="flex items-center gap-3">
+                  <button
+                    key={t.id}
+                    onClick={() => viewTeacherNotifications(t.name)}
+                    className="w-full flex items-center gap-3 px-2 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors group text-left"
+                    title={`View notifications by ${t.name}`}
+                  >
                     <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
                       i === 0 ? 'bg-yellow-100 text-yellow-700' :
                       i === 1 ? 'bg-gray-100 text-gray-600' :
                       i === 2 ? 'bg-orange-100 text-orange-700' : 'bg-gray-50 text-gray-500'
                     }`}>{i + 1}</span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-gray-900 truncate">{t.name}</p>
+                      <p className="text-xs font-medium text-gray-900 truncate group-hover:text-indigo-700">{t.name}</p>
                       <p className="text-xs text-gray-400 truncate">{t.subject || t.school?.name || '—'}</p>
                     </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className="text-sm font-bold text-indigo-600">{t.totalNotifications}</p>
-                      <p className="text-xs text-gray-400">notifs</p>
+                    <div className="text-right flex-shrink-0 flex items-center gap-1.5">
+                      <div>
+                        <p className="text-sm font-bold text-indigo-600">{t.totalNotifications}</p>
+                        <p className="text-xs text-gray-400">notifs</p>
+                      </div>
+                      <ExternalLink className="w-3 h-3 text-gray-300 group-hover:text-indigo-400 transition-colors" />
                     </div>
-                  </div>
+                  </button>
                 ))}
             </div>
           )}
@@ -355,8 +370,17 @@ export default function AnalyticsPage() {
                   <tr key={t.id} className="hover:bg-gray-50">
                     <td className="table-td">
                       <div>
-                        <p className="font-medium text-gray-900 text-sm">{t.name}</p>
-                        <p className="text-xs text-gray-400 font-mono">{t.phone}</p>
+                        <button
+                          onClick={() => viewTeacherNotifications(t.name)}
+                          className="group flex items-center gap-1.5 text-left"
+                          title={`View notifications by ${t.name}`}
+                        >
+                          <div>
+                            <p className="font-medium text-gray-900 text-sm group-hover:text-indigo-600 transition-colors">{t.name}</p>
+                            <p className="text-xs text-gray-400 font-mono">{t.phone}</p>
+                          </div>
+                          <ExternalLink className="w-3 h-3 text-gray-300 group-hover:text-indigo-400 transition-colors flex-shrink-0 mt-0.5" />
+                        </button>
                       </div>
                     </td>
                     <td className="table-td text-sm text-gray-500">
