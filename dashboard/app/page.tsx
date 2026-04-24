@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { api, Student, Teacher, Parent, Class, Notification, AttendanceLog } from '@/lib/api';
+import { api, Notification, AttendanceLog } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
 import {
   GraduationCap, BookOpen, Users, School, Upload, Megaphone,
@@ -19,8 +19,10 @@ interface Stats {
 }
 
 const API_ENDPOINTS = [
-  { method: 'GET', path: '/api/students', desc: 'List all students with class & parent info' },
+  { method: 'GET', path: '/api/students', desc: 'List students (paginated, search, filter, sort)' },
   { method: 'POST', path: '/api/students', desc: 'Create student + parent together' },
+  { method: 'PATCH', path: '/api/students/:id', desc: 'Update student and/or parent fields' },
+  { method: 'DELETE', path: '/api/students/:id', desc: 'Delete student + parent + all related data' },
   { method: 'GET', path: '/api/teachers', desc: 'List all teachers with assigned classes' },
   { method: 'POST', path: '/api/teachers', desc: 'Register a new teacher' },
   { method: 'GET', path: '/api/parents', desc: 'List parents (filter: schoolId, classId, optedIn)' },
@@ -57,7 +59,7 @@ export default function DashboardPage() {
     setError(null);
     try {
       const [students, teachers, parents, classes, notifs, attendance] = await Promise.all([
-        api.students.list(),
+        api.students.list({ limit: 1 }),
         api.teachers.list(),
         api.parents.list(),
         api.classes.list(),
@@ -65,7 +67,7 @@ export default function DashboardPage() {
         api.attendance.list().catch(() => [] as AttendanceLog[]),
       ]);
       setStats({
-        students: students.length,
+        students: students.meta.total,
         teachers: teachers.length,
         parents: parents.length,
         classes: classes.length,
