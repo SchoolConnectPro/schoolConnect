@@ -101,6 +101,7 @@ export const api = {
   },
   students: {
     list: () => request<Student[]>('/students'),
+    get: (id: string) => request<Student>(`/students/${id}`),
     create: (data: {
       studentName: string;
       rollNumber?: string;
@@ -109,6 +110,15 @@ export const api = {
       parentPhone: string;
       languagePreference?: string;
     }) => request<Student>('/students', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id: string, data: {
+      studentName?: string;
+      rollNumber?: string;
+      classId?: string;
+      parentName?: string;
+      parentPhone?: string;
+      languagePreference?: string;
+    }) => request<Student>(`/students/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    delete: (id: string) => request<{ id: string; name: string }>(`/students/${id}`, { method: 'DELETE' }),
   },
   teachers: {
     list: () => request<Teacher[]>('/teachers'),

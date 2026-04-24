@@ -130,6 +130,129 @@ router.get('/students', async (_req: Request, res: Response) => {
 });
 
 /**
+ * GET /api/students/:id
+ * Single student with class & parent info
+ */
+router.get('/students/:id', async (req: Request, res: Response) => {
+  try {
+    const student = await prisma.student.findUnique({
+      where: { id: req.params.id as string },
+      include: {
+        class: { select: { id: true, grade: true, section: true } },
+        parent: true,
+      },
+    });
+    if (!student) {
+      res.status(404).json({ success: false, error: 'Student not found' });
+      return;
+    }
+    res.json({ success: true, data: student });
+  } catch (err) {
+    console.error('[Admin] GET /students/:id error:', err);
+    res.status(500).json({ success: false, error: 'Failed to fetch student' });
+  }
+});
+
+/**
+ * PATCH /api/students/:id
+ * Update student fields and/or parent fields
+ */
+router.patch('/students/:id', async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+  const { studentName, rollNumber, classId, parentName, parentPhone, languagePreference } =
+    req.body as {
+      studentName?: string;
+      rollNumber?: string;
+      classId?: string;
+      parentName?: string;
+      parentPhone?: string;
+      languagePreference?: 'EN' | 'HI' | 'PA';
+    };
+
+  try {
+    const student = await prisma.student.update({
+      where: { id },
+      data: {
+        ...(studentName && { name: studentName }),
+        ...(rollNumber !== undefined && { rollNumber: rollNumber || null }),
+        ...(classId && { classId }),
+        ...(parentName || parentPhone || languagePreference
+          ? {
+              parent: {
+                update: {
+                  ...(parentName && { name: parentName }),
+                  ...(parentPhone && { phone: parentPhone }),
+                  ...(languagePreference && { languagePreference }),
+                },
+              },
+            }
+          : {}),
+      },
+      include: {
+        class: { select: { id: true, grade: true, section: true } },
+        parent: true,
+      },
+    });
+    res.json({ success: true, data: student });
+  } catch (err: unknown) {
+    const isNotFound =
+      typeof err === 'object' && err !== null && 'code' in err &&
+      (err as { code: string }).code === 'P2025';
+    if (isNotFound) {
+      res.status(404).json({ success: false, error: 'Student not found' });
+      return;
+    }
+    console.error('[Admin] PATCH /students/:id error:', err);
+    res.status(500).json({ success: false, error: 'Failed to update student' });
+  }
+});
+
+/**
+ * DELETE /api/students/:id
+ * Delete student + parent + all related data (messageLogs, attendanceLogs)
+ * Notifications are NOT deleted — they are class-level records.
+ */
+router.delete('/students/:id', async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+
+  try {
+    // Verify student exists and get parent id
+    const student = await prisma.student.findUnique({
+      where: { id },
+      include: { parent: { select: { id: true } } },
+    });
+
+    if (!student) {
+      res.status(404).json({ success: false, error: 'Student not found' });
+      return;
+    }
+
+    // Delete in order to respect foreign key constraints:
+    // 1. MessageLogs (FK → Parent)
+    if (student.parent) {
+      await prisma.messageLog.deleteMany({ where: { parentId: student.parent.id } });
+    }
+
+    // 2. AttendanceLogs (FK → Student)
+    await prisma.attendanceLog.deleteMany({ where: { studentId: id } });
+
+    // 3. Parent (FK → Student)
+    if (student.parent) {
+      await prisma.parent.delete({ where: { id: student.parent.id } });
+    }
+
+    // 4. Student
+    await prisma.student.delete({ where: { id } });
+
+    console.log(`[Admin] Deleted student ${id} (${student.name}) and all related data`);
+    res.json({ success: true, data: { id, name: student.name } });
+  } catch (err) {
+    console.error('[Admin] DELETE /students/:id error:', err);
+    res.status(500).json({ success: false, error: 'Failed to delete student' });
+  }
+});
+
+/**
  * POST /api/students
  * Add a student + parent
  */
