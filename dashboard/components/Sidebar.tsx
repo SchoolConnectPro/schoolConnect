@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Upload, GraduationCap, BookOpen,
   Users, Megaphone, CalendarCheck, Bell, Plug, Settings, X,
-  LucideIcon,
+  BarChart2, LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -37,6 +37,8 @@ const nav: NavEntry[] = [
   { href: '/broadcast', label: 'Broadcast', icon: Megaphone },
   { href: '/attendance', label: 'Attendance', icon: CalendarCheck },
   { href: '/notifications', label: 'Notifications', icon: Bell },
+  { section: 'Insights' },
+  { href: '/analytics', label: 'Analytics', icon: BarChart2 },
   { section: 'System' },
   { href: '/api-reference', label: 'API Reference', icon: Plug },
   { href: '/settings', label: 'Settings', icon: Settings },

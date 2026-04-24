@@ -101,6 +101,29 @@ export interface StudentListResponse {
   meta: PageMeta;
 }
 
+export interface TeacherStat {
+  id: string;
+  name: string;
+  phone: string;
+  subject?: string;
+  school?: { name: string };
+  totalNotifications: number;
+  totalAttendanceMarked: number;
+  totalRecipients: number;
+  byType: Record<string, number>;
+  lastActive: string | null;
+}
+
+export interface AnalyticsData {
+  teachers: TeacherStat[];
+  overview: {
+    byType: Record<string, { count: number; recipients: number }>;
+    delivery: Record<string, number>;
+    deliveryRate: number;
+    totalMessages: number;
+  };
+}
+
 // ─── API calls ───────────────────────────────────────────────────────────────
 
 export const api = {
@@ -191,6 +214,9 @@ export const api = {
   notifications: {
     list: () => request<Notification[]>('/notifications'),
     get: (id: string) => request<Notification>(`/notifications/${id}`),
+  },
+  analytics: {
+    get: () => request<AnalyticsData>('/analytics'),
   },
   testMessage: (phone: string, message: string) =>
     request<{ messageSid: string }>('/test-message', {

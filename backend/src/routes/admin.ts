@@ -692,6 +692,127 @@ router.get('/attendance', async (_req: Request, res: Response) => {
 });
 
 // ─────────────────────────────────────────────
+// ANALYTICS
+// ─────────────────────────────────────────────
+
+/**
+ * GET /api/analytics
+ * Teacher engagement analytics:
+ *   - Per-teacher: notification counts by type, recipients reached, attendance marked, last active
+ *   - Overview: notification type breakdown, delivery stats
+ */
+router.get('/analytics', async (_req: Request, res: Response) => {
+  try {
+    // Fetch all teachers with their notifications and attendance logs
+    const [teachers, deliveryStats, overviewByType] = await Promise.all([
+      prisma.teacher.findMany({
+        include: {
+          school: { select: { name: true } },
+          notifications: {
+            select: {
+              type: true,
+              recipientCount: true,
+              status: true,
+              sentAt: true,
+              createdAt: true,
+            },
+          },
+          attendanceLogs: {
+            select: { id: true, createdAt: true },
+            orderBy: { createdAt: 'desc' },
+            take: 1,
+          },
+          _count: {
+            select: { notifications: true, attendanceLogs: true },
+          },
+        },
+        orderBy: { name: 'asc' },
+      }),
+
+      // Delivery stats across all message logs
+      prisma.messageLog.groupBy({
+        by: ['status'],
+        _count: { id: true },
+      }),
+
+      // Notification counts by type (school-wide)
+      prisma.notification.groupBy({
+        by: ['type'],
+        _count: { id: true },
+        _sum: { recipientCount: true },
+      }),
+    ]);
+
+    // Build per-teacher stats
+    const teacherStats = teachers.map((t) => {
+      const byType: Record<string, number> = {};
+      let totalRecipients = 0;
+      let lastActive: string | null = null;
+
+      for (const n of t.notifications) {
+        byType[n.type] = (byType[n.type] || 0) + 1;
+        totalRecipients += n.recipientCount || 0;
+        const d = (n.sentAt || n.createdAt).toISOString();
+        if (!lastActive || d > lastActive) lastActive = d;
+      }
+
+      // Also check attendance logs for last active
+      if (t.attendanceLogs[0]) {
+        const d = t.attendanceLogs[0].createdAt.toISOString();
+        if (!lastActive || d > lastActive) lastActive = d;
+      }
+
+      return {
+        id: t.id,
+        name: t.name,
+        phone: t.phone,
+        subject: t.subject,
+        school: t.school,
+        totalNotifications: t._count.notifications,
+        totalAttendanceMarked: t._count.attendanceLogs,
+        totalRecipients,
+        byType,
+        lastActive,
+      };
+    });
+
+    // Build overview
+    const overviewTypes: Record<string, { count: number; recipients: number }> = {};
+    for (const row of overviewByType) {
+      overviewTypes[row.type] = {
+        count: row._count.id,
+        recipients: row._sum.recipientCount || 0,
+      };
+    }
+
+    const delivery: Record<string, number> = {};
+    let totalDelivered = 0;
+    let totalMessages = 0;
+    for (const row of deliveryStats) {
+      delivery[row.status] = row._count.id;
+      totalMessages += row._count.id;
+      if (row.status === 'DELIVERED') totalDelivered = row._count.id;
+    }
+
+    res.json({
+      success: true,
+      data: {
+        teachers: teacherStats,
+        overview: {
+          byType: overviewTypes,
+          delivery,
+          deliveryRate: totalMessages > 0 ? Math.round((totalDelivered / totalMessages) * 100) : 0,
+          totalMessages,
+        },
+      },
+    });
+  } catch (err) {
+    console.error('[Admin] GET /analytics error:', err);
+    res.status(500).json({ success: false, error: 'Failed to fetch analytics' });
+  }
+});
+
+// ─────────────────────────────────────────────
 // SCHOOLS
 // ─────────────────────────────────────────────
 
